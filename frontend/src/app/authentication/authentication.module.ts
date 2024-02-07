@@ -6,5 +6,6 @@ import { NgZorroModule } from '../NgZorroModule.module';
 @NgModule({
   declarations: [LoginComponent],
   imports: [CommonModule, NgZorroModule],
+  exports: [LoginComponent],
 })
 export class AuthenticationModule {}
