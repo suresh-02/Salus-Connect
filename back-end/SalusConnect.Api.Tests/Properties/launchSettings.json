@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SalusConnect.Api.Tests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

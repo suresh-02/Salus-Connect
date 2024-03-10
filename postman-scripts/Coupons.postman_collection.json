@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "0f4feb93-5557-4833-a73e-9e4b7552aef4",
+		"name": "Coupons",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create coupon",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"couponNickname\": \"COUPON3\",\r\n    \"couponName\": \"Coupon 3\",\r\n    \"description\": \"Coupon 3 description\",\r\n    \"discountPercent\": null,\r\n    \"discountAmount\": 3.3,\r\n    \"couponDuration\": \"MultipleMonths\",\r\n    \"durationMonths\": 3,\r\n    \"redemptionDateLimit\": \"2023-03-31\",\r\n    \"redemptionNumLimit\": 3,\r\n    \"isActive\": true,\r\n    \"couponCodes\": [\r\n        {\r\n            \"couponCode\": \"C3CPN01\",\r\n            \"isFirstTimeOnly\": true\r\n        }\r\n    ],\r\n    \"specificProducts\": [\r\n        {\r\n            \"planId\": 5,\r\n            \"stripeProductId\": \"prod_L5doAiooEzHuh3\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/coupons",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"coupons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/coupons/46",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"coupons",
+						"46"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update coupon",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"couponId\": 46,\r\n    \"stripeId\": \"sQ4H3MoJ\",\r\n    \"couponNickname\": \"COUPON1\",\r\n    \"couponName\": \"Coupon 1\",\r\n    \"description\": \"Coupon 1 description\",\r\n    \"discountPercent\": 1.00,\r\n    \"couponDuration\": \"Once\",\r\n    \"redemptionDateLimit\": \"2022-04-01T00:00:00\",\r\n    \"redemptionNumLimit\": 1,\r\n    \"isActive\": false,\r\n    \"createdAt\": \"2022-02-13T03:37:54.050402Z\",\r\n    \"specificProducts\": [\r\n        {\r\n            \"planId\": 6,\r\n            \"stripeProductId\": \"prod_L61xYOqwdOi1tE\"\r\n        },\r\n        {\r\n            \"planId\": 7,\r\n            \"stripeProductId\": \"prod_L78fKdfk3UaTbe\"\r\n        }\r\n    ],\r\n    \"couponCodes\": [\r\n        {\r\n            \"couponCodeId\": 42,\r\n            \"stripeId\": \"promo_1KSe3iSFdmEmcCd05LSvyCEg\",\r\n            \"couponCode\": \"C1001\",\r\n            \"isFirstTimeOnly\": true,\r\n            \"redemptionNumLimit\": 1,\r\n            \"expiryDate\": \"2022-03-01T00:00:00\",\r\n            \"isActive\": true\r\n        },\r\n        {\r\n            \"couponCodeId\": 43,\r\n            \"stripeId\": \"promo_1KSe3iSFdmEmcCd0EV0B23Jb\",\r\n            \"couponCode\": \"C1002\",\r\n            \"isFirstTimeOnly\": false,\r\n            \"redemptionNumLimit\": 1,\r\n            \"isActive\": true\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/coupons/46",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"coupons",
+						"46"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbmlzdHJhdG9yIiwiZXhwIjoxNjQ0ODI5ODY4LCJpc3MiOiJodHRwOi8vOTkuNzkuNTMuMTY4L2FwaSIsImF1ZCI6Imh0dHA6Ly85OS43OS41My4xNjgifQ.MPVFkwLyt3SpFNoptgnbG_3iE-XSketUe-O6wxYiGx0",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

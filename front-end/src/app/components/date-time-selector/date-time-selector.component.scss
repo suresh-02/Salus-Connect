@@ -1,0 +1,18 @@
+.timeBtnActive {
+  background: #dff1fe;
+  border: 1px solid #2ba3fa;
+}
+
+.icon {
+  @apply bg-blue0 text-blue2 p-1 rounded transition-colors;
+  &:hover {
+    @apply bg-blue2 text-white cursor-pointer;
+  }
+  &:disabled {
+    @apply bg-gray-300 text-white cursor-not-allowed;
+  }
+}
+
+[nz-radio] {
+  display: block;
+}

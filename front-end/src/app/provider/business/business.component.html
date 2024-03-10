@@ -1,0 +1,174 @@
+<div *ngIf="doctor" class="flex flex-col items-end">
+  <span class="text-sm">
+    You are operating on behalf of {{ doctor.firstName }}
+    {{ doctor.lastName }}
+  </span>
+  <a routerLink="/provider/choose" class="text-blue1 hover:text-blue2"
+    >Switch provider</a
+  >
+</div>
+<div class="flex flex-col w-full">
+  <div class="flex justify-center gap-5 border-b-1 border-lightGray">
+    <a
+      routerLink="./dashboard/appointment"
+      [queryParams]="{
+        docId: user.facility?.facilityId ? -1 : user.userId,
+        facilityId: user.facility?.facilityId ? user.facility?.facilityId : -1
+      }"
+      [ngClass]="{
+        'text-blue1 pb-2 border-b-1 border-blue1': isActive('dashboard')
+      }"
+      class="hover:text-blue2"
+      >Dashboard and Analytics</a
+    >
+    <a
+      routerLink="./subscription/plan"
+      [queryParams]="{
+        docId: user.facility?.facilityId ? -1 : user.userId,
+        facilityId: user.facility?.facilityId ? user.facility?.facilityId : -1
+      }"
+      [ngClass]="{
+        'text-blue1 pb-2 border-b-1 border-blue1': isActive('subscription')
+      }"
+      class="hover:text-blue2"
+      >Subscription and Payments</a
+    >
+  </div>
+</div>
+
+<div class="flex min-h-[calc(100vh-200px)]">
+  <ng-container
+    *ngTemplateOutlet="tab === 0 ? analytics : subscription"
+  ></ng-container>
+  <div class="p-5 w-full" [@fade]="prepareRoute(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
+  </div>
+</div>
+
+<ng-template #subscription>
+  <ul nz-menu nzMode="inline">
+    <li nz-menu-item nzMatchRouter>
+      <a
+        routerLink="./subscription/plan"
+        [queryParams]="{
+          docId: user.facility?.facilityId ? -1 : user.userId,
+          facilityId: user.facility?.facilityId ? user.facility?.facilityId : -1
+        }"
+        >Plan</a
+      >
+    </li>
+    <li nz-menu-item nzMatchRouter>
+      <a
+        routerLink="./subscription/receipts"
+        [queryParams]="{
+          docId: user.facility?.facilityId ? -1 : user.userId,
+          facilityId: user.facility?.facilityId ? user.facility?.facilityId : -1
+        }"
+        >Receipts and Invoices</a
+      >
+    </li>
+    <li nz-menu-item nzMatchRouter>
+      <a routerLink="./subscription/faq">FAQs</a>
+    </li>
+  </ul>
+</ng-template>
+
+<ng-template #analytics>
+  <ul nz-menu nzMode="inline">
+    <li
+      nz-menu-item
+      nzMatchRouter
+      *ngIf="user.role.roleName !== 'SupportStaff'"
+    >
+      <a
+        routerLink="./dashboard/appointment"
+        [queryParams]="{ docId: user.userId }"
+        >Appointments</a
+      >
+    </li>
+    <li
+      nz-menu-item
+      nzMatchRouter
+      *ngIf="user.role.roleName !== 'SupportStaff'"
+    >
+      <a routerLink="./dashboard/revenue" [queryParams]="{ docId: user.userId }"
+        >Revenue</a
+      >
+    </li>
+    <li
+      nz-submenu
+      nzOpen
+      nzTitle="Appointments"
+      *ngIf="user.role.roleName === 'SupportStaff'"
+      [(nzOpen)]="openMap.sub1"
+      (nzOpenChange)="openHandler('sub1')"
+    >
+      <ul>
+        <li nz-menu-group nzTitle="Providers">
+          <ul>
+            <li
+              nz-menu-item
+              [nzSelected]="isAllSelected && isActive('appointment')"
+            >
+              <a
+                routerLink="./dashboard/appointment"
+                [queryParams]="{
+                  docId: -1,
+                  facilityId: facilityId
+                }"
+                >All</a
+              >
+            </li>
+            <li nz-menu-item nzMatchRouter *ngFor="let provider of providers">
+              <a
+                routerLink="./dashboard/appointment"
+                [queryParams]="{
+                  docId: provider.userId,
+                  facilityId: facilityId
+                }"
+                >{{ provider.firstName }} {{ provider.lastName }}</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li
+      nz-submenu
+      nzTitle="Revenue"
+      *ngIf="user.role.roleName === 'SupportStaff'"
+      [(nzOpen)]="openMap.sub2"
+      (nzOpenChange)="openHandler('sub2')"
+    >
+      <ul>
+        <li nz-menu-group nzTitle="Providers">
+          <ul>
+            <li
+              nz-menu-item
+              [nzSelected]="isAllSelected && isActive('revenue')"
+            >
+              <a
+                routerLink="./dashboard/revenue"
+                [queryParams]="{
+                  docId: -1,
+                  facilityId: facilityId
+                }"
+                >All</a
+              >
+            </li>
+            <li nz-menu-item nzMatchRouter *ngFor="let provider of providers">
+              <a
+                [routerLink]="['./dashboard/revenue']"
+                [queryParams]="{
+                  docId: provider.userId,
+                  facilityId: facilityId
+                }"
+                >{{ provider.firstName }} {{ provider.lastName }}</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</ng-template>

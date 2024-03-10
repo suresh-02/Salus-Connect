@@ -1,0 +1,184 @@
+<app-header></app-header>
+<div @fade>
+  <div
+    class="md:p-16 bg-cover bg-no-repeat"
+    style="background-image: url(../../assets/images/DroneStill-008-1.svg)"
+  >
+    <div class="mt-20 pb-14 container">
+      <div>
+        <h1 class="font-bold md:text-5xl text-2xl md:mb-9 mb-4">
+          <span class="text-blue2 md:text-5xl text-2xl">Find</span> and
+          <span class="text-blue2 md:text-5xl text-2xl">Book</span> medical
+          appointments with ease.
+        </h1>
+        <p class="my-5 md:my-10 md:text-base text-sm">
+          We are making our way across the Great White North starting with the
+          GTA.<br />
+          Catch us on
+          <a
+            class="font-bold"
+            href="https://twitter.com/gosimplydoc"
+            target="_blank"
+            >@gosimplydoc</a
+          >
+          to stay up to date on our progress.
+        </p>
+      </div>
+    </div>
+    <app-provider-search (search)="search($event)"></app-provider-search>
+  </div>
+  <div class="min-h-[316px] pb-20">
+    <!-- style="
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.37) 0%,
+        rgba(43, 163, 250, 0.35) 100%
+      );
+    " -->
+    <div class="container">
+      <h1 class="md:text-5xl text-2xl font-semibold pt-[60px] pb-4 text-center">
+        We believe that finding and booking medical appointments should never be
+        a challenge. Period.
+      </h1>
+      <p class="pb-5 md:pb-12 md:text-base text-sm text-center">
+        That's why when you need a medical appointment, SimplyDoc lets you book
+        your appointments in 3 simple steps.
+      </p>
+      <div class="md:grid grid-cols-3 gap-[94px]">
+        <div class="p-4 mb-3 md:mb-9 flex-col flex items-center">
+          <div class="round md:mr-0 mr-2">1</div>
+          <span class="md:text-base text-sm text-center"
+            >Search for a medical provider available at a place and day of your
+            choosing.
+          </span>
+        </div>
+        <div class="p-4 mb-3 md:mb-9 flex-col flex items-center">
+          <div class="round md:mr-0 mr-2">2</div>
+          <span class="md:text-base text-sm text-center"
+            >Pick a time slot and request an appointment by either creating a
+            new account or logging in to your existing account.</span
+          >
+        </div>
+        <div class="p-4 mb-3 md:mb-9 flex-col flex items-center">
+          <div class="round md:mr-0 mr-2">3</div>
+          <span class="md:text-base text-sm text-center"
+            >If the provider has enabled Instant Booking, you're all set.
+            Otherwise, look out for the confirmation text or email.</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-2 md:p-8 bgImg">
+    <div class="bgcontent flex flex-col items-center justify-center">
+      <h1 class="md:text-5xl text-2xl font-bold text-center">
+        At every step, SimplyDoc is created<br class="hidden md:block" />
+        with Canadians in mind.
+      </h1>
+      <div class="flex flex-col items-center justify-center">
+        <div
+          class="flex flex-col md:flex-row items-center justify-center p-10 pb-5 gap-4"
+        >
+          <img
+            src="../../assets/images/SimplyDoc-Logo.png"
+            alt="SimplyDoc-Logo"
+            class="h-14"
+          />
+          <div>
+            <p class="text-sm mb-5">
+              Whenver you need to see a medical provider, you can benefit from
+              the work that SimplyDoc has already done for you. That means:
+            </p>
+            <p class="check">
+              <i nz-icon nzType="check" nzTheme="outline" class="mr-2"></i>
+              No more endless phone calls to check for doctor availability.
+            </p>
+            <p class="check">
+              <i nz-icon nzType="check" nzTheme="outline" class="mr-2"></i>
+              Get instant appointment confirmations, where available.
+            </p>
+            <p class="check">
+              <i nz-icon nzType="check" nzTheme="outline" class="mr-2"></i>
+              Lose the guesswork while finding providers that are Accepting New
+              Patients.
+            </p>
+            <p class="check">
+              <i nz-icon nzType="check" nzTheme="outline" class="mr-2"></i>
+              SimplyDoc is free for you to use. You only pay your provider.
+            </p>
+            <p class="check">
+              <i nz-icon nzType="check" nzTheme="outline" class="mr-2"></i>
+              You get your own patient zone that keeps a record of all your past
+              and upcoming appointments.
+            </p>
+            <p class="check">
+              <i nz-icon nzType="check" nzTheme="outline" class="mr-2"></i>
+              <span>
+                A relentless focus on information security.
+                <a
+                  class="underline underline-offset-2 ml-1"
+                  routerLink="/security"
+                >
+                  Read more.</a
+                >
+              </span>
+            </p>
+          </div>
+        </div>
+        <button class="btn btn-blue btn-lg" routerLink="/register">
+          Create your account
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="p-11 bg-center bgLearnMore">
+    <div class="container bgLearnMoreContent">
+      <h1 class="md:text-5xl text-2xl font-bold text-center">
+        SimplyDoc for the medical <br class="hidden md:block" />
+        community
+      </h1>
+      <div class="max-w-xl mx-auto mt-5 space-y-4">
+        <p class="text-center md:text-sm">
+          Are you a healthcare professional or clinic using traditional methods
+          to manage patient appointments? SimplyDoc is a comprehensive platform
+          that radically improves patient discovery and appointment management
+          experience letting you and your team focus on what matters the most...
+          your patient's health needs.
+        </p>
+        <p class="text-center md:text-sm">
+          You can start with as little as a basic listing that provides your
+          practice with enhanced visibility to the SimplyDoc community or you
+          can go the full distance to make your entire calendar available. At
+          every step of the transition process, the choice is yours.
+        </p>
+      </div>
+      <div class="flex justify-center sm:gap-24 items-center mt-5">
+        <!-- justify-between sm: -->
+        <button class="btn btn-black btn-md" routerLink="/learn-more">
+          Learn More
+        </button>
+        <!-- <button class="btn btn-black btn-md">Apply to Join</button> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-gradient-to-t from-white via-lightGray to-white p-10 my-10">
+    <div class="text-center">
+      <h1 class="md:text-5xl text-center font-extrabold">
+        More healthcare practices are joining SimplyDoc
+        <br class="hidden md:block" />every week. Stay updated on our progress
+        on social.<br class="hidden md:block" />
+        Or <br class="hidden md:block" />Head over to the
+        <a class="text-blue2" routerLink="/learn-more">FAQs</a> to learn more.
+      </h1>
+      <p class="container text-base pt-5">
+        SimplyDoc is currently in a Public Beta. It means while we have quashed
+        most of the bugs, some of them may have escaped our otherwise great
+        hand-eye coordination. If you come across something that is not working
+        the way it should, let us know and we will fix it.
+      </p>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

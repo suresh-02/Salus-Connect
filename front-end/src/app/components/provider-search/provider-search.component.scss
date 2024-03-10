@@ -1,0 +1,33 @@
+.search {
+  @apply md:flex md:h-12 md:p-0 container rounded md:bg-white;
+  .search-box {
+    @apply md:flex items-center md:border-1 border-medGray rounded-l;
+    div {
+      @apply flex items-center md:border-0 border-1 border-medGray rounded my-0 h-full px-1 bg-white;
+    }
+    input {
+      @apply border-0;
+      &:focus {
+        box-shadow: none;
+      }
+    }
+    div:not(:last-child) {
+      @apply flex items-center;
+
+      input {
+        @apply md:border-r-1 border-medGray mr-2;
+      }
+    }
+    div:last-child {
+      @apply flex items-center;
+    }
+  }
+}
+
+.searchBtn {
+  height: 50px;
+  width: 50px;
+  &:hover {
+    @apply bg-blue1;
+  }
+}

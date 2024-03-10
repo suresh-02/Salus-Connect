@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "1f4be301-0a81-4c72-8c8e-50d2f7c273d1",
+		"name": "Specialties",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all specialties",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/specialties",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"specialties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a specialty",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/specialties/545",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"specialties",
+						"545"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a specialty",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"specialtyName\": \"Test 2\",\r\n    \"categoryId\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/specialties",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"specialties"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbmlzdHJhdG9yIiwiZXhwIjoxNjMzODc0OTA1LCJpc3MiOiJodHRwOi8vOTkuNzkuNTMuMTY4L2FwaSIsImF1ZCI6Imh0dHA6Ly85OS43OS41My4xNjgifQ.dnB-YKUbveW63HLLwGBEdZFBxm1e2mblAslr1WIalNY",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

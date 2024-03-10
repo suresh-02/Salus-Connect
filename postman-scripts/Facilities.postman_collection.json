@@ -1,0 +1,89 @@
+{
+	"info": {
+		"_postman_id": "67eac571-fd5a-4291-a827-c92e14d4fc41",
+		"name": "Facilities",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get facility by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/facilities/4?includeChildren=true",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"facilities",
+						"4"
+					],
+					"query": [
+						{
+							"key": "includeChildren",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create facility",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"facilityId\": 0,\r\n    \"facilityName\": \"string\",\r\n    \"facilityType\": \"Hospital\",\r\n    \"status\": \"Inactive\",\r\n    \"address\": {\r\n        \"addressId\": 0,\r\n        \"addressLine1\": \"string\",\r\n        \"addressLine2\": \"string\",\r\n        \"postalCodeId\": 0,\r\n        \"postalCode\": \"string\",\r\n        \"city\": \"string\",\r\n        \"timeZone\": 0,\r\n        \"latitude\": 0,\r\n        \"longitude\": 0,\r\n        \"isNew\": true,\r\n        \"provinceAbbr\": \"string\",\r\n        \"provinceName\": \"string\"\r\n    },\r\n    \"doctors\": [\r\n        {\r\n            \"userId\": 0,\r\n            \"firstName\": \"string\",\r\n            \"middleName\": \"string\",\r\n            \"lastName\": \"string\",\r\n            \"phoneNumber\": \"stringstri\",\r\n            \"emailAddress\": \"user@example.com\",\r\n            \"password\": \"string\",\r\n            \"role\": {\r\n                \"roleId\": 2147483647,\r\n                \"roleName\": \"string\",\r\n                \"isActive\": true\r\n            },\r\n            \"imageUrl\": \"string\",\r\n            \"status\": \"Inactive\",\r\n            \"biography\": \"string\",\r\n            \"specialty\": {\r\n                \"specialtyId\": 0,\r\n                \"specialtyName\": \"string\",\r\n                \"categoryId\": 0,\r\n                \"categoryName\": \"string\"\r\n            },\r\n            \"tags\": [\r\n                \"string\"\r\n            ],\r\n            \"facilityId\": 0,\r\n            \"facilityName\": \"string\"\r\n        }\r\n    ],\r\n    \"staff\": [\r\n        {\r\n            \"userId\": 0,\r\n            \"firstName\": \"string\",\r\n            \"middleName\": \"string\",\r\n            \"lastName\": \"string\",\r\n            \"phoneNumber\": \"stringstri\",\r\n            \"emailAddress\": \"user@example.com\",\r\n            \"password\": \"string\",\r\n            \"role\": {\r\n                \"roleId\": 2147483647,\r\n                \"roleName\": \"string\",\r\n                \"isActive\": true\r\n            },\r\n            \"imageUrl\": \"string\",\r\n            \"status\": \"Inactive\",\r\n            \"facilityName\": \"string\"\r\n        }\r\n    ],\r\n    \"subscription\": {\r\n        \"subscriptionId\": 0,\r\n        \"stripeSubscriptionId\": \"string\",\r\n        \"stripeCustomerId\": \"string\",\r\n        \"doctorId\": 0,\r\n        \"facilityId\": 0,\r\n        \"startDate\": \"2022-02-19T15:19:45.678Z\",\r\n        \"endDate\": \"2022-02-19T15:19:45.678Z\",\r\n        \"billingStartDate\": \"2022-02-19T15:19:45.678Z\",\r\n        \"freeTrialDays\": 0,\r\n        \"paymentMethod\": \"Unknown\",\r\n        \"memo\": \"string\",\r\n        \"invoiceFooter\": \"string\",\r\n        \"designatedEmail\": \"string\",\r\n        \"designatedPhone\": \"string\",\r\n        \"isActive\": true,\r\n        \"plans\": [\r\n            {\r\n                \"id\": 0,\r\n                \"planId\": 0,\r\n                \"qty\": 0,\r\n                \"cost\": 0\r\n            }\r\n        ],\r\n        \"discounts\": [\r\n            {\r\n                \"id\": 0,\r\n                \"couponId\": 0\r\n            }\r\n        ],\r\n        \"authDoctors\": [\r\n            {\r\n                \"id\": 0,\r\n                \"doctorId\": 0\r\n            }\r\n        ],\r\n        \"authStaff\": [\r\n            {\r\n                \"id\": 0,\r\n                \"staffId\": 0\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/facilities",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"facilities"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbmlzdHJhdG9yIiwiZXhwIjoxNjQ3NzY1MjY0LCJpc3MiOiJodHRwOi8vOTkuNzkuNTMuMTY4L2FwaSIsImF1ZCI6Imh0dHA6Ly85OS43OS41My4xNjgifQ.xjLjDrlGePbzDwY8xRYibJpR15QR4WpSMnmT2WRnEf0",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

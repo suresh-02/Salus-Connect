@@ -1,0 +1,163 @@
+<div class="border-1 border-medGray rounded p-6">
+  <h1 class="text-xl font-medium mb-8 text-navy">Create Exception Days</h1>
+  <div
+    class="flex flex-col xl:flex-row gap-y-5 items-center xl:items-start justify-between"
+  >
+    <div class="max-w-[400px]">
+      <h3 class="text-sm font-medium mb-2 text-navy">
+        1. Select all days for which you want to create an exception
+      </h3>
+      <app-calendar
+        class="lg:mr-10 flex justify-center lg:block mb-4"
+      ></app-calendar>
+
+      <h3 class="text-sm font-medium mb-2 text-navy">
+        2. For each of your chosen dates, select a start and end time when you
+        plan to be available. If you are not available, select Not Available on
+        this day.
+      </h3>
+
+      <div
+        class="text-blue2 text-xs flex justify-between items-center px-3 py-2 rounded border-1 border-medGray mb-3"
+      >
+        <button
+          (click)="previousDate()"
+          class="icon"
+          [disabled]="
+            selectedDate === 0 ||
+            (!notAvailable ? !startTime || !endTime : false)
+          "
+        >
+          <i nz-icon nzType="left" nzTheme="outline"></i>
+        </button>
+        <span *ngIf="dates.length > 0"
+          >{{ dates[selectedDate] | date: "EEEE, d MMMM y" }}
+        </span>
+        <span *ngIf="dates.length == 0">mm-dd-yyyy</span>
+        <button
+          (click)="nextDate()"
+          [disabled]="
+            dates.length === 0 ||
+            dates.length === 1 ||
+            selectedDate === dates.length - 1 ||
+            (!notAvailable ? !startTime || !endTime : false)
+          "
+          class="icon"
+        >
+          <i nz-icon nzType="right" nzTheme="outline"></i>
+        </button>
+      </div>
+
+      <!-- <div class="grid grid-cols-2 gap-2 text-sm mt-4">
+        <button
+          [disabled]="selectedDate === 0"
+          (click)="previousDate()"
+          class="border border-lightGray py-1 text-blue2 rounded hover:bg-bgBlue disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Previous
+        </button>
+        <button
+          [disabled]="
+            dates.length === 0 ||
+            dates.length === 1 ||
+            selectedTimes.length === 0 ||
+            this.selectedDate === dates.length - 1
+          "
+          class="bg-blue1 hover:bg-blue2 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded"
+          (click)="nextDate()"
+        >
+          Next
+        </button>
+      </div> -->
+      <div>
+        <label class="radio">
+          <input
+            #by
+            [ngClass]="{ active: !notAvailable }"
+            [(ngModel)]="notAvailable"
+            (ngModelChange)="saveSelection()"
+            name="radio"
+            type="radio"
+            [value]="false"
+          />
+          <span class="font-medium">Select Hours</span>
+        </label>
+        <div class="grid grid-rows-2 pl-10 py-2 gap-y-1 max-w-[300px]">
+          <div class="flex items-center justify-between gap-5">
+            Start time
+            <nz-time-picker
+              [nzDisabled]="notAvailable"
+              [nzUse12Hours]="true"
+              [nzMinuteStep]="15"
+              nzFormat="hh:mm a"
+              [(ngModel)]="startTime"
+              (ngModelChange)="saveDate()"
+            ></nz-time-picker>
+          </div>
+          <div class="flex items-center justify-between gap-5">
+            End time
+            <nz-time-picker
+              [nzDisabled]="notAvailable"
+              [nzUse12Hours]="true"
+              [nzMinuteStep]="15"
+              nzFormat="hh:mm a"
+              [(ngModel)]="endTime"
+              (ngModelChange)="saveDate()"
+            ></nz-time-picker>
+          </div>
+        </div>
+        <label class="radio">
+          <input
+            #by
+            [ngClass]="{ active: notAvailable }"
+            [(ngModel)]="notAvailable"
+            (ngModelChange)="saveSelection()"
+            name="radio"
+            type="radio"
+            [value]="true"
+          />
+          <span class="font-medium">Not available on this day</span>
+        </label>
+      </div>
+    </div>
+    <div *ngIf="exceptionDates.length > 0" class="overflow-auto">
+      <span class="text-sm font-medium text-navy mb-2">Selection Summary:</span>
+      <nz-table
+        #dt
+        class="shadow"
+        [nzData]="exceptionDates"
+        [nzShowPagination]="false"
+        [nzScroll]="{ x: '390px', y: '450px' }"
+      >
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of exceptionDates">
+            <td>{{ data.exceptionDate | date: "yyyy-MM-dd" }}</td>
+            <td>
+              {{ data.exceptionTimeRange ? data.exceptionTimeRange[0] : "-" }}
+            </td>
+            <td>
+              {{ data.exceptionTimeRange ? data.exceptionTimeRange[1] : "-" }}
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+  <div class="flex justify-end mt-4">
+    <button
+      [disabled]="!notAvailable ? !startTime || !endTime : false"
+      class="btn btn-blue btn-md mr-5"
+      (click)="save()"
+    >
+      Save
+    </button>
+    <button class="btn btn-outline blue btn-md" (click)="exit()">Exit</button>
+  </div>
+</div>

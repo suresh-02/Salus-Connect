@@ -1,0 +1,26 @@
+{
+	"isAcceptNew": true,
+	"isAutoApprove": false,
+	"cancellationPolicyDays": 5,
+	"treatments": [
+		{
+			"nickName": "Extraction",
+			"type": "Extract teeth",
+			"description": "Extrat teeth on daily basis",
+			"timeRange": ["10:00 AM", "01:00 PM"],
+			"durationMinutes": 30,
+			"break": null 30,
+			"treatmentDays": [1,3,5],
+			"excludeHolidays": true,
+			"insuranceCoverage": "None",
+			"feePerVisit": 30.45,
+			"isDefault": true
+		}
+	],
+	"entireCalendar": {
+		"dateRange": ["2021-12-15", "2022-12-14"]
+	},
+	"customCalendar": {
+		
+	}
+}

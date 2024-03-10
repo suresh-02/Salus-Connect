@@ -1,0 +1,10 @@
+::ng-deep {
+  .ant-picker-panel-container {
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+  .ck-editor__editable_inline {
+    min-height: 250px;
+    max-height: 300px;
+  }
+}

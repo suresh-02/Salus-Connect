@@ -1,0 +1,41 @@
+request-doctor path change
+
+nickname 20
+treatment type 25
+tDescription 300
+symptoms 300
+notes 5000
+
+request-doctor navigation
+
+treatment search limited
+
+pg - 61 completed
+pg - 62 - Start Appointment ID with 2 alphanumerics (pending)
+pg - 64 completed
+pg - 65 completed
+pg - 66 completed
+pg - 67 completed
+pg - 68 completed
+pg - 69 pending
+pg - 71 completed
+pg - 72 completed
+
+staff
+    switch alignment
+
+all user 
+    remove title
+
+account
+    biography count
+
+admin
+    provider bio alignment
+
+-------------------------------
+
+appointment Requested (pending)
+    location alignment
+
+provider send invite progress status

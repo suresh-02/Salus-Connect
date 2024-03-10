@@ -1,0 +1,238 @@
+<nz-tabset [nzCanDeactivate]="canDeactivate">
+  <nz-tab nzTitle="Add New">
+    <ng-container *ngTemplateOutlet="builder"></ng-container>
+  </nz-tab>
+  <nz-tab *ngFor="let t of treatments; let i = index" [nzTitle]="titleTemplate">
+    <ng-template #titleTemplate>
+      {{ t.nickname }}
+      <i
+        *ngIf="t.isDefault"
+        nz-icon
+        nzType="check-circle"
+        nzTheme="twotone"
+        class="!mx-1"
+      ></i>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="builder"></ng-container>
+  </nz-tab>
+</nz-tabset>
+
+<ng-template #builder>
+  <div class="border-1 border-medGray rounded p-6" [formGroup]="treatmentForm">
+    <div>
+      <div class="flex justify-between">
+        <h1 class="text-lg font-medium">Set up time slots by treatment type</h1>
+        <button
+          *ngIf="selectedTreatment >= 0"
+          class="btn btn-red icon"
+          (click)="deletetreatment()"
+        >
+          <i
+            nz-icon
+            nzType="delete"
+            nzTheme="outline"
+            class="mr-1 leading-none"
+          ></i>
+          Delete
+        </button>
+      </div>
+      <div class="form !max-w-full">
+        <div class="input">
+          <input
+            type="text"
+            placeholder="Nickname (only you see it)"
+            formControlName="nickname"
+          />
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-darkGray"
+            >{{ 15 - tf.nickname.value?.length }} characters remaining</span
+          >
+          <span class="text-xs text-darkGray"
+            >{{ tf.nickname.value?.length }}/15</span
+          >
+        </div>
+        <div class="input">
+          <input
+            type="text"
+            placeholder="Treatment Type"
+            formControlName="treatmentType"
+          />
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-darkGray"
+            >{{ 25 - tf.treatmentType.value?.length }} characters
+            remaining</span
+          >
+          <span class="text-xs text-darkGray"
+            >{{ tf.treatmentType.value?.length }}/25</span
+          >
+        </div>
+        <div class="input">
+          <textarea
+            type="text"
+            placeholder="Treatment details"
+            formControlName="description"
+          ></textarea>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-darkGray"
+            >{{ 300 - tf.description.value?.length }} characters remaining</span
+          >
+          <span class="text-xs text-darkGray"
+            >{{ tf.description.value?.length }}/300</span
+          >
+        </div>
+      </div>
+    </div>
+    <nz-divider></nz-divider>
+    <div class="mb-4">
+      <div class="my-4">
+        <h1 class="text-base font-medium">Days Available</h1>
+        <div class="mt-4">
+          <nz-checkbox-group
+            formControlName="treatmentDays"
+          ></nz-checkbox-group>
+        </div>
+      </div>
+      <h1 class="text-base font-medium">
+        Hours <br class="md:hidden block" />
+        <span class="text-xs text-gray-500 font-normal"
+          >(use this to customize specific hours of the day when you want to
+          provide this particular treatment)</span
+        >
+      </h1>
+      <div class="flex flex-col md:flex-row gap-y-3 mt-4">
+        <div class="grid grid-cols-3 gap-2 md:mr-10">
+          <span class="flex items-center text-xs font-medium">Start time</span>
+          <div class="col-span-2 input flex items-center">
+            <nz-time-picker
+              [nzMinuteStep]="15"
+              [nzUse12Hours]="true"
+              nzFormat="hh:mm a"
+              formControlName="startTime"
+            ></nz-time-picker>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <span class="flex items-center text-xs font-medium">End Time</span>
+          <div class="col-span-2 input flex items-center">
+            <nz-time-picker
+              [nzMinuteStep]="15"
+              [nzUse12Hours]="true"
+              nzFormat="hh:mm a"
+              formControlName="endTime"
+            ></nz-time-picker>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="my-4">
+      <h1 class="text-base font-medium">Slot Duration</h1>
+      <div class="mt-4">
+        <nz-radio-group formControlName="durationMinutes">
+          <label
+            nz-radio
+            [nzValue]="sd.value"
+            *ngFor="let sd of slotDurations"
+            >{{ sd.label }}</label
+          >
+        </nz-radio-group>
+      </div>
+    </div>
+    <div class="mb-4">
+      <span class="flex justify-start items-start">
+        <h1 class="text-base font-medium">
+          Break between appointments <br class="md:hidden block" />
+          <span class="text-xs text-gray-500 font-normal"
+            >(only applies when you publish entire calendar)</span
+          >
+        </h1>
+
+        <nz-switch
+          nzSize="small"
+          class="ml-5 mt-2"
+          formControlName="isBreak"
+          (ngModelChange)="enableBreakOrFees('break')"
+        ></nz-switch>
+      </span>
+      <div class="mt-4">
+        <nz-radio-group formControlName="breakMinutes">
+          <label
+            nz-radio
+            [nzValue]="sd.value"
+            *ngFor="let sd of breakDurations"
+            >{{ sd.label }}</label
+          >
+        </nz-radio-group>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-y-3 md:gap-y-0">
+      <div class="flex gap-3 items-center">
+        <h1 class="text-base font-medium flex-grow">
+          Exclude Holidays
+        </h1>
+        <nz-switch
+          nzSize="small"
+          class="leading-none"
+          formControlName="excludeHolidays"
+        ></nz-switch>
+        <i
+          class="text-blue2 text-base leading-none"
+          nz-icon
+          nzType="info-circle"
+          nzTheme="outline"
+          nz-tooltip="List of holidays"
+        ></i>
+      </div>
+    </div>
+    <nz-divider></nz-divider>
+    <div class="my-4 flex md:flex-row flex-col">
+      <h1 class="text-base font-medium mr-5">Provincial Insurance Coverage</h1>
+      <nz-radio-group formControlName="insuranceCoverage">
+        <label nz-radio [nzValue]="ic" *ngFor="let ic of insuranceCoverages">{{
+          ic
+        }}</label>
+      </nz-radio-group>
+    </div>
+    <div class="my-4 flex md:flex-row flex-col">
+      <h1 class="text-base font-medium mr-5">Fee per visit</h1>
+      <nz-radio-group
+        formControlName="feePerVisit"
+        (ngModelChange)="enableBreakOrFees('fees')"
+      >
+        <label nz-radio nzValue="amount">CA $</label>
+        <nz-input-number
+          formControlName="feeAmount"
+          [nzMin]="1"
+        ></nz-input-number>
+        <label nz-radio nzValue="varies" class="ml-5">Varies</label>
+      </nz-radio-group>
+    </div>
+    <nz-divider></nz-divider>
+    <h1 class="text-base font-medium flex-grow">
+      Make this the default treatment to display in search
+      <nz-switch
+        nzSize="small"
+        class="ml-5"
+        formControlName="isDefault"
+        (click)="onDefaultChange()"
+      ></nz-switch>
+    </h1>
+    <div class="flex items-center justify-end">
+      <button
+        [disabled]="
+          treatmentForm.invalid || treatmentForm.hasError('treatmentDays')
+        "
+        class="btn btn-blue !text-sm mr-4"
+        (click)="submit()"
+      >
+        {{ selectedTreatment >= 0 ? "Save" : "Add" }}
+      </button>
+      <button class="btn btn-outline blue !text-sm" (click)="exit()">
+        Exit
+      </button>
+    </div>
+  </div>
+</ng-template>

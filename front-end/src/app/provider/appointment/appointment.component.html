@@ -1,0 +1,43 @@
+<div class="flex justify-end items-center mb-2">
+  <div *ngIf="doctor" class="flex flex-col items-end">
+    <span class="text-sm">
+      You are operating on behalf of {{ doctor.firstName }}
+      {{ doctor.lastName }}
+    </span>
+    <a routerLink="/provider/choose" class="text-blue1 hover:text-blue2"
+      >Switch provider</a
+    >
+  </div>
+</div>
+<div
+  [class]="
+    !isTreatment && !isDateTimeSelector
+      ? 'lg:flex lg:justify-between'
+      : 'hidden'
+  "
+  @animate
+>
+  <div class="flex justify-center lg:block lg:pb-0 pb-4">
+    <app-doctor-slots
+      (isTreatment)="getTreatment($event)"
+      (isDateTime)="getSelector($event)"
+      (isChanged)="isChanged = $event"
+    ></app-doctor-slots>
+  </div>
+  <div class="flex justify-center lg:block">
+    <app-preview-calendar></app-preview-calendar>
+  </div>
+</div>
+<div *ngIf="isTreatment" @animate>
+  <app-treatment
+    *ngIf="isTreatment"
+    (isSlot)="isTreatment = $event"
+    [treatments]="treatmentData"
+  ></app-treatment>
+</div>
+<div *ngIf="isDateTimeSelector" @animate>
+  <app-date-time-selector
+    [dates]="selectorData"
+    (isSlot)="isDateTimeSelector = $event"
+  ></app-date-time-selector>
+</div>

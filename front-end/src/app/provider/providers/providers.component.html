@@ -1,0 +1,331 @@
+<ng-template #buttons>
+  <div class="flex items-center gap-2 my-2">
+    <button routerLink="/provider/register" class="btn btn-blue icon">
+      <i nz-icon nzType="plus" nzTheme="outline" class="mr-1 leading-none"></i>
+      Add Provider
+    </button>
+    <nz-divider nzType="vertical"></nz-divider>
+    <button
+      class="btn btn-outline blue icon"
+      [disabled]="setOfCheckedId.length === 0"
+      (click)="sendInviteSelected()"
+    >
+      <i nz-icon nzType="send" nzTheme="outline" class="mr-1 leading-none"></i>
+      Send Invite to All
+    </button>
+  </div>
+</ng-template>
+<ng-template #searchbox>
+  <div class="search order-first lg:order-none">
+    <input type="text" [(ngModel)]="search" placeholder="Search..." />
+    <i
+      nz-icon
+      nzType="search"
+      nzTheme="outline"
+      class="text-darkGray text-base mr-1.5 leading-none"
+    ></i>
+  </div>
+</ng-template>
+<ng-template #pagination>
+  <nz-pagination
+    nzSize="small"
+    [nzTotal]="total"
+    nzShowSizeChanger
+    [nzPageSizeOptions]="[10, 20, 50, 100]"
+    [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzShowTotal]="rangeTemplate"
+  ></nz-pagination>
+</ng-template>
+<div class="hidden lg:flex items-center justify-between">
+  <ng-container *ngTemplateOutlet="buttons"></ng-container>
+  <ng-container *ngTemplateOutlet="searchbox"></ng-container>
+  <ng-container *ngIf="total">
+    <ng-container *ngTemplateOutlet="pagination"></ng-container>
+  </ng-container>
+</div>
+<div
+  class="flex md:flex-row flex-col lg:hidden justify-between items-center md:items-end"
+>
+  <ng-container *ngTemplateOutlet="buttons"></ng-container>
+  <div class="flex flex-col gap-y-2 mb-2">
+    <ng-container *ngTemplateOutlet="searchbox"></ng-container>
+    <ng-container *ngTemplateOutlet="pagination"></ng-container>
+  </div>
+</div>
+<nz-table
+  #dt
+  [nzData]="providers"
+  nzSize="small"
+  [nzLoading]="loading"
+  [nzShowPagination]="true"
+  [nzFrontPagination]="false"
+  [nzTotal]="total"
+  [(nzPageSize)]="pageSize"
+  [(nzPageIndex)]="pageIndex"
+  [nzVirtualForTrackBy]="trackByFunction"
+  (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+  (nzQueryParams)="onQueryParamsChange($event)"
+  [nzScroll]="{ x: '1120px' }"
+>
+  <thead>
+    <tr>
+      <th
+        nzLeft
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+      ></th>
+      <th
+        *ngFor="let col of cols"
+        [nzSortOrder]="col.sortOrder"
+        [nzSortDirections]="col.sortDirections"
+        [nzWidth]="col.width"
+        [nzColumnKey]="col.sortField"
+        [nzSortFn]="true"
+      >
+        {{ col.name }}
+      </th>
+      <th nzWidth="78px" nzRight>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let provider of dt.data">
+      <tr>
+        <td
+          nzLeft
+          [nzChecked]="
+            setOfCheckedId.includes(
+              provider.providerId + provider.providerType[0]
+            )
+          "
+          (nzCheckedChange)="
+            onItemChecked(
+              provider.providerId + provider.providerType[0],
+              $event
+            )
+          "
+        ></td>
+        <td
+          data-label="Provider Name"
+          (click)="viewProvider(provider.providerId, provider.providerType)"
+        >
+          {{ provider.providerName }}
+        </td>
+        <td
+          data-label="City"
+          (click)="viewProvider(provider.providerId, provider.providerType)"
+        >
+          {{ provider.city }}
+        </td>
+        <td
+          data-label="State"
+          (click)="viewProvider(provider.providerId, provider.providerType)"
+        >
+          {{ provider.stateAbbr }}
+        </td>
+        <td
+          data-label="Date Created"
+          (click)="viewProvider(provider.providerId, provider.providerType)"
+        >
+          <span> {{ provider.dateCreated | date: "MM-dd-yyyy HH:mm" }}</span>
+        </td>
+        <td
+          data-label="Payment Type"
+          (click)="viewProvider(provider.providerId, provider.providerType)"
+        >
+          <span> {{ provider.paymentType }}</span>
+        </td>
+        <td
+          data-label="Type"
+          (click)="viewProvider(provider.providerId, provider.providerType)"
+        >
+          <span [class]="'badge ' + provider.providerType.toLowerCase()">
+            {{ provider.providerType }}</span
+          >
+        </td>
+        <td
+          data-label="Specialty"
+          (click)="viewProvider(provider.providerId, provider.providerType)"
+        >
+          <span *ngIf="provider.providerType === 'Individual'">{{
+            provider.specialtyName
+          }}</span>
+          <br *ngIf="provider.providerType !== 'Individual'" />
+        </td>
+        <td
+          data-label="Doctors"
+          (click)="viewProvider(provider.providerId, provider.providerType)"
+        >
+          {{ provider.doctors }}
+          <br *ngIf="!provider.doctors" />
+        </td>
+        
+        <td
+          data-label="Status"
+          (click)="viewProvider(provider.providerId, provider.providerType)"
+        >
+          <span
+            [class]="
+              'badge ' +
+              findStatus(
+                provider.activeDoctors,
+                provider.doctors,
+                provider.status
+              ).toLowerCase()
+            "
+          >
+            {{
+              findStatus(
+                provider.activeDoctors,
+                provider.doctors,
+                provider.status
+              )
+            }}</span
+          >
+        </td>
+        <td nzRight data-label="Action">
+          <span class="flex items-center cursor-pointer">
+            <i
+              class="text-blue1 hover:text-blue2 mr-1.5 text-base"
+              nz-icon
+              nzType="edit"
+              nzTheme="outline"
+              nz-tooltip
+              [nzTooltipMouseEnterDelay]="1"
+              nzTooltipTitle="Edit"
+              [routerLink]="[
+                '/provider/edit',
+                provider.providerId,
+                provider.providerType.toLowerCase()
+              ]"
+            >
+            </i>
+            <i
+              class="text-red-500 text-base"
+              (click)="
+                setData({
+                  pId: provider.providerId,
+                  pType: provider.providerType,
+                  pTypeConversion: true
+                })
+              "
+              nz-icon
+              nzType="delete"
+              nzTheme="outline"
+              nz-tooltip
+              [nzTooltipMouseEnterDelay]="1"
+              nzTooltipTitle="Delete"
+              nz-popconfirm
+              nzPopconfirmTitle="Are you sure want to proceed?"
+              nzPopconfirmPlacement="bottomRight"
+              (nzOnConfirm)="deleteProvider()"
+            ></i>
+            <i
+              [id]="'label-' + provider.providerId"
+              nz-tooltip
+              [nzTooltipMouseEnterDelay]="1"
+              nzTooltipTitle="options"
+              nz-icon
+              nzType="more"
+              nzTheme="outline"
+              nz-dropdown
+              nzTrigger="click"
+              [nzDropdownMenu]="menu"
+              (click)="
+                setData({
+                  pId: provider.providerId,
+                  pType: provider.providerType,
+                  status: provider.status
+                })
+              "
+              class="text-lg"
+            ></i>
+          </span>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</nz-table>
+<!-- <div class="my-2 flex items-center justify-end">
+  <button
+    (click)="prev(dt)"
+    [disabled]="isFirstPage()"
+    class="topNavigation mr-2"
+  >
+    <i nz-icon nzType="left" nzTheme="outline"></i>
+  </button>
+  <span class="text-sm" *ngIf="dt.nzPageIndex >= 1">
+    {{ dt.nzPageIndex }}
+  </span>
+  <button
+    (click)="next(dt)"
+    [disabled]="isLastPage()"
+    class="topNavigation ml-2"
+  >
+    <i nz-icon nzType="right" nzTheme="outline"></i>
+  </button>
+</div> -->
+
+<ng-template #rangeTemplate let-range="range" let-total>
+  Displaying {{ range[0] }} to {{ range[1] }} of {{ total }}
+</ng-template>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li
+      nz-menu-item
+      (click)="activateProvider('Active')"
+      *ngIf="providerStatus !== 'Active'"
+    >
+      <i nz-icon nzType="check" nzTheme="outline" class="mr-2"></i>Activate
+    </li>
+    <li
+      nz-menu-item
+      (click)="activateProvider('Inactive')"
+      *ngIf="providerStatus !== 'Inactive'"
+    >
+      <i nz-icon nzType="close" nzTheme="outline" class="mr-2"></i>Hibernate
+    </li>
+    <li
+      nz-menu-item
+      (click)="activateProvider('Published')"
+      *ngIf="providerStatus !== 'Published'"
+    >
+      <i nz-icon nzType="send" nzTheme="outline" class="mr-2"></i>Publish Info
+    </li>
+    <li
+      nz-menu-item
+      (click)="sendInvite()"
+      *ngIf="providerStatus !== 'Invited'"
+    >
+      <i nz-icon nzType="mail" nzTheme="outline" class="mr-2"></i>
+      Send Invite
+    </li>
+  </ul>
+</nz-dropdown-menu>
+
+<nz-modal
+  [(nzVisible)]="showModal"
+  nzCentered
+  nzTitle="Provider Info"
+  [nzFooter]="null"
+  (nzOnCancel)="showModal = false"
+  [nzStyle]="{ minWidth: 'max-content' }"
+>
+  <div *nzModalContent>
+    <app-individual-edit
+      *ngIf="viewType === 'Individual'"
+      [viewId]="viewId"
+    ></app-individual-edit>
+    <app-hospital-form
+      *ngIf="viewType !== 'Individual'"
+      [viewId]="viewId"
+    ></app-hospital-form>
+  </div>
+</nz-modal>
+
+<ng-template #progress let-heading="data">
+  <span class="text-base font-medium">{{ heading }} providers</span>
+  <nz-progress [nzPercent]="percent" [nzWidth]="120"></nz-progress>
+</ng-template>

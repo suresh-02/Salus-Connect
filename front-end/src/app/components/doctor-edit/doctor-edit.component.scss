@@ -1,0 +1,31 @@
+.tag {
+  @apply bg-blue0 p-1 px-2 rounded mb-1 ml-1 select-none text-black text-[10px] flex justify-between items-center max-w-max;
+  a {
+    @apply ml-1 hover:bg-blue1 hover:bg-opacity-30 p-1 rounded-full cursor-pointer;
+  }
+}
+
+.label {
+  font-size: 14px;
+}
+
+.dis {
+  .ck .ck-editor__main {
+    @apply bg-gray-200;
+  }
+}
+
+:host ::ng-deep {
+  .ck-editor__editable_inline {
+    min-height: 100px;
+    max-height: 200px;
+    border: none;
+  }
+  .ck.ck-toolbar {
+    border: 0;
+  }
+}
+
+.disable {
+  background-color: rgb(245, 245, 245);
+}

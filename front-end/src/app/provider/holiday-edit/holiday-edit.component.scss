@@ -1,0 +1,12 @@
+input {
+  @apply border-1 border-medGray rounded p-2 text-xs focus:border-blue2;
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+::ng-deep {
+  .ant-picker-header {
+    display: none;
+  }
+}

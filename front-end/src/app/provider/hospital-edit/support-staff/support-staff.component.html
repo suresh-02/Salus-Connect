@@ -1,0 +1,349 @@
+<div class="flex items-center justify-between">
+  <span>
+    <h1 class="text-xl font-medium">Support Staff</h1>
+    <p class="!text-sm !text-black !m-0">{{ hospitalName }}</p>
+  </span>
+  <button
+    *ngIf="!isView"
+    (click)="toggleModal(-1)"
+    class="bg-blue1 hover:bg-blue2 flex items-center px-2 py-1 mb-2 text-white text-sm rounded"
+  >
+    <i nz-icon nzType="plus" nzTheme="outline" class="mr-2"></i> Add new
+  </button>
+</div>
+
+<nz-table
+  #dt
+  [nzData]="suppStaff"
+  nzSize="small"
+  [nzVirtualForTrackBy]="trackByFunction"
+  [nzShowPagination]="false"
+>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Phone Number</th>
+      <th>Email</th>
+      <th>Status</th>
+      <th *ngIf="!isView">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let staff of dt.data; let rowId = index">
+      <td>
+        <label
+          nz-checkbox
+          [nzChecked]="staff.status === 'Active'"
+          nzDisabled
+        ></label>
+      </td>
+      <td>{{ staff.firstName }} {{ staff.lastName }}</td>
+      <td>{{ staff.phoneNumber }}</td>
+      <td>{{ staff.emailAddress }}</td>
+      <td>
+        <span [class]="'badge ' + staff.status?.toLowerCase()">
+          {{ staff.status }}
+        </span>
+      </td>
+      <td *ngIf="!isView">
+        <span class="cursor-pointer">
+          <i
+            nz-icon
+            nzType="edit"
+            nzTheme="outline"
+            class="text-blue1 hover:text-blue2 text-base"
+            (click)="toggleModal(rowId)"
+          >
+          </i>
+          <i
+            nz-icon
+            nzType="delete"
+            nzTheme="outline"
+            class="ml-2 text-red-400 hover:text-red-500 text-base"
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure want to proceed?"
+            nzPopconfirmPlacement="bottomRight"
+            (nzOnConfirm)="delete()"
+            (click)="id = rowId"
+          >
+          </i>
+          <i
+            [id]="'label-' + staff.userId"
+            nz-tooltip
+            [nzTooltipMouseEnterDelay]="1"
+            nzTooltipTitle="options"
+            nz-icon
+            nzType="more"
+            nzTheme="outline"
+            nz-dropdown
+            nzTrigger="click"
+            [nzDropdownMenu]="menu"
+            (click)="
+              setData({
+                pId: staff.userId,
+                pType: 'Individual',
+                status: staff.status
+              })
+            "
+            class="text-lg"
+          ></i>
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal
+  [(nzVisible)]="showModal"
+  [nzTitle]="title + ' Support Staff'"
+  (nzOnCancel)="showModal = false"
+  [nzFooter]="null"
+  [nzMaskClosable]="false"
+  [nzKeyboard]="false"
+>
+  <div *nzModalContent>
+    <form class="form" @animate [formGroup]="suppStaffForm" id="form">
+      <div class="form-2">
+        <div
+          class="input"
+          [ngClass]="{
+            error: firstName.isError
+          }"
+        >
+          <input
+            nz-tooltip
+            nzTooltipPlacement="right"
+            [nzTooltipMouseEnterDelay]="1"
+            nzTooltipTitle="Enter your first Name"
+            type="text"
+            placeholder="First Name"
+            formControlName="firstName"
+            (ngModelChange)="checkError(firstName)"
+            (focusout)="checkError(firstName)"
+          />
+          <i
+            @animate
+            class="mr-2 text-green-400 text-base"
+            *ngIf="firstName.check"
+            nz-icon
+            nzType="check-circle"
+            nzTheme="outline"
+          ></i>
+          <i
+            @animate
+            class="mr-2 text-red-400 text-base"
+            *ngIf="firstName.isError"
+            nz-icon
+            nzType="exclamation-circle"
+            nzTheme="outline"
+          ></i>
+        </div>
+        <div
+          class="input"
+          [ngClass]="{
+            error: lastName.isError
+          }"
+        >
+          <input
+            nz-tooltip
+            nzTooltipPlacement="right"
+            [nzTooltipMouseEnterDelay]="1"
+            nzTooltipTitle="Enter your last Name"
+            type="text"
+            placeholder="Last Name"
+            formControlName="lastName"
+            (ngModelChange)="checkError(lastName)"
+            (focusout)="checkError(lastName)"
+          />
+          <i
+            @animate
+            class="mr-2 text-green-400 text-base"
+            *ngIf="lastName.check"
+            nz-icon
+            nzType="check-circle"
+            nzTheme="outline"
+          ></i>
+          <i
+            @animate
+            class="mr-2 text-red-400 text-base"
+            *ngIf="lastName.isError"
+            nz-icon
+            nzType="exclamation-circle"
+            nzTheme="outline"
+          ></i>
+        </div>
+        <p @animate class="!row-start-2" *ngIf="firstName.isError">
+          {{ firstName.message }}
+        </p>
+        <p @animate class="!col-start-2" *ngIf="lastName.isError">
+          {{ lastName.message }}
+        </p>
+      </div>
+      <div
+        class="input"
+        [ngClass]="{
+          error: middleName.isError
+        }"
+      >
+        <input
+          nz-tooltip
+          nzTooltipPlacement="right"
+          [nzTooltipMouseEnterDelay]="1"
+          nzTooltipTitle="Enter your middle Name"
+          type="text"
+          placeholder="Middle Name"
+          formControlName="middleName"
+          (ngModelChange)="checkError(middleName)"
+          (focusout)="checkError(middleName)"
+        />
+        <i
+          @animate
+          class="mr-2 text-green-400 text-base"
+          *ngIf="middleName.check"
+          nz-icon
+          nzType="check-circle"
+          nzTheme="outline"
+        ></i>
+        <i
+          @animate
+          class="mr-2 text-red-400 text-base"
+          *ngIf="middleName.isError"
+          nz-icon
+          nzType="exclamation-circle"
+          nzTheme="outline"
+        ></i>
+      </div>
+      <p @animate class="!row-start-2" *ngIf="middleName.isError">
+        {{ middleName.message }}
+      </p>
+      <div
+        class="input"
+        [ngClass]="{
+          error: phoneNumber.isError
+        }"
+      >
+        <input
+          nz-tooltip
+          nzTooltipPlacement="right"
+          [nzTooltipMouseEnterDelay]="1"
+          nzTooltipTitle="Enter your phone number"
+          type="text"
+          placeholder="Phone Number"
+          formControlName="phoneNumber"
+          (ngModelChange)="checkError(phoneNumber)"
+          (focusout)="checkError(phoneNumber)"
+        />
+        <i
+          @animate
+          class="mr-2 text-green-400 text-base"
+          *ngIf="phoneNumber.check"
+          nz-icon
+          nzType="check-circle"
+          nzTheme="outline"
+        ></i>
+        <i
+          @animate
+          class="mr-2 text-red-400 text-base"
+          *ngIf="phoneNumber.isError"
+          nz-icon
+          nzType="exclamation-circle"
+          nzTheme="outline"
+        ></i>
+      </div>
+      <p @animate *ngIf="phoneNumber.isError">{{ phoneNumber.message }}</p>
+      <div
+        class="input"
+        [ngClass]="{
+          error: emailAddress.isError
+        }"
+      >
+        <input
+          nz-tooltip
+          nzTooltipPlacement="right"
+          [nzTooltipMouseEnterDelay]="1"
+          nzTooltipTitle="Enter your email address"
+          type="text"
+          placeholder="Email Address"
+          formControlName="emailAddress"
+          (ngModelChange)="checkError(emailAddress)"
+          (focusout)="checkError(emailAddress)"
+        />
+        <i
+          @animate
+          class="mr-2 text-green-400 text-base"
+          *ngIf="emailAddress.check"
+          nz-icon
+          nzType="check-circle"
+          nzTheme="outline"
+        ></i>
+        <i
+          @animate
+          class="mr-2 text-red-400 text-base"
+          *ngIf="emailAddress.isError"
+          nz-icon
+          nzType="exclamation-circle"
+          nzTheme="outline"
+        ></i>
+      </div>
+      <p @animate *ngIf="emailAddress.isError">
+        {{ emailAddress.message }}
+      </p>
+    </form>
+
+    <div
+      class="flex items-center justify-end pt-6 md:max-w-[400px] mx-auto lg:max-w-[500px] max-w-[325px]"
+    >
+      <button
+        class="bg-gray-300 hover:bg-gray-400 px-4 py-2 text-black rounded mr-1"
+        type="button"
+        (click)="showModal = !showModal"
+      >
+        Close
+      </button>
+      <button
+        [disabled]="suppStaffForm.invalid"
+        class="bg-blue1 hover:bg-blue2 px-4 py-2 text-white rounded disabled:bg-gray-300 disabled:hover:bg-gray-400 disabled:text-black"
+        type="button"
+        (click)="save()"
+      >
+        <span *ngIf="title === 'Add'">Add</span>
+        <span *ngIf="title !== 'Add'">Save changes</span>
+      </button>
+    </div>
+  </div>
+</nz-modal>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li
+      nz-menu-item
+      (click)="activateProvider('Active')"
+      *ngIf="providerStatus !== 'Active'"
+    >
+      <i nz-icon nzType="check" nzTheme="outline" class="mr-2"></i>Activate
+    </li>
+    <li
+      nz-menu-item
+      (click)="activateProvider('Inactive')"
+      *ngIf="providerStatus !== 'Inactive'"
+    >
+      <i nz-icon nzType="close" nzTheme="outline" class="mr-2"></i>Hibernate
+    </li>
+    <li
+      nz-menu-item
+      (click)="activateProvider('Published')"
+      *ngIf="providerStatus !== 'Published'"
+    >
+      <i nz-icon nzType="send" nzTheme="outline" class="mr-2"></i>Publish Info
+    </li>
+    <li
+      nz-menu-item
+      (click)="sendInvite()"
+      *ngIf="providerStatus !== 'Invited'"
+    >
+      <i nz-icon nzType="mail" nzTheme="outline" class="mr-2"></i>
+      Send Invite
+    </li>
+  </ul>
+</nz-dropdown-menu>

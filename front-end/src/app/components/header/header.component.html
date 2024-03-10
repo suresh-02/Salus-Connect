@@ -1,0 +1,68 @@
+<div class="shadow-sm py-3 fixed top-0 w-full z-30 bg-white">
+  <div class="container -px-4 flex justify-between items-center">
+    <img
+      routerLink="/"
+      src="../../../assets/images/SimplyDoc-Logo.png"
+      alt="SimplyDoc-Logo"
+      class="h-14 cursor-pointer"
+    />
+    <a
+      *ngIf="!user"
+      class="text-navy flex items-center cursor-pointer text-sm"
+      routerLink="/login"
+      >Log in / Join us
+      <i nz-icon nzType="down" nzTheme="outline" class="ml-1"></i>
+    </a>
+    <div
+      class="max-h-12 rounded-full cursor-pointer"
+      id="label"
+      nz-dropdown
+      nzTrigger="click"
+      [nzDropdownMenu]="menu"
+      nzPlacement="bottomRight"
+      *ngIf="user"
+    >
+      <nz-avatar
+        *ngIf="!user.imageUrl"
+        [ngStyle]="{ 'background-color': '#99ddff' }"
+        [nzText]="
+          user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()
+        "
+        [nzSize]="45"
+        style="
+          vertical-align: middle;
+          font-size: 22px;
+          font-weight: 600;
+          color: #505050;
+        "
+      ></nz-avatar>
+      <img
+        [src]="environment.imageBaseUrl + user.imageUrl"
+        *ngIf="user.imageUrl"
+        class="object-cover w-11 h-11 rounded-full"
+      />
+    </div>
+  </div>
+</div>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li
+      nz-menu-item
+      routerLink="/account"
+      *ngIf="user?.role.roleName !== 'SupportStaff'"
+    >
+      <i nz-icon nzType="user" nzTheme="outline" class="mr-2"></i> My Profile
+    </li>
+    <li
+      nz-menu-item
+      routerLink="/provider/choose"
+      *ngIf="user?.role.roleName === 'SupportStaff'"
+    >
+      <i nz-icon nzType="login" nzTheme="outline" class="mr-2"></i>Choose Doctor
+    </li>
+    <li nz-menu-item routerLink="/" (click)="logout()">
+      <i nz-icon nzType="logout" nzTheme="outline" class="mr-2"></i>Logout
+    </li>
+  </ul>
+</nz-dropdown-menu>

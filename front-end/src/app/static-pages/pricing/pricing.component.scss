@@ -1,0 +1,64 @@
+.switch.svelte-1609q2g.svelte-1609q2g {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+.switch.svelte-1609q2g input.svelte-1609q2g {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider.svelte-1609q2g.svelte-1609q2g {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+.slider.svelte-1609q2g.svelte-1609q2g:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #fff;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+input.svelte-1609q2g:checked + .slider.svelte-1609q2g {
+  background-color: #2196f3;
+  box-shadow: 0 0 1px #2196f3;
+}
+input.svelte-1609q2g:checked + .slider.svelte-1609q2g:before {
+  transform: translate(26px);
+}
+
+.bgImg:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200%;
+  height: 200%;
+  opacity: 0.4;
+  background-image: url("../../../assets/images/CA.png");
+}
+
+.img:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  background-image: url("../../../assets/images/pricing.png");
+}

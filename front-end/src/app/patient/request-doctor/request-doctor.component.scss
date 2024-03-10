@@ -1,0 +1,30 @@
+.selected {
+  @apply bg-blue2 text-white;
+}
+
+::ng-deep {
+  .ant-picker-panel-container {
+    box-shadow: none;
+    @apply border-1 border-lightGray;
+  }
+}
+
+.treatmentBtn {
+  @apply text-blue2 px-3 py-1 border border-blue2 transition-all rounded-md hover:bg-blue2 hover:text-white;
+  &.selected {
+    @apply bg-blue2 text-white;
+  }
+}
+
+.grayBtn {
+  @apply bg-lightGray text-black p-1 rounded;
+}
+
+:host ::ng-deep {
+  .ck-editor__editable_inline {
+    border: none;
+  }
+  .ck.ck-toolbar {
+    border: 0;
+  }
+}

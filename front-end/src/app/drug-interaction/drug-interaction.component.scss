@@ -1,0 +1,32 @@
+h4 {
+  color: #000;
+  font-weight: 600;
+}
+
+h3 {
+  color: #000;
+  font-weight: 500;
+  font-size: 14px;
+  padding-block: 5px;
+}
+
+h4.contraindicated {
+  border-bottom: 4px solid #cc0000;
+  font-size: 18px;
+}
+h4.serious {
+  border-bottom: 4px solid #e96163;
+  font-size: 16px;
+}
+h4.significant {
+  border-bottom: 4px solid #f1adac;
+  font-size: 15px;
+}
+h4.monitor {
+  border-bottom: 4px solid #f1adac;
+  font-size: 15px;
+}
+h4.minor {
+  border-bottom: 4px solid #f7dfdf;
+  font-size: 14px;
+}

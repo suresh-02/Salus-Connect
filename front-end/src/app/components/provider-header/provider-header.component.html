@@ -1,0 +1,290 @@
+<ng-template #navMenu>
+  <div class="lg:flex block items-center nav" @inOut>
+    <!-- *ngIf="!isAdmin" -->
+    <div
+      (click)="menuClick()"
+      [routerLink]="isPatient ? '/home' : '/provider/home'"
+      routerLinkActive="active"
+      #home="routerLinkActive"
+    >
+      <i
+        nz-icon
+        nzType="home"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="home.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+      <a> Home</a>
+    </div>
+    <div
+      *ngIf="isPatient"
+      (click)="menuClick()"
+      routerLink="/search-doctor"
+      routerLinkActive="active"
+      #bookApointment="routerLinkActive"
+    >
+      <i
+        nz-icon
+        [nzType]="'calendar'"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="bookApointment.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+      <a> Book Appointment</a>
+    </div>
+    <div
+      (click)="menuClick()"
+      *ngIf="isAdmin"
+      routerLink="/provider/listing"
+      routerLinkActive="active"
+      #provider="routerLinkActive"
+    >
+      <i
+        nz-icon
+        [nzType]="'team'"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="provider.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+
+      <a>Providers</a>
+    </div>
+    <div
+      (click)="menuClick()"
+      *ngIf="isAdmin"
+      routerLink="/provider/register"
+      routerLinkActive="active"
+      #onBoarding="routerLinkActive"
+    >
+      <i
+        nz-icon
+        nzType="user-add"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="onBoarding.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+      <a>Provider Onboarding</a>
+    </div>
+    <div
+      (click)="menuClick()"
+      *ngIf="isAdmin"
+      routerLink="/provider/specialty"
+      routerLinkActive="active"
+      #specialty="routerLinkActive"
+    >
+      <i
+        nz-icon
+        [nzType]="'crown'"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="specialty.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+      <a>Specialties</a>
+    </div>
+    <div
+      (click)="menuClick()"
+      *ngIf="isAdmin"
+      routerLink="/provider/holiday"
+      routerLinkActive="active"
+      #holiday="routerLinkActive"
+    >
+      <i
+        nz-icon
+        [nzType]="'calendar'"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="holiday.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+      <a>Holidays</a>
+    </div>
+    <div
+      (click)="menuClick()"
+      *ngIf="isAdmin"
+      routerLink="/provider/payment"
+      routerLinkActive="active"
+      #payment="routerLinkActive"
+    >
+      <i
+        nz-icon
+        [nzType]="'calendar'"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="payment.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+      <a>Payments</a>
+    </div>
+    <div
+      (click)="menuClick()"
+      *ngIf="isAdmin"
+      routerLink="/provider/patients"
+      routerLinkActive="active"
+      #patient="routerLinkActive"
+    >
+      <i
+        nz-icon
+        [nzType]="'team'"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="patient.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+
+      <a>Patients</a>
+    </div>
+    <div
+      (click)="menuClick()"
+      *ngIf="isStaffOrDoctor"
+      routerLink="/provider/appointment"
+      routerLinkActive="active"
+      #appointment="routerLinkActive"
+    >
+      <i
+        nz-icon
+        [nzType]="'calendar'"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="appointment.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+      <a>Appointments</a>
+    </div>
+    <div
+      (click)="menuClick()"
+      *ngIf="isStaffOrDoctor"
+      routerLink="/provider/inbox"
+      #inbox="routerLinkActive"
+      routerLinkActive="active"
+    >
+      <i
+        nz-icon
+        [nzType]="'mail'"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="inbox.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+
+      <a
+        >Inbox &bull;
+        <span class="text-blue2 text-[13px]">{{ notification }}</span></a
+      >
+    </div>
+    <div
+      (click)="menuClick()"
+      *ngIf="!isAdmin && !isPatient"
+      routerLink="/provider/business"
+      #business="routerLinkActive"
+      routerLinkActive="active"
+      [queryParams]="{
+        docId: user.facility?.facilityId ? -1 : user.userId,
+        facilityId: user.facility?.facilityId ? user.facility?.facilityId : -1
+      }"
+    >
+      <i
+        nz-icon
+        [nzType]="'dollar'"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="business.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+      <a>Business</a>
+    </div>
+    <div
+      (click)="menuClick()"
+      routerLink="/account"
+      routerLinkActive="active"
+      #account="routerLinkActive"
+    >
+      <i
+        nz-icon
+        [nzType]="'user'"
+        nzTheme="outline"
+        class="mr-1"
+        [class]="account.isActive ? 'text-blue2' : 'text-darkGray'"
+      ></i>
+      <a> Account</a>
+    </div>
+  </div>
+</ng-template>
+
+<div class="shadow-sm pt-3 fixed w-full top-0 z-30 bg-white">
+  <div class="container">
+    <div class="flex justify-between mb-1">
+      <img
+        routerLink="/"
+        src="../../../assets/images/SimplyDoc-Logo.png"
+        alt="SimplyDoc-Logo"
+        class="h-9 cursor-pointer"
+      />
+      <div
+        class="max-h-12 rounded-full cursor-pointer"
+        id="label"
+        nz-dropdown
+        nzTrigger="click"
+        [nzDropdownMenu]="menu"
+        nzPlacement="bottomRight"
+      >
+        <nz-avatar
+          *ngIf="!user.imageUrl"
+          [ngStyle]="{ 'background-color': '#99ddff' }"
+          [nzText]="
+            user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()
+          "
+          [nzSize]="45"
+          style="
+            vertical-align: middle;
+            font-size: 22px;
+            font-weight: 600;
+            color: #505050;
+          "
+        ></nz-avatar>
+        <img
+          [src]="environment.imageBaseUrl + user.imageUrl"
+          *ngIf="user.imageUrl"
+          class="object-cover w-11 h-11 rounded-full"
+        />
+      </div>
+    </div>
+    <div
+      class="lg:hidden block menu-icon"
+      [ngClass]="{ menuActive: isNavMenu }"
+    >
+      <input
+        class="menu-icon__checkbox"
+        type="checkbox"
+        (click)="menuClick()"
+      />
+      <div>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <div class="flex justify-between items-center">
+      <div *ngIf="isNavigation">
+        <div class="lg:hidden block" *ngIf="isNavMenu">
+          <ng-container *ngTemplateOutlet="navMenu"></ng-container>
+        </div>
+        <div class="lg:block hidden">
+          <ng-container *ngTemplateOutlet="navMenu"></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item routerLink="/account">
+      <i nz-icon [nzType]="'user'" nzTheme="outline" class="mr-2"></i> Account
+      Info
+    </li>
+    <li
+      nz-menu-item
+      routerLink="/provider/choose"
+      *ngIf="user?.role.roleName === 'SupportStaff'"
+    >
+      <i nz-icon [nzType]="'login'" nzTheme="outline" class="mr-2"></i>Choose
+      Doctor
+    </li>
+    <li nz-menu-item routerLink="/" (click)="auth.logout()">
+      <i nz-icon [nzType]="'logout'" nzTheme="outline" class="mr-2"></i>Logout
+    </li>
+  </ul>
+</nz-dropdown-menu>

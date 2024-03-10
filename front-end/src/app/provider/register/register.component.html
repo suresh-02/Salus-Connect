@@ -1,0 +1,94 @@
+<div class="">
+  <div class="container" @animate>
+    <div class="max-w-[350px] md:max-w-[400px] lg:max-w-[500px] mx-auto">
+      <div class="form lg:!mx-0" *ngIf="isHeader">
+        <span class="flex items-center justify-between">
+          <div class="flex items-center">
+            <i
+              class="text-lg"
+              nz-icon
+              nzType="edit"
+              nzTheme="outline"
+              *ngIf="id > 0"
+            ></i>
+            <h1 class="ml-2 text-xl font-medium">
+              {{
+                id > 0
+                  ? registerType === "individual"
+                    ? "Edit " +
+                      registerType[0].toUpperCase() +
+                      registerType.slice(1, registerType.length) +
+                      " provider info"
+                    : "Edit " +
+                      registerType[0].toUpperCase() +
+                      registerType.slice(1, registerType.length) +
+                      " info"
+                  : ""
+              }}
+            </h1>
+          </div>
+          <button
+            routerLink="/provider/listing"
+            class="flex text-sm text-blue2 items-center"
+            *ngIf="id > 0"
+          >
+            <i nz-icon nzType="arrow-left" nzTheme="outline" class="mr-2"></i>
+            back
+          </button>
+        </span>
+        <div class="flex justify-between items-center">
+          <div class="input-radio" *ngIf="isAddressForm" @animate>
+            <label class="radio">
+              <input
+                type="radio"
+                id="individual"
+                name="registerType"
+                value="Individual"
+                routerLinkActive="active"
+                #rlaI="routerLinkActive"
+                [checked]="rlaI.isActive"
+                routerLink="/provider/register/individual"
+              />
+              <span>Individual</span>
+            </label>
+            <label class="radio">
+              <input
+                type="radio"
+                id="hospital"
+                name="registerType"
+                value="Hospital"
+                routerLinkActive="active"
+                #rlaH="routerLinkActive"
+                [checked]="rlaH.isActive"
+                routerLink="/provider/register/hospital"
+              />
+              <span>Hospital</span>
+            </label>
+            <label class="radio">
+              <input
+                type="radio"
+                id="clinic"
+                name="registerType"
+                value="Clinic"
+                routerLinkActive="active"
+                #rlaC="routerLinkActive"
+                [checked]="rlaC.isActive"
+                routerLink="/provider/register/clinic"
+              />
+              <span>Clinic</span>
+            </label>
+          </div>
+          <button
+            routerLink="/provider/listing"
+            class="flex text-sm text-blue2 items-center"
+            *ngIf="id < 0"
+          >
+            <i nz-icon nzType="arrow-left" nzTheme="outline" class="mr-2"></i>
+            back
+          </button>
+        </div>
+      </div>
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

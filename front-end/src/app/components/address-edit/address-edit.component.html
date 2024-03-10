@@ -1,0 +1,63 @@
+<form [formGroup]="addressForm" id="addressForm" class="form">
+  <div
+    class="input"
+    [ngClass]="{
+      error: addressLine1.isError
+    }"
+  >
+    <input
+      nz-tooltip
+      nzTooltipPlacement="right"
+      [nzTooltipMouseEnterDelay]="1"
+      nzTooltipTitle="Enter your address line 1"
+      tabindex="2"
+      type="text"
+      formControlName="addressLine1"
+      placeholder="Address Line 1"
+      (ngModelChange)="checkError(addressLine1)"
+      (focusout)="checkError(addressLine1)"
+    />
+    <i
+      @animate
+      class="mr-2 text-green-400 text-base"
+      *ngIf="addressLine1.check"
+      nz-icon
+      nzType="check-circle"
+      nzTheme="outline"
+    ></i>
+    <i
+      @animate
+      class="mr-2 text-red-400 text-base"
+      *ngIf="addressLine1.isError"
+      nz-icon
+      nzType="exclamation-circle"
+      nzTheme="outline"
+    ></i>
+  </div>
+  <p @animate *ngIf="addressLine1.isError">{{ addressLine1.message }}</p>
+  <div class="input">
+    <input
+      nz-tooltip
+      nzTooltipPlacement="right"
+      [nzTooltipMouseEnterDelay]="1"
+      nzTooltipTitle="Enter your address line 2"
+      tabindex="3"
+      type="text"
+      placeholder="Address Line 2"
+      formControlName="addressLine2"
+    />
+  </div>
+  <div class="form form-2 !items-end">
+    <div class="input">
+      <input type="text" placeholder="City" formControlName="city" />
+    </div>
+    <div class="input">
+      <input
+        type="text"
+        class="flex-auto"
+        placeholder="State"
+        formControlName="stateAbbr"
+      />
+    </div>
+  </div>
+</form>

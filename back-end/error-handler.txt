@@ -1,0 +1,2 @@
+https://www.jerriepelser.com/blog/validation-response-aspnet-core-webapi/
+https://kevsoft.net/2020/02/09/adding-errors-to-model-state-and-returning-bad-request-within-asp-net-core-3-1.html

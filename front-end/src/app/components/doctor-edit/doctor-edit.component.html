@@ -1,0 +1,405 @@
+<form class="form" @animate [formGroup]="individualForm" id="form">
+  <div class="form-2">
+    <div
+      class="input"
+      [ngClass]="{
+        error: firstName.isError
+      }"
+    >
+      <input
+        nz-tooltip
+        nzTooltipPlacement="right"
+        [nzTooltipMouseEnterDelay]="1"
+        nzTooltipTitle="Enter your first name"
+        type="text"
+        tabindex="1"
+        placeholder="First Name"
+        formControlName="firstName"
+        (ngModelChange)="checkError(firstName)"
+        (focusout)="checkError(firstName)"
+      />
+      <i
+        @animate
+        class="mr-2 text-green-400 text-base"
+        *ngIf="firstName.check"
+        nz-icon
+        nzType="check-circle"
+        nzTheme="outline"
+      ></i>
+      <i
+        @animate
+        class="mr-2 text-red-400 text-base"
+        *ngIf="firstName.isError"
+        nz-icon
+        nzType="exclamation-circle"
+        nzTheme="outline"
+      ></i>
+    </div>
+    <div
+      class="input"
+      [ngClass]="{
+        error: lastName.isError
+      }"
+    >
+      <input
+        nz-tooltip
+        nzTooltipPlacement="right"
+        [nzTooltipMouseEnterDelay]="1"
+        nzTooltipTitle="Enter your last name"
+        type="text"
+        tabindex="2"
+        placeholder="Last Name"
+        formControlName="lastName"
+        (ngModelChange)="checkError(lastName)"
+        (focusout)="checkError(lastName)"
+      />
+      <i
+        @animate
+        class="mr-2 text-green-400 text-base"
+        *ngIf="lastName.check"
+        nz-icon
+        nzType="check-circle"
+        nzTheme="outline"
+      ></i>
+      <i
+        @animate
+        class="mr-2 text-red-400 text-base"
+        *ngIf="lastName.isError"
+        nz-icon
+        nzType="exclamation-circle"
+        nzTheme="outline"
+      ></i>
+    </div>
+    <p @animate class="!row-start-2" *ngIf="firstName.isError">
+      {{ firstName.message }}
+    </p>
+    <p @animate class="!col-start-2" *ngIf="lastName.isError">
+      {{ lastName.message }}
+    </p>
+  </div>
+  <div
+    class="input"
+    [ngClass]="{
+      error: phoneNumber.isError
+    }"
+  >
+    <input
+      nz-tooltip
+      nzTooltipPlacement="right"
+      [nzTooltipMouseEnterDelay]="1"
+      nzTooltipTitle="Enter your phone number"
+      type="text"
+      tabindex="3"
+      placeholder="Phone Number"
+      formControlName="phoneNumber"
+      (ngModelChange)="checkError(phoneNumber)"
+      (focusout)="checkError(phoneNumber)"
+    />
+    <i
+      @animate
+      class="mr-2 text-green-400 text-base"
+      *ngIf="phoneNumber.check"
+      nz-icon
+      nzType="check-circle"
+      nzTheme="outline"
+    ></i>
+    <i
+      @animate
+      class="mr-2 text-red-400 text-base"
+      *ngIf="phoneNumber.isError"
+      nz-icon
+      nzType="exclamation-circle"
+      nzTheme="outline"
+    ></i>
+  </div>
+  <p @animate *ngIf="phoneNumber.isError">{{ phoneNumber.message }}</p>
+  <div
+    class="input"
+    [ngClass]="{
+      error: emailAddress.isError
+    }"
+  >
+    <input
+      nz-tooltip
+      nzTooltipPlacement="right"
+      [nzTooltipMouseEnterDelay]="1"
+      nzTooltipTitle="Enter your email address"
+      type="text"
+      tabindex="4"
+      placeholder="Email Address"
+      formControlName="emailAddress"
+      (ngModelChange)="checkError(emailAddress)"
+      (focusout)="checkError(emailAddress)"
+    />
+    <i
+      @animate
+      class="mr-2 text-green-400 text-base"
+      *ngIf="emailAddress.check"
+      nz-icon
+      nzType="check-circle"
+      nzTheme="outline"
+    ></i>
+    <i
+      @animate
+      class="mr-2 text-red-400 text-base"
+      *ngIf="emailAddress.isError"
+      nz-icon
+      nzType="exclamation-circle"
+      nzTheme="outline"
+    ></i>
+  </div>
+  <p @animate *ngIf="emailAddress.isError">{{ emailAddress.message }}</p>
+  <div
+    class="input"
+    [ngClass]="{
+      error: bio.isError
+    }"
+  >
+    <!-- <textarea
+      nz-tooltip
+      nzTooltipPlacement="right"
+      [nzTooltipMouseEnterDelay]="1"
+      nzTooltipTitle="Enter your biography"
+      tabindex="5"
+      rows="4"
+      placeholder="Bio"
+      formControlName="biography"
+      (ngModelChange)="checkError(bio)"
+      (focusout)="checkError(bio)"
+    ></textarea> -->
+    <!-- (ngModelChange)="checkError(bio)"
+    (focusout)="checkError(bio)" -->
+    <ckeditor
+      class="w-full"
+      [ngClass]="{ 'p-2': isView }"
+      formControlName="richBio"
+      [editor]="Editor"
+      (change)="onChange($event)"
+      [config]="{
+        toolbar: !isView
+          ? {
+              items: [
+                'heading',
+                'bold',
+                'italic',
+                '|',
+                'undo',
+                'redo',
+                '|',
+                'numberedList',
+                'bulletedList'
+              ],
+              shouldNotGroupWhenFull: true
+            }
+          : []
+      }"
+      tagName="textarea"
+    ></ckeditor>
+    <!-- <i
+      @animate
+      class="mr-2 text-green-400 text-base"
+      *ngIf="bio.check"
+      nz-icon
+      nzType="check-circle"
+      nzTheme="outline"
+    ></i>
+    <i
+      @animate
+      class="mr-2 text-red-400 text-base"
+      *ngIf="bio.isError"
+      nz-icon
+      nzType="exclamation-circle"
+      nzTheme="outline"
+    ></i> -->
+  </div>
+  <div class="flex items-center gap-2">
+    <p @animate *ngIf="bio.isError">{{ bio.message }}</p>
+  </div>
+  <div *ngIf="!isView" class="flex justify-between items-center mt-1">
+    <p class="!text-darkGray">
+      {{ 4000 - individualForm.controls["biography"]?.value?.length }}
+      characters remaining
+    </p>
+    <p class="!text-darkGray">
+      {{
+        individualForm.controls["biography"]?.value?.length
+          ? individualForm.controls["biography"]?.value?.length
+          : 0
+      }}/4000
+    </p>
+  </div>
+  <div [ngClass]="{ 'form-2': isOther }">
+    <div
+      class="input"
+      formGroupName="specialty"
+      style="width: full"
+      [ngClass]="{
+        error: specialty.isError
+      }"
+    >
+      <div
+        id="dropdown"
+        class="dropdown !w-full"
+        tabindex="6"
+        (focusout)="checkSpecialty()"
+      >
+        <div
+          [ngClass]="{ disable: isView }"
+          class="default-item current-item !w-full !py-[10px] -mt-2"
+          (click)="openDropdown()"
+        >
+          <span
+            class="text-darkGray"
+            *ngIf="!individualForm.controls['specialty'].value"
+          >
+            Specialist in...
+          </span>
+          <span *ngIf="individualForm.controls['specialty'].value">
+            {{ individualForm.controls["specialty"].value.specialtyName }}
+          </span>
+          <i nz-icon nzType="down" nzTheme="outline"></i>
+        </div>
+        <ng-container *ngIf="!isView">
+          <div
+            [ngClass]="{
+              bottom: dropdownPosition === 'bottom',
+              top: dropdownPosition === 'top'
+            }"
+            @inOut
+            *ngIf="isDropdown"
+            class="default-item other-item !w-full z-50"
+          >
+            <div *ngFor="let category of specialtyData">
+              <p class="heading">{{ category.categoryName }}</p>
+              <span
+                [id]="'data-' + specialty.specialtyId"
+                [ngClass]="{
+                  selected:
+                    specialty.specialtyName === selectedSpecialty?.specialtyName
+                }"
+                *ngFor="let specialty of category.specialties"
+                (click)="
+                  setSpecialty({
+                    name: specialty.specialtyName,
+                    sId: specialty.specialtyId,
+                    cId: category.categoryId
+                  })
+                "
+                >{{ specialty.specialtyName }}</span
+              >
+              <span
+                [id]="'data-' + category.categoryId"
+                (click)="
+                  setSpecialty({
+                    name: 'Other',
+                    sId: 0,
+                    cId: category.categoryId
+                  })
+                "
+                >Other</span
+              >
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!-- <nz-select
+        class="w-full"
+        formControlName="specialtyId"
+        nzAllowClear
+        nzPlaceHolder="Choose"
+        nzShowSearch
+      >
+        <nz-option-group
+          *ngFor="let category of specialtyData"
+          [nzLabel]="category.categoryName"
+        >
+          <nz-option
+            *ngFor="let specialty of category.specialties"
+            [nzValue]="specialty.specialtyId"
+            [nzLabel]="specialty.specialtyName"
+          ></nz-option>
+          <nz-option [nzValue]="0" nzLabel="Other"></nz-option>
+        </nz-option-group>
+      </nz-select> -->
+      <i
+        @animate
+        class="mr-2 text-green-400 text-base"
+        *ngIf="specialty.check"
+        nz-icon
+        nzType="check-circle"
+        nzTheme="outline"
+      ></i>
+      <i
+        @animate
+        class="mr-2 text-red-400 text-base"
+        *ngIf="specialty.isError"
+        nz-icon
+        nzType="exclamation-circle"
+        nzTheme="outline"
+      ></i>
+    </div>
+    <div class="input" style="width: auto" *ngIf="isOther">
+      <input type="text" formControlName="other" (ngModelChange)="setOther()" />
+    </div>
+  </div>
+  <p @animate *ngIf="specialty.isError">{{ specialty.message }}</p>
+  <div
+    class="input"
+    [ngClass]="{
+      error: tags.isError
+    }"
+  >
+    <nz-select
+      [nzBorderless]="true"
+      class="w-full"
+      formControlName="tags"
+      nzMode="tags"
+      [nzTokenSeparators]="[',']"
+      nzPlaceHolder="Specialty"
+      [nzOptionOverflowSize]="4"
+      (focusout)="checkError(tags)"
+      (ngModelChange)="checkError(tags)"
+    >
+      <nz-option
+        *ngFor="let option of listOfOption"
+        [nzLabel]="option.label"
+        [nzValue]="option.value"
+        [nzHide]="!isNotSelected(option.value)"
+      ></nz-option>
+    </nz-select>
+    <i
+      @animate
+      class="mr-2 text-green-400 text-base"
+      *ngIf="tags.check"
+      nz-icon
+      nzType="check-circle"
+      nzTheme="outline"
+    ></i>
+    <i
+      @animate
+      class="mr-2 text-red-400 text-base leading-none"
+      *ngIf="tags.isError"
+      nz-icon
+      nzType="exclamation-circle"
+      nzTheme="outline"
+    ></i>
+  </div>
+  <div class="flex flex-col gap-y-1 mt-1">
+    <p @animate *ngIf="tags.isError">{{ tags.message }}</p>
+    <small class="text-darkGray text-[10px] mx-[10%] lg:mx-0"
+      >Type , or Press TAB or ENTER to add tag</small
+    >
+  </div>
+
+  <div class="input-checkbox">
+    <label>
+      <input
+        type="checkbox"
+        tabindex="8"
+        formControlName="isBackgroundCheck"
+        required
+      />
+      <p>Background check completed?</p>
+    </label>
+  </div>
+</form>

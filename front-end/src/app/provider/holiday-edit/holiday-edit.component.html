@@ -1,0 +1,158 @@
+<ng-template #add>
+  <button class="btn btn-blue icon" (click)="toggleModal(-1)">
+    <i nz-icon nzType="plus" nzTheme="outline" class="mr-1 leading-none"></i>
+    Add Holiday
+  </button>
+</ng-template>
+<ng-template #text>
+  <p class="mr-2 text-base font-medium my-2">
+    Dispalying holidays in
+    {{ selectedYear === 1900 ? "every year" : selectedYear }}
+  </p>
+</ng-template>
+<ng-template #select>
+  <nz-select [(ngModel)]="selectedYear" class="w-28">
+    <nz-option [nzValue]="1900" nzLabel="Every year"></nz-option>
+    <nz-option *ngFor="let y of year" [nzValue]="y" [nzLabel]="y"></nz-option>
+  </nz-select>
+</ng-template>
+
+<div class="hidden sm:flex flex-row justify-between mb-2">
+  <ng-container *ngTemplateOutlet="add"></ng-container>
+  <ng-container *ngTemplateOutlet="text"></ng-container>
+  <ng-container *ngTemplateOutlet="select"></ng-container>
+</div>
+
+<div class="sm:hidden my-2">
+  <div class="flex justify-center">
+    <ng-container *ngTemplateOutlet="text"></ng-container>
+  </div>
+  <div class="flex justify-between items-center">
+    <ng-container *ngTemplateOutlet="add"></ng-container>
+    <ng-container *ngTemplateOutlet="select"></ng-container>
+  </div>
+</div>
+
+<nz-table
+  nzSize="small"
+  [nzShowPagination]="false"
+  #holidayTable
+  [nzData]="holidays"
+  [nzLoading]="loading"
+  [nzScroll]="{ x: '500px' }"
+>
+  <thead>
+    <tr>
+      <th nzWidth="80px">Date</th>
+      <th nzWidth="220px">Name</th>
+      <th nzWidth="110px">Provinces</th>
+      <th nzWidth="80px" nzRight>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of holidayTable.data; let rowId = index">
+      <td *ngIf="selectedYear === 1900">{{ data.date | date: "dd-MMM" }}</td>
+      <td *ngIf="selectedYear !== 1900">
+        {{ data.date | date: "dd-MMM EEEE" }}
+      </td>
+      <td>{{ data.name }}</td>
+      <td>{{ data.provinces.length > 0 ? data.provinces : "All Province" }}</td>
+      <td nzRight>
+        <span class="hover:cursor-pointer">
+          <i
+            nz-icon
+            nzType="edit"
+            nzTheme="outline"
+            class="text-blue1 hover:text-blue2 text-base"
+            (click)="toggleModal(rowId)"
+          >
+          </i>
+          <i
+            nz-icon
+            nzType="delete"
+            nzTheme="outline"
+            class="ml-2 text-red-400 hover:text-red-500 text-base"
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure want to proceed?"
+            nzPopconfirmPlacement="bottomRight"
+            (nzOnConfirm)="delete(data.holidayId)"
+          >
+          </i>
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal
+  [(nzVisible)]="isModal"
+  [nzTitle]="
+    selectedYear === 1900
+      ? modalTitle + ' holiday for all year'
+      : modalTitle + ' holiday for ' + selectedYear
+  "
+  (nzOnCancel)="closeModal()"
+  [nzFooter]="null"
+  [nzMaskClosable]="false"
+  [nzKeyboard]="false"
+>
+  <div *nzModalContent>
+    <div class="p-4 pb-0">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-flow-row-dense mb-2">
+          <label>Month:</label>
+          <nz-date-picker
+            nzMode="month"
+            nzFormat="MMM"
+            [(ngModel)]="selectedMonth"
+          ></nz-date-picker>
+        </div>
+        <div class="grid grid-flow-row-dense mb-2">
+          <label for="date">Date:</label>
+          <nz-date-picker
+            name="date"
+            nzFormat="dd"
+            [formControl]="selectedDate"
+          ></nz-date-picker>
+        </div>
+      </div>
+      <div class="grid grid-flow-row-dense mb-2">
+        <span>Name:</span>
+        <input type="text" [formControl]="holidayName" />
+      </div>
+      <p class="text-red-500" *ngIf="holidayName.getError('minlength')">
+        Name must minimum of 5 characters
+      </p>
+      <div class="grid grid-flow-row-dense mb-2">
+        <label for="name">Province:</label>
+        <nz-select
+          nzMode="multiple"
+          nzPlaceHolder="Select Province"
+          [(ngModel)]="selectedProvince"
+          (ngModelChange)="provinceChange()"
+        >
+          <nz-option
+            *ngFor="let option of provinces"
+            [nzLabel]="option"
+            [nzValue]="option"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div class="flex justify-end items-center gap-4 pt-4">
+        <button class="btn btn-gray" (click)="isModal = !isModal">Close</button>
+        <button
+          class="btn btn-blue"
+          (click)="isModal = !isModal"
+          (click)="submit()"
+          [disabled]="
+            selectedDate == null ||
+            holidayName.invalid ||
+            selectedProvince.length == 0
+          "
+        >
+          {{ modalTitle === "Edit" ? "Save" : modalTitle }}
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-modal>

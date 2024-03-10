@@ -1,0 +1,299 @@
+<div class="flex justify-end items-center mb-2">
+  <div *ngIf="doctor" class="flex flex-col items-end">
+    <span class="text-sm">
+      You are operating on behalf of {{ doctor.firstName }}
+      {{ doctor.lastName }}
+    </span>
+    <a routerLink="/provider/choose" class="text-blue1 hover:text-blue2"
+      >Switch provider</a
+    >
+  </div>
+</div>
+<div
+  class="flex md:flex-row items-center md:items-start flex-col-reverse md:gap-10 gap-y-2 md:gap-y-0"
+  *ngIf="user?.role?.roleName !== 'Administrator'"
+>
+  <div class="flex flex-col gap-y-4">
+    <div>
+      <button
+        (click)="isOpen = !isOpen"
+        class="btn btn-outline blue mb-4 w-full"
+        [class]="
+          filterTreatmentType !== 'all'
+            ? '!bg-blue0 !text-black hover:!text-black'
+            : ''
+        "
+        cdkOverlayOrigin
+        #trigger="cdkOverlayOrigin"
+      >
+        <i nz-icon nzType="filter" nzTheme="outline"></i>
+        Filter Appointments by Treatment Type
+      </button>
+      <!-- <nz-date-picker
+        class="z-0"
+        nzBorderless
+        nzInline
+        [(ngModel)]="selectedDate"
+      ></nz-date-picker> -->
+      <app-calendar
+        (clickedDate)="calClick($event)"
+        [selectedDate]="
+          'date-' +
+          selectedDate.getDate() +
+          '-' +
+          selectedDate.getMonth() +
+          '-' +
+          selectedDate.getFullYear()
+        "
+      ></app-calendar>
+    </div>
+    <div>
+      <h1 class="text-lg font-medium">
+        {{ selectedDate | date: "MMMM d, y" }}
+      </h1>
+      <div class="max-h-[320px] overflow-y-auto py-4">
+        <div *ngIf="this.groupedAppointments.accepcted.length > 0">
+          <span
+            class="flex justify-start text-white bg-[#24c50b] p-1 rounded font-medium"
+            >ACCEPTED</span
+          >
+          <div
+            class="my-1"
+            *ngFor="let a of groupedAppointments.accepcted; let isLast = last"
+          >
+            <div class="my-3 grid grid-cols-4 gap-4 max-w-[300px]">
+              <div class="grid grid-rows-2">
+                <span class="font-medium">{{
+                  amOrPm(a.appointmentTime.slice(0, 5))
+                }}</span>
+                <span class="text-darkGray">{{ a.durationMin }} min</span>
+              </div>
+              <span class="font-medium">{{ a.treatmentNickname }}</span>
+              <div class="grid grid-rows-2">
+                <span class="font-medium">{{
+                  a.patientName.split(" ")[0]
+                }}</span>
+                <span
+                  class="text-darkGray truncate"
+                  nz-tooltip
+                  [nzTooltipTitle]="a.symptoms"
+                  >{{ a.symptoms }}</span
+                >
+              </div>
+              <a
+                class="text-blue2 text-right"
+                (click)="openNotesModal(a.appointmentId)"
+                >Notes</a
+              >
+            </div>
+            <nz-divider *ngIf="!isLast"></nz-divider>
+          </div>
+        </div>
+        <div *ngIf="this.groupedAppointments.requested.length > 0">
+          <span
+            class="flex justify-start text-white bg-red-400 p-1 rounded font-medium"
+            >PENDING</span
+          >
+          <div
+            class="my-1"
+            *ngFor="let a of groupedAppointments.requested; let isLast = last"
+          >
+            <div class="my-3 grid grid-cols-4 gap-4 max-w-[300px]">
+              <div class="grid grid-rows-2">
+                <span class="font-medium">{{
+                  amOrPm(a.appointmentTime.slice(0, 5))
+                }}</span>
+                <span class="text-darkGray">{{ a.durationMin }} min</span>
+              </div>
+              <span class="font-medium">{{ a.treatmentNickname }}</span>
+              <div class="grid grid-rows-2">
+                <span class="font-medium">{{
+                  a.patientName.split(" ")[0]
+                }}</span>
+                <span
+                  class="text-darkGray truncate"
+                  nz-tooltip
+                  [nzTooltipTitle]="a.symptoms"
+                  >{{ a.symptoms }}</span
+                >
+              </div>
+              <a
+                class="text-blue2 text-right"
+                (click)="openNotesModal(a.appointmentId)"
+                >Notes</a
+              >
+            </div>
+            <nz-divider *ngIf="!isLast"></nz-divider>
+          </div>
+        </div>
+        <div *ngIf="this.groupedAppointments.proposeNew.length > 0">
+          <span
+            class="flex justify-start text-white bg-gray-400 p-1 rounded font-medium"
+            >NEW TIME PROPOSED</span
+          >
+          <div
+            class="my-1"
+            *ngFor="let a of groupedAppointments.proposeNew; let isLast = last"
+          >
+            <div class="my-3 grid grid-cols-4 gap-4 max-w-[300px]">
+              <div class="grid grid-rows-2">
+                <span class="font-medium">{{
+                  amOrPm(a.appointmentTime.slice(0, 5))
+                }}</span>
+                <span class="text-darkGray">{{ a.durationMin }} min</span>
+              </div>
+              <span class="font-medium">{{ a.treatmentNickname }}</span>
+              <div class="grid grid-rows-2">
+                <span class="font-medium">{{
+                  a.patientName.split(" ")[0]
+                }}</span>
+                <span
+                  class="text-darkGray truncate"
+                  nz-tooltip
+                  [nzTooltipTitle]="a.symptoms"
+                  >{{ a.symptoms }}</span
+                >
+              </div>
+              <a
+                class="text-blue2 text-right"
+                (click)="openNotesModal(a.appointmentId)"
+                >Notes</a
+              >
+            </div>
+            <nz-divider *ngIf="!isLast"></nz-divider>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <full-calendar
+    class="flex-1 max-h-[650px]"
+    #calendar
+    [options]="calendarOptions"
+  ></full-calendar>
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="isOpen"
+    (overlayOutsideClick)="isOpen = false"
+  >
+    <div
+      class="bg-white p-4 rounded border-1 border-medGray mt-2 min-w-[300px] shadow-md"
+    >
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-medium">Filters</h3>
+        <i
+          nz-icon
+          nzType="close"
+          (click)="isOpen = false"
+          class="cursor-pointer"
+        ></i>
+      </div>
+      <nz-divider></nz-divider>
+      <div class="flex flex-col">
+        <nz-radio-group
+          class="flex flex-col text-base"
+          [(ngModel)]="filterTreatmentType"
+          (ngModelChange)="saveFilter()"
+        >
+          <label nz-radio nzValue="all">All</label>
+          <label *ngFor="let t of treatmentList" nz-radio [nzValue]="t">{{
+            t
+          }}</label>
+        </nz-radio-group>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<nz-modal
+  [(nzVisible)]="notesModal"
+  (nzOnCancel)="cancel()"
+  (nzOnOk)="addNotes()"
+  nzTitle="Add Notes"
+  [nzMaskClosable]="false"
+  [nzKeyboard]="false"
+  [nzStyle]="{ minWidth: 'max-content' }"
+  nzOkText="Submit"
+  [nzOkDisabled]="
+    staffNotes.invalid ||
+    doctorNotes.invalid ||
+    (!richStaffNotes.dirty && !richDoctorNotes.dirty)
+  "
+>
+  <div *nzModalContent class="mt-6">
+    <nz-tabset>
+      <nz-tab nzTitle="Doctor Notes">
+        <div class="max-w-[550px]">
+          <ckeditor
+            [editor]="Editor"
+            [formControl]="richDoctorNotes"
+            (change)="onChange($event, 'doctor')"
+            [config]="{
+              toolbar: {
+                items: [
+                  'heading',
+                  'bold',
+                  'italic',
+                  '|',
+                  'undo',
+                  'redo',
+                  '|',
+                  'numberedList',
+                  'bulletedList'
+                ],
+                shouldNotGroupWhenFull: true
+              }
+            }"
+            tagName="textarea"
+          ></ckeditor>
+        </div>
+        <!-- <div class="flex justify-between items-center mt-1">
+          <p class="!text-darkGray">
+            {{ 4000 - doctorNotes.value?.length }}
+            characters remaining
+          </p>
+          <p class="!text-darkGray">
+            {{ doctorNotes.value?.length ? doctorNotes.value?.length : 0 }}/4000
+          </p>
+        </div> -->
+      </nz-tab>
+      <nz-tab nzTitle="Staff Notes">
+        <div class="max-w-[550px]">
+          <ckeditor
+            [editor]="Editor"
+            [formControl]="richStaffNotes"
+            (change)="onChange($event, 'staff')"
+            [config]="{
+              toolbar: {
+                items: [
+                  'heading',
+                  'bold',
+                  'italic',
+                  '|',
+                  'undo',
+                  'redo',
+                  '|',
+                  'numberedList',
+                  'bulletedList'
+                ],
+                shouldNotGroupWhenFull: true
+              }
+            }"
+            tagName="textarea"
+          ></ckeditor>
+        </div>
+        <!-- <div class="flex justify-between items-center mt-1">
+          <p class="!text-darkGray">
+            {{ 4000 - staffNotes.value?.length }}
+            characters remaining
+          </p>
+          <p class="!text-darkGray">
+            {{ staffNotes.value?.length ? staffNotes.value?.length : 0 }}/4000
+          </p>
+        </div> -->
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</nz-modal>

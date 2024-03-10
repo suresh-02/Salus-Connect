@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "c9dfe8b8-8bf3-4a4f-9256-69a32524cf70",
+		"name": "Appointments",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Change status",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"appointmentId\": 40,\r\n  \"appointmentStatus\": \"ProposeNew\",\r\n  \"notifyParty\": \"Patient\",\r\n  \"newAppointmentTime\": \"2021-12-16T13:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/appointments/40",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"appointments",
+						"40"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mark as complete",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"completeStatus\": \"noshow\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/appointments/54/mark-as-complete",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"appointments",
+						"54",
+						"mark-as-complete"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJEb2N0b3IiLCJleHAiOjE2NDA1MzYzNDgsImlzcyI6Imh0dHA6Ly85OS43OS41My4xNjgvYXBpIiwiYXVkIjoiaHR0cDovLzk5Ljc5LjUzLjE2OCJ9.FMjpQXSUDwXFDfq4gKwrhahbMDgwjL_VVpg8sRqljLc",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

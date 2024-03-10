@@ -1,0 +1,171 @@
+<div class="flex items-center justify-between">
+  <span>
+    <h1 class="text-xl font-medium">Providers</h1>
+    <p class="!text-sm !text-black !m-0">{{ hospitalName }}</p>
+  </span>
+  <button
+    *ngIf="!isView"
+    (click)="toggleModal(-1)"
+    class="bg-blue1 hover:bg-blue2 flex items-center px-2 py-1 mb-2 text-white text-sm rounded"
+  >
+    <i nz-icon nzType="plus" nzTheme="outline" class="mr-2 text-base"></i> Add
+    new
+  </button>
+</div>
+<nz-table
+  #dt
+  [nzData]="doctors"
+  nzSize="small"
+  [nzVirtualForTrackBy]="trackByFunction"
+  [nzShowPagination]="false"
+>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Phone Number</th>
+      <th>Email</th>
+      <th>Specialty</th>
+      <th>Status</th>
+      <th *ngIf="!isView">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let doctor of dt.data; let rowId = index">
+      <td>
+        <label
+          nz-checkbox
+          [nzChecked]="doctor.status === 'Active'"
+          nzDisabled
+        ></label>
+      </td>
+      <td>{{ doctor.firstName }} {{ doctor.lastName }}</td>
+      <td>{{ doctor.phoneNumber }}</td>
+      <td>{{ doctor.emailAddress }}</td>
+      <td>
+        <span class="badge cyan"> {{ doctor.specialty.specialtyName }}</span>
+      </td>
+      <td>
+        <span [class]="'badge ' + doctor.status?.toLowerCase()">
+          {{ doctor.status }}
+        </span>
+      </td>
+      <td *ngIf="!isView">
+        <span class="cursor-pointer">
+          <i
+            nz-icon
+            nzType="edit"
+            nzTheme="outline"
+            class="text-blue1 hover:text-blue2 text-base"
+            (click)="toggleModal(rowId)"
+          >
+          </i>
+          <i
+            nz-icon
+            nzType="delete"
+            nzTheme="outline"
+            class="ml-2 text-red-400 hover:text-red-500 text-base"
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure want to proceed?"
+            nzPopconfirmPlacement="bottomRight"
+            (nzOnConfirm)="delete()"
+            (click)="id = rowId"
+          >
+          </i>
+          <i
+            [id]="'label-' + doctor.userId"
+            nz-tooltip
+            [nzTooltipMouseEnterDelay]="1"
+            nzTooltipTitle="options"
+            nz-icon
+            nzType="more"
+            nzTheme="outline"
+            nz-dropdown
+            nzTrigger="click"
+            [nzDropdownMenu]="menu"
+            (click)="
+              setData({
+                pId: doctor.userId,
+                pType: 'Individual',
+                status: doctor.status
+              })
+            "
+            class="text-lg"
+          ></i>
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal
+  [(nzVisible)]="showModal"
+  [nzTitle]="title + ' Provider'"
+  (nzOnCancel)="showModal = false"
+  [nzFooter]="null"
+  [nzMaskClosable]="false"
+  [nzKeyboard]="false"
+>
+  <div *nzModalContent>
+    <app-doctor-edit
+      @animate
+      [individualForm]="doctorForm"
+      [selectedSpecialty]="specialtyData"
+      (sendSpecialty)="getSpecialty($event)"
+      [id]="id >= 0 ? doctors[id].userId : -1"
+    ></app-doctor-edit>
+    <div
+      class="flex items-center justify-end pt-6 md:max-w-[400px] mx-auto lg:max-w-[500px] max-w-[325px]"
+    >
+      <button
+        class="bg-gray-300 hover:bg-gray-400 px-4 py-2 text-black rounded mr-1"
+        type="button"
+        (click)="showModal = false"
+      >
+        Close
+      </button>
+      <button
+        [disabled]="doctorForm.invalid"
+        class="bg-blue1 hover:bg-blue2 px-4 py-2 text-white rounded disabled:bg-gray-300 disabled:hover:bg-gray-400 disabled:text-black"
+        (click)="save()"
+      >
+        <span *ngIf="title === 'Add'">Add</span>
+        <span *ngIf="title !== 'Add'">Save changes</span>
+      </button>
+    </div>
+  </div>
+</nz-modal>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li
+      nz-menu-item
+      (click)="activateProvider('Active')"
+      *ngIf="providerStatus !== 'Active'"
+    >
+      <i nz-icon nzType="check" nzTheme="outline" class="mr-2"></i>Activate
+    </li>
+    <li
+      nz-menu-item
+      (click)="activateProvider('Inactive')"
+      *ngIf="providerStatus !== 'Inactive'"
+    >
+      <i nz-icon nzType="close" nzTheme="outline" class="mr-2"></i>Hibernate
+    </li>
+    <li
+      nz-menu-item
+      (click)="activateProvider('Published')"
+      *ngIf="providerStatus !== 'Published'"
+    >
+      <i nz-icon nzType="send" nzTheme="outline" class="mr-2"></i>Publish Info
+    </li>
+    <li
+      nz-menu-item
+      (click)="sendInvite()"
+      *ngIf="providerStatus !== 'Invited'"
+    >
+      <i nz-icon nzType="mail" nzTheme="outline" class="mr-2"></i>
+      Send Invite
+    </li>
+  </ul>
+</nz-dropdown-menu>

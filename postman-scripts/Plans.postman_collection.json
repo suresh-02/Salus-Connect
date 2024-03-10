@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "6bb92127-cc13-4561-90f4-6e03a552c662",
+		"name": "Plans",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all plans",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/plans",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"plans"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get plan by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/plans/6",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"plans",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create plan",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"planNickname\": \"Base: Clinic\",\r\n    \"planName\": \"Base Plan for Clinics\",\r\n    \"description\": \"Base plan for clinics\",\r\n    \"unitLabel\": \"Seat\",\r\n    \"baseFee\": 40.87,\r\n    \"feeFrequency\": \"Recurring\",\r\n    \"billingPeriod\": \"Monthly\",\r\n    \"planCategory\": \"Base\",\r\n    \"isActive\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/plans",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"plans"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update plan",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"planId\": 6,\r\n    \"planNickname\": \"Base: Clinic 1\",\r\n    \"planName\": \"Base Plan for Clinics 1\",\r\n    \"description\": \"Base plan for clinics 1\",\r\n    \"unitLabel\": \"Seat 1\",\r\n    \"baseFee\": 48.88,\r\n    \"feeFrequency\": \"Recurring\",\r\n    \"billingPeriod\": \"Monthly\",\r\n    \"planCategory\": \"Base\",\r\n    \"stripeProductId\": \"prod_L61xYOqwdOi1tE\",\r\n    \"stripePriceId\": \"price_1KPptPSFdmEmcCd0BgbA9Gv4\",\r\n    \"isActive\": true,\r\n    \"createdAt\": \"2022-02-05T09:39:39.553338Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/plans/6",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"plans",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hibernate plan",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 6,\r\n    \"isHibernate\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/plans/6/hibernate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"plans",
+						"6",
+						"hibernate"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbmlzdHJhdG9yIiwiZXhwIjoxNjQ0Mzg4OTYwLCJpc3MiOiJodHRwOi8vOTkuNzkuNTMuMTY4L2FwaSIsImF1ZCI6Imh0dHA6Ly85OS43OS41My4xNjgifQ._nMXSXZQn__uYw6z6PHFP-8PZKISvooTZ76ceLwSRjo",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

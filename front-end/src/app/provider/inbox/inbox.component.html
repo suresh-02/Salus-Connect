@@ -1,0 +1,564 @@
+<div *ngIf="doctor" class="flex flex-col items-end justify-end">
+  <span class="text-sm">
+    You are operating on behalf of {{ doctor.firstName }}
+    {{ doctor.lastName }}
+  </span>
+  <a routerLink="/provider/choose" class="text-blue1 hover:text-blue2"
+    >Switch provider</a
+  >
+</div>
+<div class="flex justify-between items-center mb-4">
+  <nz-range-picker
+    class="w-[300px] mr-2"
+    [(ngModel)]="dateRange"
+    (ngModelChange)="loadData()"
+  ></nz-range-picker>
+  <div class="search order-first lg:order-none">
+    <input type="text" [(ngModel)]="search" placeholder="Search..." />
+    <i
+      nz-icon
+      nzType="search"
+      nzTheme="outline"
+      class="text-darkGray text-base mr-1.5 leading-none"
+    ></i>
+  </div>
+  <button class="btn btn-blue" (click)="openPhoneModal()">
+    Schedule an Appointment
+  </button>
+</div>
+<div class="flex justify-between mb-2">
+  <div class="flex gap-4">
+    <nz-select
+      class="min-w-[150px]"
+      nzShowSearch
+      nzPlaceHolder="Filter Status"
+      [(ngModel)]="statusFilter"
+      (ngModelChange)="loadData()"
+    >
+      <nz-option
+        *ngFor="let fs of filterStatus"
+        [nzValue]="fs.value"
+        [nzLabel]="fs.text"
+      ></nz-option>
+    </nz-select>
+    <button class="btn btn-blue icon gap-1" (click)="loadData()">
+      <i nz-icon nzType="redo" nzTheme="outline"></i>
+      Refresh
+    </button>
+  </div>
+  <nz-pagination
+    nzSize="small"
+    [nzTotal]="total"
+    nzShowSizeChanger
+    [nzPageSizeOptions]="[5, 10, 20, 50]"
+    [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzShowTotal]="rangeTemplate"
+  ></nz-pagination>
+</div>
+<nz-table
+  #appointmentTable
+  nzBordered
+  [nzData]="appointments"
+  [nzLoading]="loading"
+  nzSize="middle"
+  [nzScroll]="{ x: '1100px' }"
+  [nzVirtualForTrackBy]="trackByFunction"
+  [nzShowPagination]="true"
+  [nzFrontPagination]="false"
+  [nzTotal]="total"
+  [nzPageSize]="pageSize"
+  [nzPageIndex]="pageIndex"
+  (nzQueryParams)="onQueryParamsChange($event)"
+  class="shadow"
+>
+  <thead>
+    <tr>
+      <th nzWidth="100px" nzColumnKey="appointmentCode" [nzSortFn]="true">
+        Appointment ID
+      </th>
+      <th
+        nzColumnKey="appointmentDate"
+        nzWidth="100px"
+        [nzSortFn]="true"
+        nzSortOrder="ascend"
+      >
+        Appointment Date
+      </th>
+      <th nzColumnKey="appointmentTime" nzWidth="145px">Appointment Time</th>
+      <th nzColumnKey="patientName" nzWidth="130px" [nzSortFn]="true">
+        Patient
+      </th>
+      <th nzColumnKey="treatmentType" nzWidth="130px" [nzSortFn]="true">
+        Treatment
+      </th>
+      <th nzColumnKey="status" nzWidth="154px" [nzSortFn]="true">Status</th>
+      <th nzColumnKey="markAsComplete" nzWidth="150px">Mark as Complete</th>
+      <th nzColumnKey="billedAmount" nzWidth="140px">Billed Amount</th>
+      <th rowspan="2" nzWidth="60px" nzRight>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of appointmentTable.data; let index = index">
+      <td>
+        <div>
+          <span
+            nz-tooltip
+            nzTooltipTitle="Follow Up"
+            class="badge blue"
+            *ngIf="data.parentId"
+            >Follow-up</span
+          >
+          <p>
+            {{ data.appointmentCode }}
+          </p>
+        </div>
+      </td>
+      <td *ngIf="!data.newAppointmentTime">
+        {{ data.appointmentDate | date: "MM-dd-yyyy" }}
+      </td>
+      <td class="text-center" *ngIf="data.newAppointmentTime">
+        {{ data.appointmentDate | date: "MM-dd-yyyy" }} <br />
+        to<br />
+        {{ data.newAppointmentTime | date: "MM-dd-yyyy" }}
+      </td>
+      <td *ngIf="!data.newAppointmentTime">
+        {{ addMinute(data.appointmentTime, data.durationMin)[0] }} -
+        {{ addMinute(data.appointmentTime, data.durationMin)[1] }}
+      </td>
+      <td class="text-center" *ngIf="data.newAppointmentTime">
+        {{ addMinute(data.appointmentTime, data.durationMin)[0] }} -
+        {{ addMinute(data.appointmentTime, data.durationMin)[1] }}<br />
+        to<br />
+        {{
+          addMinute(
+            formatDate(data.newAppointmentTime, "HH:mm", "en"),
+            data.durationMin
+          )[0]
+        }}
+        -
+        {{
+          addMinute(
+            formatDate(data.newAppointmentTime, "HH:mm", "en"),
+            data.durationMin
+          )[1]
+        }}
+      </td>
+      <td
+        class="max-w-[135px]"
+        nzEllipsis
+        nz-tooltip
+        [nzTooltipTitle]="patientTemplate"
+        [nzTooltipTitleContext]="{
+          $implicit: {
+            name: data.patientName,
+            phone: data.phoneNumber,
+            email: data.emailAddress
+          }
+        }"
+      >
+        {{ data.patientName }} <br />
+        {{ data.emailAddress }}
+        <br />
+        {{ data.phoneNumber }}
+      </td>
+      <td
+        class="max-w-[135px]"
+        nzEllipsis
+        nz-tooltip
+        [nzTooltipTitle]="treatmentTemplate"
+        [nzTooltipTitleContext]="{
+          $implicit: {
+            treatmentNickname: data.treatmentNickname,
+            symptoms: data.symptoms,
+            fees: data.treatmentFees,
+            insuranceCoverage: data.treatmentInsuranceCoverage
+          }
+        }"
+      >
+        <span *ngIf="data.symptoms && data.symptoms.length > 0">
+          Symptoms: {{ data.symptoms }}
+          <br />
+        </span>
+        {{ data.treatmentNickname }}
+        <br />
+        Fee per visit:
+        {{ data.treatmentFees ? "C$ " + data.treatmentFees : "Varies" }}
+        <br />
+        Insurance coverage: {{ data.treatmentInsuranceCoverage }}
+      </td>
+      <td class="min-w-[250px]">
+        <div class="grid grid-rows-2 py-2 items-start">
+          <span [class]="'badge ' + data.status.toLocaleLowerCase()">
+            {{
+              data.status === "ProposeNew" ? "New Time Proposed" : data.status
+            }}
+          </span>
+          <div
+            *ngIf="data.status !== 'Rejected' && data.status !== 'Cancelled'"
+          >
+            <nz-select
+              class="min-w-[130px] max-w-[130px]"
+              nzPlaceHolder="Change status"
+              [(ngModel)]="status[index]"
+              (ngModelChange)="
+                status[index] === 'ProposeNew'
+                  ? openFPModal(
+                      data.appointmentId,
+                      'Propose new time',
+                      data.treatmentId
+                    )
+                  : changeStatus(data.appointmentId, index)
+              "
+            >
+              <nz-option
+                nzValue="Accepted"
+                nzLabel="Accept"
+                *ngIf="
+                  data.status !== 'Accepted' && data.status !== 'Confirmed'
+                "
+              ></nz-option>
+              <nz-option nzValue="Rejected" nzLabel="Reject"></nz-option>
+              <nz-option
+                nzValue="ProposeNew"
+                nzLabel="Propose new time"
+              ></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </td>
+      <td class="min-w-full">
+        <div class="grid grid-rows-2">
+          <nz-select
+            nzPlaceHolder="Select"
+            class="min-w-[130px] max-w-[130px] row-start-2"
+            [(ngModel)]="mark[index]"
+            [ngModel]="data.completeStatus"
+            (ngModelChange)="markAsComplete($event, data.appointmentId)"
+          >
+            <nz-option
+              nzLabel="Mark as complete"
+              nzValue="Complete"
+            ></nz-option>
+            <nz-option nzLabel="No show" nzValue="NoShow"></nz-option>
+          </nz-select>
+        </div>
+      </td>
+      <td>
+        <div class="grid grid-rows-2">
+          <div class="flex items-center justify-center gap-1 row-start-2">
+            <nz-input-number
+              class="min-w-[100px]"
+              [(ngModel)]="billedAmount[index]"
+              [ngModel]="
+                data.billedAmount
+                  ? data.billedAmount
+                  : data.treatmentFees
+                  ? data.treatmentFees
+                  : 0.0
+              "
+              [nzMin]="1"
+              [nzStep]="0.1"
+              nzPlaceHolder="C$"
+              [nzFormatter]="formatterDollar"
+              [nzParser]="parserDollar"
+              [nzPrecision]="2"
+              nzPrecisionMode="cut"
+            ></nz-input-number>
+            <span
+              class="text-blue2 cursor-pointer"
+              (click)="addBilledAmount(data.appointmentId, index)"
+            >
+              <i nz-icon nzType="check" nzTheme="outline"></i>
+            </span>
+          </div>
+        </div>
+      </td>
+      <td nzRight>
+        <div class="grid grid-rows-2">
+          <div
+            class="flex items-center justify-center mt-1.5 gap-2 row-start-2"
+          >
+            <span
+              class="text-blue2 cursor-pointer text-sm"
+              nz-tooltip="Follow Up"
+              (click)="
+                openFPModal(data.appointmentId, 'Follow Up', data.treatmentId)
+              "
+            >
+              <i nz-icon nzType="rollback" nzTheme="outline" class="mr-1"></i>
+            </span>
+            <span
+              class="text-blue2 cursor-pointer text-sm"
+              nz-tooltip="Add Notes"
+              (click)="
+                openNotesModal(
+                  data.appointmentId,
+                  data.doctorNotes
+                )
+              "
+            >
+              <i nz-icon nzType="snippets" nzTheme="outline" class="mr-1"></i>
+            </span>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal
+  [(nzVisible)]="FPModal"
+  [nzTitle]="modalTitle"
+  [nzMaskClosable]="false"
+  [nzKeyboard]="false"
+  [nzStyle]="{ minWidth: 'max-content' }"
+  nzOkText="Submit"
+  (nzOnOk)="modalTitle === 'Follow Up' ? followUp() : proposeNewTime()"
+  (nzOnCancel)="cancel()"
+  [nzOkDisabled]="
+    modalTitle === 'Follow Up'
+      ? !selectTreatment || !selectedDate || !selectedSlot
+      : !selectedDate || !selectedSlot
+  "
+>
+  <div *nzModalContent class="mt-6">
+    <div
+      class="flex items-center gap-4 mb-2"
+      *ngIf="modalTitle === 'Follow Up'"
+    >
+      <span class="font-medium mb-1">Select Treatment:</span>
+      <nz-select [(ngModel)]="selectedTreatment" class="min-w-[162px]">
+        <nz-option
+          *ngFor="let t of treatments"
+          [nzValue]="t.treatmentId"
+          [nzLabel]="t.nickname"
+        ></nz-option>
+      </nz-select>
+    </div>
+    <div class="flex items-start justify-between">
+      <div class="flex flex-col">
+        <span class="font-medium mb-1">Select Date:</span>
+        <div *ngIf="treatmentLoad">
+          <i
+            nz-icon
+            nzType="loading"
+            nzTheme="outline"
+            class="text-blue2 text-3xl"
+          ></i>
+        </div>
+        <nz-date-picker
+          *ngIf="!treatmentLoad"
+          [nzDisabledDate]="disabledDate"
+          [nzBorderless]="true"
+          nzInline
+          [(ngModel)]="selectedDate"
+        ></nz-date-picker>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-medium mb-1">Select Slot:</span>
+        <nz-select
+          [(ngModel)]="selectedSlot"
+          nzAllowClear
+          nzPlaceHolder="Choose slot"
+          class="w-28"
+        >
+          <nz-option
+            *ngFor="let option of availableSlots"
+            [nzValue]="option"
+            [nzLabel]="option"
+          ></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </div>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="notesModal"
+  (nzOnCancel)="cancel()"
+  (nzOnOk)="addNotes()"
+  nzTitle="Add Notes"
+  [nzMaskClosable]="false"
+  [nzKeyboard]="false"
+  [nzStyle]="{ minWidth: 'max-content' }"
+  nzOkText="Submit"
+  [nzOkDisabled]="
+    doctorNotes.invalid ||
+    !richDoctorNotes.dirty
+  "
+>
+  <div *nzModalContent class="mt-6">
+    <nz-tabset>
+      <nz-tab nzTitle="Doctor Notes">
+        <div class="max-w-[550px]">
+          <ckeditor
+            class="w-auto"
+            [editor]="Editor"
+            [formControl]="richDoctorNotes"
+            (change)="onChange($event, 'doctor')"
+            [config]="{
+              toolbar: {
+                items: [
+                  'heading',
+                  'bold',
+                  'italic',
+                  '|',
+                  'undo',
+                  'redo',
+                  '|',
+                  'numberedList',
+                  'bulletedList'
+                ],
+                shouldNotGroupWhenFull: true
+              }
+            }"
+            tagName="textarea"
+          ></ckeditor>
+        </div>
+        <!-- <div class="flex justify-between items-center mt-1">
+          <p class="!text-darkGray">
+            {{ 4000 - doctorNotes.value?.length }}
+            characters remaining
+          </p>
+          <p class="!text-darkGray">
+            {{ doctorNotes.value?.length ? doctorNotes.value?.length : 0 }}/4000
+          </p>
+        </div> -->
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="phoneModal"
+  (nzOnOk)="appointmentByPhone()"
+  (nzOnCancel)="cancel()"
+  nzTitle="Schedule an Appointment"
+  [nzMaskClosable]="false"
+  [nzKeyboard]="false"
+  [nzStyle]="{ minWidth: 'max-content' }"
+  nzOkText="Submit"
+  [nzOkDisabled]="
+    phoneAppointmentForm.invalid ||
+    !selectTreatment ||
+    !selectedDate ||
+    !selectedSlot
+  "
+>
+  <div *nzModalContent class="mt-6">
+    <div class="flex items-center gap-4 mb-2">
+      <span class="font-medium mb-1">Select Treatment:</span>
+      <nz-select [(ngModel)]="selectedTreatment" class="min-w-[162px]">
+        <nz-option
+          *ngFor="let t of treatments"
+          [nzValue]="t.treatmentId"
+          [nzLabel]="t.nickname"
+        ></nz-option>
+      </nz-select>
+    </div>
+    <div class="flex items-start justify-between">
+      <div class="flex flex-col">
+        <span class="font-medium mb-1">Select Date:</span>
+        <div *ngIf="treatmentLoad">
+          <i
+            nz-icon
+            nzType="loading"
+            nzTheme="outline"
+            class="text-blue2 text-3xl"
+          ></i>
+        </div>
+        <nz-date-picker
+          *ngIf="!treatmentLoad"
+          [nzDisabledDate]="disabledDate"
+          [nzBorderless]="true"
+          nzInline
+          [(ngModel)]="selectedDate"
+        ></nz-date-picker>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-medium mb-1">Select Slot:</span>
+        <nz-select
+          [(ngModel)]="selectedSlot"
+          nzAllowClear
+          nzPlaceHolder="Choose slot"
+          class="w-28"
+        >
+          <nz-option
+            *ngFor="let option of availableSlots"
+            [nzValue]="option"
+            [nzLabel]="option"
+          ></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div class="form" [formGroup]="phoneAppointmentForm">
+      <div class="input">
+        <input type="text" placeholder="Name" formControlName="name" />
+      </div>
+      <div class="input">
+        <input type="text" placeholder="Email" formControlName="email" />
+      </div>
+      <div class="input">
+        <input
+          type="text"
+          placeholder="Phone Number"
+          formControlName="phoneNumber"
+        />
+      </div>
+      <div class="input mb-4">
+        <textarea
+          type="text"
+          placeholder="Symptoms"
+          formControlName="symptoms"
+          maxlength="255"
+        ></textarea>
+      </div>
+      <div class="flex justify-between items-center mb-1">
+        <p class="!text-darkGray">
+          {{
+            255 - this.phoneAppointmentForm.controls["symptoms"].value?.length
+          }}
+          characters remaining
+        </p>
+        <p class="!text-darkGray">
+          {{
+            this.phoneAppointmentForm.controls["symptoms"].value?.length
+              ? this.phoneAppointmentForm.controls["symptoms"].value?.length
+              : 0
+          }}/255
+        </p>
+      </div>
+      <label nz-checkbox formControlName="emailConsent"
+        >By submitting this form, I confirm that the patient has consented to
+        receive emails and/or text messages (where available) regarding this
+        appointment booking.</label
+      >
+    </div>
+  </div>
+</nz-modal>
+
+<ng-template #treatmentTemplate let-data>
+  <span *ngIf="data.symptoms.length > 0">
+    Symptoms: {{ data.symptoms }}
+    <br />
+  </span>
+  {{ data.treatmentNickname }}
+  <br />
+  Fee per visit:
+  {{ data.fees ? "C$ " + data.fees : "Varies" }}
+  <br />
+  Insurance coverage: {{ data.insuranceCoverage }}
+</ng-template>
+
+<ng-template #patientTemplate let-data>
+  {{ data.name }}
+  <br />
+  {{ data.email }}
+  <br />
+  {{ data.phone }}
+</ng-template>
+
+<ng-template #rangeTemplate let-range="range" let-total>
+  Displaying {{ range[0] }} to {{ range[1] }} of {{ total }}
+</ng-template>

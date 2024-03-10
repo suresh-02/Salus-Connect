@@ -1,0 +1,36 @@
+::ng-deep {
+  .ant-picker-panel-container {
+    box-shadow: none;
+    @apply border-1 border-lightGray;
+  }
+  .ck-editor__editable_inline {
+    min-height: 250px;
+    max-height: 300px;
+  }
+}
+
+.treatmentBtn {
+  @apply text-blue2 px-3 py-1 border border-blue2 transition-all rounded-md hover:bg-blue2 hover:text-white;
+  &.selected {
+    @apply bg-blue2 text-white;
+  }
+}
+
+.search {
+  @apply flex items-center justify-center px-2 rounded border border-medGray bg-white transition-all;
+  &:focus-within {
+    border: 1px solid #2ba3fa;
+  }
+  &::placeholder {
+    color: #7e858d;
+  }
+  input,
+  textarea {
+    @apply w-full rounded py-2 text-sm;
+    border: none;
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+  }
+}

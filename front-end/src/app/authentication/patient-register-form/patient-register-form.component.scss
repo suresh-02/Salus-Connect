@@ -1,0 +1,13 @@
+.cancel {
+  @apply border border-lightGray text-blue2 px-12 py-2 rounded mx-2;
+  &:hover {
+    @apply bg-bgBlue;
+  }
+}
+
+.proceed {
+  @apply border border-lightGray text-white bg-blue2 px-12 py-2 rounded mx-2;
+  &:hover {
+    @apply bg-blue-500;
+  }
+}

@@ -1,0 +1,18 @@
+.check {
+  @apply flex items-center md:text-base text-sm mb-2;
+}
+
+button {
+  padding: 15px;
+  margin-top: 36px;
+  background-color: #2ba3fa;
+  border-radius: 5px;
+  color: white;
+  &:hover {
+    background-color: #02bbfe;
+  }
+}
+
+img {
+  @apply md:w-auto md:h-auto object-cover h-80 w-full;
+}

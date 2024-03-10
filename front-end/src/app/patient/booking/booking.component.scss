@@ -1,0 +1,16 @@
+p {
+  @apply text-darkGray text-sm;
+}
+
+.appointment {
+  @apply bg-[#dff1fe] grid grid-flow-col gap-4 p-8 rounded my-2 w-full;
+  .details {
+    @apply flex flex-col gap-2;
+    span:first-child {
+      @apply text-sm text-darkGray uppercase font-medium;
+    }
+    span {
+      @apply text-sm text-black font-medium;
+    }
+  }
+}

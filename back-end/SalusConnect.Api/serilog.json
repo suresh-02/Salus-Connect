@@ -1,0 +1,31 @@
+{
+  "Serilog": {
+    "LevelSwitches": {
+      "$consoleSwitch": "Information",
+      "$fileSwitch": "Information",
+      "$emailSwitch": "Warning"
+    },
+    "Using": [
+      "Serilog.Sinks.Console",
+      "Serilog.Sinks.File",
+      "Serilog.Sinks.Email"
+    ],
+    "MinimumLevel": "Information",
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "levelSwitch": "$consoleSwitch"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "logs/salusconnect-.log",
+          "levelSwitch": "$fileSwitch",
+          "rollingInterval": "Day"
+        }
+      }
+    ]
+  }
+}

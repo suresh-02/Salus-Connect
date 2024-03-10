@@ -1,0 +1,179 @@
+<h1 class="text-xl font-medium flex items-center mb-2">
+  <i nz-icon nzType="home" nzTheme="outline" class="mr-2 text-lg"></i>
+  Home
+</h1>
+
+<nz-table
+  #appointmentTable
+  nzBordered
+  [nzData]="appointments"
+  [nzLoading]="loading"
+  [nzVirtualForTrackBy]="trackByFunction"
+  [nzShowPagination]="false"
+  nzSize="small"
+  class="shadow"
+>
+  <thead>
+    <tr>
+      <th colspan="3">Appointment</th>
+      <th rowspan="2">Doctor Name</th>
+      <th rowspan="2">Location</th>
+      <th rowspan="2">Treatment</th>
+      <th rowspan="2">Status</th>
+    </tr>
+    <tr>
+      <th>ID</th>
+      <th>Date</th>
+      <th>Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of appointmentTable.data; let index = index">
+      <td>
+        {{ data.appointmentCode }}
+        <span
+          nz-tooltip
+          nzTooltipTitle="Follow Up"
+          class="badge blue"
+          *ngIf="data.parentId"
+          >F</span
+        >
+      </td>
+      <td *ngIf="!data.newAppointmentTime">
+        {{ data.appointmentDate | date: "MM-dd-yyyy" }}
+      </td>
+      <td class="text-center" *ngIf="data.newAppointmentTime">
+        {{ data.appointmentDate | date: "MM-dd-yyyy" }} <br />
+        to<br />
+        {{ data.newAppointmentTime | date: "MM-dd-yyyy" }}
+      </td>
+      <td *ngIf="!data.newAppointmentTime">
+        {{ addMinute(data.appointmentTime, data.durationMin)[0] }} -
+        {{ addMinute(data.appointmentTime, data.durationMin)[1] }}
+      </td>
+      <td class="text-center" *ngIf="data.newAppointmentTime">
+        {{ addMinute(data.appointmentTime, data.durationMin)[0] }} -
+        {{ addMinute(data.appointmentTime, data.durationMin)[1] }}<br />
+        to<br />
+        {{
+          addMinute(
+            formatDate(data.newAppointmentTime, "HH:mm", "en"),
+            data.durationMin
+          )[0]
+        }}
+        -
+        {{
+          addMinute(
+            formatDate(data.newAppointmentTime, "HH:mm", "en"),
+            data.durationMin
+          )[1]
+        }}
+      </td>
+      <td>
+        {{ data.doctorName }}
+      </td>
+      <td>
+        <div class="flex flex-col">
+          <span>
+            {{ data.facilityName }}
+          </span>
+          <span>
+            {{ data.location }}
+          </span>
+        </div>
+      </td>
+      <td
+        class="max-w-[200px]"
+        nzEllipsis
+        nz-tooltip
+        [nzTooltipTitle]="treatmentTemplate"
+        [nzTooltipTitleContext]="{
+          $implicit: {
+            treatmentNickname: data.treatmentNickname,
+            symptoms: data.symptoms,
+            fees: data.treatmentFees,
+            insuranceCoverage: data.treatmentInsuranceCoverage
+          }
+        }"
+      >
+        Symptoms: {{ data.symptoms }}<br />
+        {{ data.treatmentNickname }}
+        <br />
+        Fee per visit:
+        {{ data.treatmentFees ? "C$ " + data.treatmentFees : "Varies" }}
+        <br />
+        Insurance coverage: {{ data.treatmentInsuranceCoverage }}
+      </td>
+      <td>
+        <div class="flex flex-col items-start gap-2 py-2">
+          <span [class]="'badge ' + data.status.toLocaleLowerCase()">
+            {{
+              data.status === "ProposeNew" ? "New Time Proposed" : data.status
+            }}
+          </span>
+          <div
+            class="flex items-center gap-1"
+            *ngIf="data.status !== 'Rejected' && data.status !== 'Cancelled'"
+          >
+            <nz-select
+              nzPlaceHolder="Change status"
+              [(ngModel)]="status[index]"
+              (ngModelChange)="
+                changeStatus(data.appointmentId, index, data.newAppointmentTime)
+              "
+            >
+              <nz-option
+                *ngIf="data.status === 'ProposeNew'"
+                nzValue="Confirmed"
+                nzLabel="Confirm"
+              ></nz-option>
+              <nz-option
+                nzValue="Cancelled"
+                nzLabel="Cancel"
+                *ngIf="
+                  isCancellable(
+                    data.appointmentDate,
+                    data.cancellationPolicyDays
+                  )
+                "
+              ></nz-option>
+            </nz-select>
+            <!-- <button
+              nz-tooltip
+              nzTooltipPlacement="right"
+              nzTooltipTitle="Submit"
+              class="text-blue1 hover:text-blue2 mx-1 cursor-pointer text-[15px] disabled:text-medGray"
+              [disabled]="!status[index]"
+              (click)="
+                submit(data.appointmentId, index, data.newAppointmentTime)
+              "
+            >
+              <i nz-icon nzType="check" nzTheme="outline"></i>
+            </button>
+            <i
+              nz-icon
+              nzType="undo"
+              nzTheme="outline"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              nzTooltipTitle="Reset"
+              (click)="status[index] = ''"
+              class="text-red-400 hover:text-red-500 cursor-pointer text-[15px]"
+            >
+            </i> -->
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #treatmentTemplate let-data>
+  Symptoms: {{ data.symptoms }} <br />
+  {{ data.treatmentNickname }}
+  <br />
+  Fee per visit:
+  {{ data.fees ? "C$ " + data.fees : "Varies" }}
+  <br />
+  Insurance coverage: {{ data.insuranceCoverage }}
+</ng-template>

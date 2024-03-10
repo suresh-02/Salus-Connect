@@ -1,0 +1,139 @@
+<div class="grid grid-flow-rows gap-2 max-w-[280px]">
+  <!-- <h1 class="text-xl font-medium flex items-center">
+    <i
+      nz-icon
+      nzTheme="outline"
+      nzType="crown"
+      nzTheme="outline"
+      class="text-lg mr-1.5"
+    ></i>
+    Specialties
+  </h1> -->
+  <div *ngFor="let category of specialties">
+    <p class="text-base font-medium mb-1">{{ category.categoryName }}</p>
+    <div *ngFor="let specialty of category.specialties">
+      <div *ngIf="specialty.specialtyId !== id" class="specialty">
+        <span>
+          {{ specialty.specialtyName }}
+        </span>
+        <div class="ml-2 flex">
+          <i
+            nz-icon
+            nzType="edit"
+            nzTheme="outline"
+            nz-tooltip
+            nzTooltipPlacement="right"
+            nzTooltipTitle="Edit"
+            class="text-blue1 hover:text-blue2 mr-1 cursor-pointer text-[15px]"
+            (click)="
+              editValue(
+                category.categoryId,
+                specialty.specialtyId,
+                specialty.specialtyName
+              )
+            "
+          >
+          </i>
+          <i
+            class="text-red-400 hover:text-red-500 cursor-pointer text-[15px]"
+            nz-icon
+            nzType="delete"
+            nzTheme="outline"
+            nz-tooltip
+            nzTooltipPlacement="right"
+            nzTooltipTitle="Delete"
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure want to proceed?"
+            nzPopconfirmPlacement="bottomRight"
+            (nzOnConfirm)="delete()"
+            (click)="delId = specialty.specialtyId"
+          >
+          </i>
+        </div>
+      </div>
+      <div *ngIf="specialty.specialtyId === id" class="specialty">
+        <input
+          type="text"
+          class="!border-1 border-medGray rounded mr-2 p-2 text-xs focus:border-blue2"
+          [(ngModel)]="editData.specialtyName"
+          [value]="specialty.specialtyName"
+        />
+        <div class="flex items-center ml-2">
+          <button
+            nz-tooltip
+            nzTooltipPlacement="right"
+            nzTooltipTitle="Save"
+            class="text-blue1 hover:text-blue2 mr-1 cursor-pointer text-[15px] disabled:text-medGray"
+            (click)="edit()"
+            [disabled]="editData.specialtyName.length === 0"
+          >
+            <i nz-icon nzType="check" nzTheme="outline"></i>
+            <!-- <span class="text-xs">Save</span> -->
+          </button>
+          <i
+            nz-icon
+            nzType="close"
+            nzTheme="outline"
+            nz-tooltip
+            nzTooltipPlacement="right"
+            nzTooltipTitle="Cancel"
+            (click)="id = -1"
+            class="text-red-400 hover:text-red-500 cursor-pointer text-[15px]"
+          >
+            <!-- <span class="text-xs">Cancel</span> -->
+          </i>
+        </div>
+      </div>
+    </div>
+    <div class="my-2 w-full">
+      <div class="specialty" *ngIf="category.categoryId === addId">
+        <input
+          type="text"
+          class="!border-1 border-medGray rounded mr-2 p-2 text-xs focus:border-blue2"
+          [(ngModel)]="addData.specialtyName"
+        />
+        <div class="flex items-center ml-2">
+          <button
+            nz-tooltip
+            nzTooltipPlacement="right"
+            nzTooltipTitle="Add"
+            class="flex items-center text-blue1 hover:text-blue2 mr-1 cursor-pointer text-[15px] disabled:text-medGray"
+            (click)="add()"
+            [disabled]="addData.specialtyName.length === 0"
+          >
+            <!-- <span class="text-xs">Save</span> -->
+            <i nz-icon nzType="check" nzTheme="outline"></i>
+          </button>
+          <i
+            nz-icon
+            nzType="close"
+            nzTheme="outline"
+            nz-tooltip
+            nzTooltipPlacement="right"
+            nzTooltipTitle="Cancel"
+            (click)="addId = -1"
+            class="text-red-400 hover:text-red-500 cursor-pointer text-[15px]"
+          >
+            <!-- <span class="text-xs">Cancel</span> -->
+          </i>
+        </div>
+      </div>
+      <button
+        *ngIf="category.categoryId !== addId"
+        class="text-blue2 flex border-1 border-medGray hover:border-blue2 max-w-max rounded p-1 items-center"
+        (click)="
+          addId = category.categoryId;
+          addData = { categoryId: -1, specialtyId: 0, specialtyName: '' }
+        "
+      >
+        <i
+          nz-icon
+          nzType="plus"
+          nzTheme="outline"
+          class="text-xs mr-1 leading-none"
+        ></i>
+        <span class="text-xs">Add New</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,226 @@
+<div *ngIf="doctor && treatments">
+  <div class="max-w-[900px] mx-auto" @fade>
+    <button
+      routerLink="/search-doctor"
+      class="flex text-sm text-blue2 items-center mb-4"
+    >
+      <i nz-icon nzType="arrow-left" nzTheme="outline" class="mr-2"></i>
+      back
+    </button>
+    <div
+      class="flex bg-white gap-y-9 border border-lightGray p-4 rounded-[10px] withCalendar sm:pr-0"
+    >
+      <div class="flex-grow md:pr-6 md:pb-0 pb-5">
+        <div
+          class="flex sm:flex-row flex-col items-center sm:items-start justify-center sm:justify-start mb-4"
+        >
+          <nz-avatar
+            [ngStyle]="{ backgroundColor: '#99ddff', minWidth: '80px' }"
+            [nzText]="doctor.firstName[0] + doctor.lastName[0]"
+            [nzSize]="80"
+            *ngIf="!doctor.imageUrl"
+            class="align-middle text-4xl font-medium text-gray-700 mr-4"
+          ></nz-avatar>
+          <img
+            [src]="environment.imageBaseUrl + doctor.imageUrl"
+            *ngIf="doctor.imageUrl"
+            class="object-cover w-20 h-20 rounded-full mr-4"
+          />
+          <div>
+            <h1 class="font-medium text-xl">
+              {{ doctor.firstName }} {{ doctor.lastName }}
+            </h1>
+            <p class="text-darkGray">{{ doctor.specialtyName }}</p>
+            <p class="text-darkGray mb-1">
+              {{ doctor.facilityName ? doctor.facilityName + "," : "" }}
+              {{ doctor.city }}
+              {{ doctor.stateAbbr }}
+            </p>
+            <span
+              class="p-1 text-white text-center mb-1 block max-w-max"
+              [class]="doctor.isAcceptNew ? 'rounded bg-green-500' : 'grayBtn'"
+              >Accepting New Patients</span
+            >
+            <span
+              class="p-1 text-white text-center block max-w-max"
+              [class]="
+                doctor.isAutoApprove ? 'rounded bg-green-500' : 'grayBtn'
+              "
+              >Allows Instant Booking</span
+            >
+            <p class="font-medium text-darkGray mt-2 mb-1">Specialties</p>
+            <p class="mb-2 flex flex-wrap gap-1">
+              <span
+                *ngFor="let tags of doctor.tags; let i = index"
+                class="px-2 py-1 rounded text-xs font-medium text-darkGray bg-blue0"
+                >{{ tags }}</span
+              >
+            </p>
+            <span *ngIf="doctor.cancellationPolicyDays > 0"
+              >Cancellation Policy:
+              {{ doctor.cancellationPolicyDays }} day(s)</span
+            >
+          </div>
+        </div>
+        <!-- <div class="mb-4 max-h-[600px] overflow-y-auto">
+          <p class="mb-5">
+            {{ doctor.biography }}
+          </p>
+        </div> -->
+        <ckeditor
+          class="w-auto"
+          [disabled]="true"
+          [editor]="Editor"
+          [data]="doctor.biography"
+          [config]="{
+            height: 600,
+            toolbar: []
+          }"
+          tagName="textarea"
+        ></ckeditor>
+      </div>
+      <nz-divider
+        nzType="vertical"
+        nzOrientation="center"
+        class="h-auto"
+      ></nz-divider>
+      <div class="px-4">
+        <h1 class="font-medium text-sm">Select a treatment type</h1>
+        <div class="flex flex-wrap gap-1 my-2">
+          <button
+            class="treatmentBtn"
+            *ngFor="let t of doctor.treatments"
+            [ngClass]="{
+              selected: t.treatmentId === selectedTreatment?.treatmentId
+            }"
+            (click)="selectedTreatment = t"
+          >
+            {{ t.treatmentType }}
+          </button>
+        </div>
+        <div *ngIf="selectedTreatment">
+          <div class="mt-6">
+            <span class="grayBtn mr-2"
+              >Fees:
+              {{
+                selectedTreatment.feePerVisit
+                  ? "C$ " + selectedTreatment.feePerVisit
+                  : "Varies"
+              }}</span
+            >
+            <span class="grayBtn"
+              >Provincial Coverage:
+              {{ selectedTreatment.insuranceCoverage }}</span
+            >
+          </div>
+          <div class="my-3">
+            <h1 class="font-medium">Treatment Description</h1>
+            <p class="max-h-[100px] overflow-y-auto max-w-[360px] break-words">
+              {{ selectedTreatment.description }}
+            </p>
+          </div>
+        </div>
+        <div>
+          <div *ngIf="loading" class="flex justify-center">
+            <i
+              nz-icon
+              nzType="loading"
+              nzTheme="outline"
+              class="text-blue2 text-3xl"
+            ></i>
+          </div>
+          <nz-date-picker
+            *ngIf="!loading"
+            class="flex items-center justify-center"
+            [nzDisabledDate]="disabledDate"
+            [nzBorderless]="true"
+            nzInline
+            [(ngModel)]="selectedDate"
+            [nzShowToday]="false"
+          ></nz-date-picker>
+        </div>
+
+        <div class="mt-4">
+          <span class="flex justify-between items-center pb-4">
+            <h1 class="font-medium text-lg">Available slots</h1>
+            <a
+              class="text-[13px] text-blue2"
+              *ngIf="availableSlots && availableSlots.length > 8"
+              (click)="isSeeMore = !isSeeMore"
+            >
+              {{ isSeeMore ? "See less" : "See more" }}
+            </a>
+          </span>
+          <div class="min-w-[360px]">
+            <div class="max-h-[168px] overflow-y-auto">
+              <div class="grid grid-cols-2 gap-2">
+                <button
+                  *ngFor="
+                    let t of isSeeMore
+                      ? availableSlots
+                      : (availableSlots | slice: 0:8)
+                  "
+                  (click)="selectedSlot = t"
+                  [ngClass]="{ selected: t == selectedSlot }"
+                  class="border-1 border-lightGray px-6 py-2 rounded-md text-blue2 truncate"
+                  nz-tooltip
+                  [nzTooltipTitle]="
+                    addMinute(t, selectedTreatment.durationMinutes)[0] +
+                    '-' +
+                    addMinute(t, selectedTreatment.durationMinutes)[1]
+                  "
+                >
+                  {{ addMinute(t, selectedTreatment.durationMinutes)[0] }} -
+                  {{ addMinute(t, selectedTreatment.durationMinutes)[1] }}
+                </button>
+              </div>
+              <nz-empty
+                *ngIf="!availableSlots"
+                [nzNotFoundContent]="contentTpl"
+              >
+                <ng-template #contentTpl>
+                  <span class="font-medium"
+                    >No available slots for the selected date.</span
+                  >
+                </ng-template>
+              </nz-empty>
+            </div>
+            <div class="mt-4">
+              <!-- <span class="font-medium text-sm"
+                >Please mention why you would like to see
+                {{ doctor.firstName }} {{ doctor.lastName }}. Mention any
+                symptoms you may be experiencing</span
+              > -->
+              <div class="form">
+                <textarea
+                  class="input !mt-0"
+                  rows="3"
+                  [(ngModel)]="symptoms"
+                  maxlength="300"
+                  placeholder="Please mention why you would like to see {{
+                    doctor.firstName
+                  }}. Mention any symptoms you may be experiencing"
+                ></textarea>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-darkGray"
+                  >{{ 300 - symptoms.length }} characters remaining</span
+                >
+                <span class="text-xs text-darkGray"
+                  >{{ symptoms.length }}/300</span
+                >
+              </div>
+            </div>
+            <button
+              [disabled]="!selectedSlot || !selectedDate"
+              class="bg-blue2 py-2 rounded-md text-white col-span-2 disabled:opacity-50 disabled:cursor-not-allowed w-full mt-2"
+              (click)="requestAppointment()"
+            >
+              Request Appointment
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

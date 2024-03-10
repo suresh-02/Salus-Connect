@@ -1,0 +1,299 @@
+<div class="container px-[13%] pb-5" @fade>
+  <div class="flex flex-col items-center">
+    <h1 class="text-xl font-semibold text-center">Join the SimplyDoc family</h1>
+    <p class="text-sm text-darkGray mt-2 text-center">
+      Create an account with us to get started.
+    </p>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form mt-4" id="form">
+    <div class="form-2">
+      <div
+        class="input"
+        [ngClass]="{
+          error: firstName.isError
+        }"
+      >
+        <input
+          tabindex="1"
+          type="text"
+          placeholder="First Name"
+          formControlName="firstName"
+          (ngModelChange)="checkError(firstName)"
+          (focusout)="checkError(firstName)"
+        />
+        <i
+          @animate
+          class="mr-2 text-green-400 text-base"
+          *ngIf="firstName.check"
+          nz-icon
+          nzType="check-circle"
+          nzTheme="outline"
+        ></i>
+        <i
+          @animate
+          class="mr-2 text-red-400 text-base"
+          *ngIf="firstName.isError"
+          nz-icon
+          nzType="exclamation-circle"
+          nzTheme="outline"
+        ></i>
+      </div>
+      <div
+        class="input"
+        [ngClass]="{
+          error: lastName.isError
+        }"
+      >
+        <input
+          tabindex="2"
+          type="text"
+          placeholder="Last Name"
+          formControlName="lastName"
+          (ngModelChange)="checkError(lastName)"
+          (focusout)="checkError(lastName)"
+        />
+        <i
+          @animate
+          class="mr-2 text-green-400 text-base"
+          *ngIf="lastName.check"
+          nz-icon
+          nzType="check-circle"
+          nzTheme="outline"
+        ></i>
+        <i
+          @animate
+          class="mr-2 text-red-400 text-base"
+          *ngIf="lastName.isError"
+          nz-icon
+          nzType="exclamation-circle"
+          nzTheme="outline"
+        ></i>
+      </div>
+      <p @animate class="!row-start-2" *ngIf="firstName.isError">
+        {{ firstName.message }}
+      </p>
+      <p @animate class="md:!col-start-2" *ngIf="lastName.isError">
+        {{ lastName.message }}
+      </p>
+    </div>
+    <div
+      class="input"
+      [ngClass]="{
+        error: phoneNumber.isError
+      }"
+    >
+      <input
+        formControlName="phoneNumber"
+        (ngModelChange)="checkError(phoneNumber)"
+        (focusout)="checkError(phoneNumber)"
+        tabindex="3"
+        type="text"
+        placeholder="Phone Number"
+      />
+      <i
+        @animate
+        class="mr-2 text-green-400 text-base"
+        *ngIf="phoneNumber.check"
+        nz-icon
+        nzType="check-circle"
+        nzTheme="outline"
+      ></i>
+      <i
+        @animate
+        class="mr-2 text-red-400 text-base"
+        *ngIf="phoneNumber.isError"
+        nz-icon
+        nzType="exclamation-circle"
+        nzTheme="outline"
+      ></i>
+    </div>
+    <p @animate *ngIf="phoneNumber.isError">{{ phoneNumber.message }}</p>
+    <div
+      class="input"
+      [ngClass]="{
+        error: emailAddress.isError
+      }"
+    >
+      <input
+        tabindex="4"
+        type="text"
+        placeholder="Email Address"
+        formControlName="emailAddress"
+        (ngModelChange)="checkError(emailAddress)"
+        (focusout)="checkError(emailAddress)"
+      />
+      <i
+        @animate
+        class="mr-2 text-green-400 text-base"
+        *ngIf="emailAddress.check"
+        nz-icon
+        nzType="check-circle"
+        nzTheme="outline"
+      ></i>
+      <i
+        @animate
+        class="mr-2 text-red-400 text-base"
+        *ngIf="emailAddress.isError"
+        nz-icon
+        nzType="exclamation-circle"
+        nzTheme="outline"
+      ></i>
+    </div>
+    <p @animate *ngIf="emailAddress.isError">{{ emailAddress.message }}</p>
+    <div
+      class="input"
+      [ngClass]="{
+        error: password.isError
+      }"
+    >
+      <input
+        tabindex="5"
+        [type]="hidePassword"
+        placeholder="Password"
+        formControlName="password"
+        (ngModelChange)="checkError(password)"
+        (focusout)="checkError(password)"
+      />
+      <p
+        *ngIf="hidePassword === 'text'"
+        (click)="hideOrShowPassword('password')"
+        class="hideShow"
+      >
+        <i
+          nz-icon
+          nzType="eye-invisible"
+          class="text-base"
+          nzTheme="outline"
+        ></i>
+      </p>
+      <p
+        *ngIf="hidePassword === 'password'"
+        (click)="hideOrShowPassword('password')"
+        class="hideShow"
+      >
+        <i nz-icon nzType="eye" class="text-base" nzTheme="outline"></i>
+      </p>
+      <i
+        @animate
+        class="mr-2 text-green-400 text-base"
+        *ngIf="password.check"
+        nz-icon
+        nzType="check-circle"
+        nzTheme="outline"
+      ></i>
+      <i
+        @animate
+        class="mr-2 text-red-400 text-base"
+        *ngIf="password.isError"
+        nz-icon
+        nzType="exclamation-circle"
+        nzTheme="outline"
+      ></i>
+    </div>
+    <p @animate *ngIf="password.isError">{{ password.message }}</p>
+    <div
+      class="input"
+      [ngClass]="{
+        error: confirmPassword.isError
+      }"
+    >
+      <input
+        tabindex="6"
+        [type]="hideConfirmPassword"
+        placeholder="Confirm Password"
+        formControlName="confirmPassword"
+        (ngModelChange)="checkError(confirmPassword)"
+        (focusout)="checkError(confirmPassword)"
+      />
+      <p
+        *ngIf="hideConfirmPassword === 'text'"
+        (click)="hideOrShowPassword('confirmPassword')"
+        class="hideShow"
+      >
+        <i
+          nz-icon
+          nzType="eye-invisible"
+          class="text-base"
+          nzTheme="outline"
+        ></i>
+      </p>
+      <p
+        *ngIf="hideConfirmPassword === 'password'"
+        (click)="hideOrShowPassword('confirmPassword')"
+        class="hideShow"
+      >
+        <i nz-icon nzType="eye" class="text-base" nzTheme="outline"></i>
+      </p>
+      <i
+        @animate
+        class="mr-2 text-green-400 text-base"
+        *ngIf="confirmPassword.check"
+        nz-icon
+        nzType="check-circle"
+        nzTheme="outline"
+      ></i>
+      <i
+        @animate
+        class="mr-2 text-red-400 text-base"
+        *ngIf="
+          confirmPassword.isError ||
+          form.controls['confirmPassword']?.hasError('NoPasswordMatch')
+        "
+        nz-icon
+        nzType="exclamation-circle"
+        nzTheme="outline"
+      ></i>
+    </div>
+    <p @animate *ngIf="confirmPassword.isError">
+      {{ confirmPassword.message }}
+    </p>
+    <div class="input-checkbox">
+      <label>
+        <input tabindex="7" type="checkbox" formControlName="emailCheckbox" />
+        <p>
+          I consent to receiving emails from SimplyDoc. You will receive a
+          confirmation email regarding your appointment.
+        </p>
+      </label>
+    </div>
+    <div class="input-checkbox">
+      <label>
+        <input tabindex="8" type="checkbox" formControlName="agreeCheckbox" />
+        <p>
+          I have read and agreed to the
+          <a
+            class="text-blue1 hover:text-blue2"
+            href="/terms-of-use"
+            target="_blank"
+            >Terms of Use</a
+          >
+          and
+          <a
+            class="text-blue1 hover:text-blue2"
+            href="/privacy-policy"
+            target="_blank"
+            >Privacy Policy</a
+          >
+        </p>
+      </label>
+    </div>
+    <button class="submit" [disabled]="form.invalid">
+      <i
+        nz-icon
+        nzTheme="outline"
+        nzType="loading"
+        class="text-white leading-none mr-2"
+        *ngIf="loading"
+      ></i>
+      Submit
+    </button>
+  </form>
+  <div class="form">
+    <p class="!text-darkGray mx-[10%] lg:mx-0 !text-[12px]">
+      Have an account with us?
+      <a class="text-blue2 cursor-pointer" routerLink="/login">Log in</a>
+    </p>
+    <!-- <nz-divider nzText="OR" class="!text-darkGray"></nz-divider> -->
+  </div>
+  <!-- <app-social-button sign="Sign up"></app-social-button> -->
+</div>

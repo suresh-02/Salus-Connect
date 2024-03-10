@@ -1,0 +1,37 @@
+<div class="events rounded !max-w-[280px]">
+  <div class="flex justify-between items-center">
+    <p class="text-xl font-medium flex flex-col">
+      {{ dt | date: "MMMM d, y" }}
+      <span class="text-xs text-darkGray font-medium"
+        >{{ appointments.length }} confirmed appointments</span
+      >
+    </p>
+    <!-- <a class="text-xs font-medium cursor-pointer text-blue2"
+      >View available slots</a
+    > -->
+  </div>
+  <div *ngIf="appointments.length > 0" @animate>
+    <div
+      class="event-details pb-4 grid grid-cols-5 grid-rows-2 gap-x-5 mt-4"
+      *ngFor="let slot of appointments"
+    >
+      <span class="col-span-1 text-sm font-medium">{{
+        slot.appointmentTime.slice(0, 5)
+      }}</span>
+      <div class="col-span-4 text-sm font-medium">{{ slot.patientName }}</div>
+      <div class="text-xs pt-1 text-darkGray">{{ slot.durationMin }} mins</div>
+      <div class="col-span-4 text-xs pt-1 text-darkGray">
+        {{ slot.emailAddress }} - {{ slot.phoneNumber }}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="appointments.length === 0" @animate>
+    <nz-empty [nzNotFoundContent]="contentTpl" class="my-4">
+      <ng-template #contentTpl>
+        <span class="font-medium"
+          >You have no scheduled appointments for the selected date.</span
+        >
+      </ng-template>
+    </nz-empty>
+  </div>
+</div>

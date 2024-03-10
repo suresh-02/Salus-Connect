@@ -1,0 +1,279 @@
+<div>
+  <div class="max-w-[900px] mx-auto">
+    <div class="mb-4">
+      <div class="flex-grow">
+        <app-provider-search
+          [initialSearch]="initialSearch"
+          [isSearch]="true"
+          (searchData)="searchDoctor($event)"
+        ></app-provider-search>
+      </div>
+      <!-- <button
+        (click)="isOpen = !isOpen"
+        class="filterBtn"
+        cdkOverlayOrigin
+        #trigger="cdkOverlayOrigin"
+      >
+        <i nz-icon nzType="filter" nzTheme="outline"></i>
+        Filters
+      </button> -->
+    </div>
+    <div
+      *ngIf="loading"
+      class="bg-white border border-lightGray p-4 rounded-[10px]"
+    >
+      <nz-skeleton [nzAvatar]="true" [nzParagraph]="{ rows: 4 }"></nz-skeleton>
+    </div>
+    <div *ngIf="doctorData.length > 0 && !loading">
+      <div
+        class="mb-4 bg-white gap-y-9 border border-lightGray p-4 rounded-[10px]"
+        *ngFor="let doctor of doctorData"
+      >
+        <div @fade class="sm:grid grid-cols-2 gap-4">
+          <div
+            class="flex sm:flex-row flex-col items-center sm:items-start justify-start"
+          >
+            <nz-avatar
+              [ngStyle]="{ backgroundColor: '#99ddff', minWidth: '80px' }"
+              [nzText]="doctor.firstName[0] + doctor.lastName[0]"
+              [nzSize]="80"
+              *ngIf="!doctor.imageUrl"
+              class="align-middle text-4xl font-medium text-gray-700 mr-4"
+            ></nz-avatar>
+            <img
+              [src]="environment.imageBaseUrl + doctor.imageUrl"
+              *ngIf="doctor.imageUrl"
+              class="object-cover w-20 h-20 rounded-full mr-4"
+            />
+            <div class="text-center sm:text-left">
+              <h1 class="font-medium text-xl">
+                {{ doctor.firstName }} {{ doctor.lastName }}
+              </h1>
+              <p class="text-darkGray">{{ doctor.specialtyName }}</p>
+              <p class="text-darkGray mb-1">
+                {{ doctor.facilityName ? doctor.facilityName + "," : "" }}
+                {{ doctor.city }}
+                {{ doctor.stateAbbr }}
+              </p>
+              <span
+                class="p-1 text-white text-center mb-1 block max-w-max"
+                [class]="
+                  doctor.isAcceptNew ? 'rounded bg-green-500' : 'grayBtn'
+                "
+                >Accepting New Patients</span
+              >
+              <span
+                class="p-1 text-white text-center block max-w-max"
+                [class]="
+                  doctor.isAutoApprove ? 'rounded bg-green-500' : 'grayBtn'
+                "
+                >Allows Instant Booking</span
+              >
+              <p class="font-medium text-darkGray mt-2 mb-1">Specialties</p>
+              <p class="mb-2 flex flex-wrap gap-1">
+                <span
+                  *ngFor="let tags of doctor.tags; let i = index"
+                  class="px-2 py-1 rounded text-xs font-medium text-darkGray bg-blue0"
+                  >{{ tags }}</span
+                >
+              </p>
+              <span *ngIf="doctor.cancellationPolicyDays > 0"
+                >Cancellation Policy:
+                {{ doctor.cancellationPolicyDays }} day(s)</span
+              >
+            </div>
+          </div>
+          <!-- <div
+            class="max-h-[200px] overflow-y-auto bio"
+            [innerHTML]="doctor.biography"
+          ></div> -->
+          <ckeditor
+            class="w-auto"
+            [disabled]="true"
+            [editor]="Editor"
+            [data]="doctor.biography"
+            [config]="{
+              height: 100,
+              toolbar: []
+            }"
+            tagName="textarea"
+          ></ckeditor>
+          <div class="col-span-2" *ngIf="doctor.treatments">
+            <div class="grid grid-cols-2">
+              <div>
+                <h1 class="font-medium text-base">
+                  Availability by treatment type
+                </h1>
+                <div class="flex flex-wrap gap-1 my-2">
+                  <button
+                    class="treatmentBtn"
+                    *ngFor="let t of doctor.treatments"
+                    (click)="selectTreatment(doctor.id, t)"
+                    [ngClass]="{
+                      selected: isSelected(doctor.id, t).length === 1
+                    }"
+                  >
+                    {{ t.treatmentType }}
+                  </button>
+                </div>
+              </div>
+              <div *ngIf="selectedTreatment(doctor.id)">
+                <span class="grayBtn mr-2"
+                  >Fees:
+                  {{
+                    selectedTreatment(doctor.id).feePerVisit
+                      ? "C$ " + selectedTreatment(doctor.id).feePerVisit
+                      : "Varies"
+                  }}</span
+                >
+                <span class="grayBtn"
+                  >Provincial Coverage:
+                  {{ selectedTreatment(doctor.id).insuranceCoverage }}</span
+                >
+                <h1 class="mt-2 font-bold">Treatment Description</h1>
+                <p class="max-w-[430px] break-words">
+                  {{ selectedTreatment(doctor.id).description }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-2" *ngIf="doctor.slots">
+            <div>
+              <div *ngIf="doctor.isAvailable">
+                <div class="flex justify-between items-center">
+                  <h1 class="text-base font-medium mb-1">
+                    {{ doctor.isAvailable.date | date: "EEEE, MMMM dd" }}
+                  </h1>
+                  <span
+                    class="text-blue2 cursor-pointer"
+                    (click)="route(doctor.id)"
+                    >View all availabilities</span
+                  >
+                </div>
+                <div class="grid grid-cols-2 gap-x-2">
+                  <div
+                    *ngFor="
+                      let time of doctor.isAvailable.times
+                        | sortTime
+                        | slice: 0:6
+                    "
+                  >
+                    <button
+                      class="timeBtn"
+                      (click)="route(doctor.id, doctor.isAvailable.date, time)"
+                    >
+                      {{
+                        addMinute(time, doctor.isAvailable.durationMinutes)[0]
+                      }}
+                      -
+                      {{
+                        addMinute(time, doctor.isAvailable.durationMinutes)[1]
+                      }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                *ngIf="!doctor.isAvailable"
+                class="flex justify-between items-center mb-2"
+              >
+                <h1 class="text-base font-medium mb-1">
+                  No available slots for
+                  {{ searchData.selectedDate | date: "EEEE, MMMM dd" }}
+                </h1>
+                <span
+                  class="text-blue2 cursor-pointer"
+                  (click)="route(doctor.id)"
+                  *ngIf="searchData.selectedDate"
+                  >View all availabilities</span
+                >
+              </div>
+              <div
+                class="flex justify-between items-center"
+                *ngIf="doctor.slots.length > 0"
+              >
+                <h1 class="text-base font-medium mb-1">
+                  Within 7 days of
+                  {{ searchData.selectedDate | date: "MMMM dd" }}
+                </h1>
+                <span
+                  class="text-blue2 cursor-pointer"
+                  (click)="route(doctor.id)"
+                  >View all availabilities</span
+                >
+              </div>
+              <div *ngFor="let slot of doctor.slots | slice: 0:3">
+                <div>
+                  <div class="grid grid-cols-2 gap-x-2">
+                    <button
+                      class="timeBtn"
+                      *ngFor="let t of slot.times | slice: 0:2"
+                      (click)="route(doctor.id, slot.date, t)"
+                    >
+                      {{ slot.date | date: "MMM dd" }},
+                      {{ addMinute(t, slot.durationMinutes)[0] }} -
+                      {{ addMinute(t, slot.durationMinutes)[1] }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="doctor.slots.length === 0">
+              <h1 class="text-base font-medium mb-1">
+                No available dates within 7 days of
+                {{ searchData.selectedDate | date: "MMMM dd" }}
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen"
+  (overlayOutsideClick)="isOpen = false"
+>
+  <div
+    class="bg-white p-4 rounded border-1 border-medGray mt-2 min-w-[300px] shadow-md"
+  >
+    <div class="flex items-center justify-between">
+      <h3 class="text-base font-medium">Filters</h3>
+      <i
+        nz-icon
+        nzType="close"
+        (click)="isOpen = false"
+        class="cursor-pointer"
+      ></i>
+    </div>
+    <nz-divider></nz-divider>
+    <div class="flex flex-col mb-6" *ngIf="facilityName.length > 0">
+      <span class="text-darkGray mb-2">Hospital affiliation</span>
+      <nz-checkbox-group [(ngModel)]="facilityName"></nz-checkbox-group>
+    </div>
+    <div class="flex flex-col">
+      <span class="text-darkGray mb-2">Distance</span>
+      <nz-radio-group [(ngModel)]="distance">
+        <label nz-radio nzValue="0.5">0.5 miles</label>
+        <label nz-radio nzValue="1">1 mile</label>
+        <label nz-radio nzValue="5">5 miles</label>
+        <label nz-radio nzValue="10">10 miles</label>
+        <label nz-radio nzValue="25">25 miles</label>
+        <label nz-radio nzValue="50">50 miles</label>
+      </nz-radio-group>
+    </div>
+    <div class="flex justify-end items-center mt-2">
+      <button class="cancel mr-2" (click)="clear()">Clear</button>
+      <button class="save" (click)="saveFilter()">Save</button>
+    </div>
+  </div>
+</ng-template> -->
+
+<div class="max-w-[900px] mx-auto pb-5">
+  <div *ngIf="doctorData.length === 0 && !loading">
+    <app-no-result></app-no-result>
+  </div>
+</div>

@@ -1,0 +1,370 @@
+<div class="wrapper">
+  <div class="items-center flex justify-between pb-5">
+    <h3 class="flex items-center">
+      <span class="!text-base mr-2">Accepting new patients</span>
+    </h3>
+    <div class="form-switch inline-block align-middle">
+      <input
+        type="checkbox"
+        id="1"
+        class="form-switch-checkbox"
+        required
+        [(ngModel)]="isAcceptNew"
+        (ngModelChange)="entireCalender.markAsDirty()"
+      />
+      <label class="form-switch-label" for="1"></label>
+    </div>
+  </div>
+  <div class="items-center flex justify-between pb-3">
+    <h3 class="flex items-center">
+      <span class="!text-base mr-2">Auto approve all booking requests</span>
+    </h3>
+    <div class="form-switch inline-block align-middle">
+      <input
+        type="checkbox"
+        id="2"
+        class="form-switch-checkbox"
+        required
+        [(ngModel)]="isAutoApprove"
+        (ngModelChange)="entireCalender.markAsDirty()"
+      />
+      <label class="form-switch-label" for="2"></label>
+    </div>
+  </div>
+  <div class="items-center flex justify-between">
+    <h3 class="flex items-center text-base">
+      Cancellation policy (calendar days)
+    </h3>
+    <nz-input-number
+      [(ngModel)]="cancellationDays"
+      [nzMin]="1"
+    ></nz-input-number>
+  </div>
+  <nz-divider></nz-divider>
+  <h3 class="flex items-center justify-between font-medium text-base">
+    Time Slot and Treatment Info Builder<span
+      class="text-blue2 ml-3 cursor-pointer"
+      (click)="isTreatment.emit({ isTreatment: true, treatments: treatments })"
+      >Create or Edit</span
+    >
+  </h3>
+  <nz-divider></nz-divider>
+  <!-- Accordion Heading One -->
+  <div
+    class="parent-tab"
+    [ngClass]="{ 'border-b-1 border-lightGray': !isEdit }"
+  >
+    <input
+      type="radio"
+      name="tab"
+      id="tab-1"
+      (change)="scheduleChange()"
+      value="entireCalendar"
+      [checked]="!custom"
+    />
+    <label for="tab-1" class="!z-0">
+      <span class="my-1 !text-base"
+        >Make entire calendar available
+        <p class="text-darkGray !text-xs mr-4">
+          Select this option to give your patients the widest possible options
+          to find a time on your SimplyDoc calendar
+        </p></span
+      >
+      <div class="flex mt-1 icon">
+        <div
+          class="checkbox bg-white border-2 rounded-full border-lightGray w-5 h-5 flex flex-shrink-0 justify-center items-center focus-within:border-lightGray"
+        >
+          <svg
+            class="fill-current w-2.5 h-2.5 text-gray-300 pointer-events-none"
+            version="1.1"
+            viewBox="0 0 17 12"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g fill="none" fill-rule="evenodd">
+              <g
+                transform="translate(-9 -11)"
+                fill="#2BA3FA"
+                fill-rule="nonzero"
+              >
+                <path
+                  d="m25.576 11.414c0.56558 0.55188 0.56558 1.4439 0 1.9961l-9.404 9.176c-0.28213 0.27529-0.65247 0.41385-1.0228 0.41385-0.37034 0-0.74068-0.13855-1.0228-0.41385l-4.7019-4.588c-0.56584-0.55188-0.56584-1.4442 0-1.9961 0.56558-0.55214 1.4798-0.55214 2.0456 0l3.679 3.5899 8.3812-8.1779c0.56558-0.55214 1.4798-0.55214 2.0456 0z"
+                />
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </label>
+    <div class="main-content" *ngIf="!custom" @animate>
+      <form
+        for="entireCalendar"
+        class="accordion-content mb-4"
+        [formGroup]="entireCalender"
+      >
+        <p class="font-semibold text-[10px] mt-3 mb-1 text-navy">DATES</p>
+        <div class="grid grid-cols-3 gap-10 mb-2">
+          <p class="flex items-center text-xs font-medium">Start on</p>
+          <div class="col-span-2 flex items-center">
+            <nz-date-picker
+              [nzDisabledDate]="disabledStartDate"
+              formControlName="startDate"
+              (ngModelChange)="startDateChange()"
+            ></nz-date-picker>
+            <i
+              nz-icon
+              nzType="exclamation-circle"
+              nzTheme="outline"
+              class="mt-1 ml-2"
+              *ngIf="errors.startDate"
+            ></i>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-10 mb-2">
+          <label class="radio">
+            <input
+              #by
+              [checked]="isEndBy"
+              [ngClass]="{ active: isEndBy }"
+              value="endBy"
+              (change)="endDateChange(by.value)"
+              name="radio"
+              type="radio"
+              checked
+            />
+            <span class="!text-[10px]">End by</span>
+          </label>
+
+          <div class="col-span-2 input flex items-center" for="endBy">
+            <nz-date-picker
+              [nzDisabledDate]="disabledEndDate"
+              formControlName="endDate"
+            ></nz-date-picker>
+            <i
+              nz-icon
+              nzType="exclamation-circle"
+              nzTheme="outline"
+              class="mt-1 ml-2"
+              *ngIf="errors.endBy"
+            ></i>
+            <!-- [pTooltip]="errors.endByMessage" -->
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-10 mb-2">
+          <label class="radio">
+            <input
+              #after
+              [checked]="isEndAfter"
+              [ngClass]="{ active: isEndAfter }"
+              (change)="endDateChange(after.value)"
+              name="radio"
+              type="radio"
+              value="endAfter"
+            />
+            <span class="!text-[10px]">End after</span>
+          </label>
+          <div class="col-span-2 input flex items-center" for="endAfter">
+            <nz-input-number
+              formControlName="endOccurrence"
+              [nzMin]="1"
+              [nzMax]="ef.daysOrWeeks.value === 'day' ? 365 : 52"
+              [nzStep]="1"
+            ></nz-input-number>
+            <span class="ml-1 !text-[10px] red text-darkGray">
+              {{ ef.daysOrWeeks.value + "(s)" }}
+            </span>
+            <i
+              nz-icon
+              nzType="exclamation-circle"
+              nzTheme="outline"
+              class="mt-1 ml-2"
+              *ngIf="errors.endAfter"
+            ></i>
+          </div>
+        </div>
+        <div
+          class="grid grid-cols-3 gap-10 items-center mb-4"
+          *ngIf="isEndAfter"
+          @animate
+        >
+          <div class="flex gap-4 col-start-2 col-span-2">
+            <label class="radio">
+              <input
+                formControlName="daysOrWeeks"
+                [checked]="ef.daysOrWeeks.value === 'day'"
+                #day
+                [ngClass]="{ active: day.checked }"
+                type="radio"
+                value="day"
+              />
+              <span class="!text-[10px]">Days</span>
+            </label>
+            <label class="radio">
+              <input
+                formControlName="daysOrWeeks"
+                [checked]="ef.daysOrWeeks.value === 'week'"
+                #week
+                [ngClass]="{ active: week.checked }"
+                type="radio"
+                value="week"
+              />
+              <span class="!text-[10px]">Weeks</span>
+            </label>
+          </div>
+        </div>
+        <div class="mb-2">
+          <label class="radio">
+            <input
+              #end
+              [ngClass]="{ active: end.checked }"
+              (change)="endDateChange(end.value)"
+              name="radio"
+              type="radio"
+              value="noEnd"
+            />
+            <span class="!text-[10px]"
+              >No end date (the schedule will automatically expires in 365
+              days)</span
+            >
+          </label>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Accordion Heading Two -->
+  <div class="parent-tab">
+    <input
+      type="radio"
+      name="tab"
+      id="tab-2"
+      [checked]="custom"
+      (change)="scheduleChange('custom')"
+      value="custom"
+    />
+    <label for="tab-2">
+      <span class="mb-1 !text-base"
+        >Custom schedule
+        <i
+          nz-icon
+          nzType="info-circle"
+          nzTheme="fill"
+          [nz-tooltip]="titleTemplate"
+        ></i>
+
+        <p class="text-darkGray !text-xs">
+          Select this option when you only want to make certain days and times
+          visible to your patients.
+        </p></span
+      >
+
+      <div class="flex mt-1 icon">
+        <div
+          class="checkbox bg-white border-2 rounded-full border-lightGray w-5 h-5 flex flex-shrink-0 justify-center items-center focus-within:border-lightGray"
+        >
+          <svg
+            class="fill-current w-2.5 h-2.5 text-lightGray pointer-events-none"
+            version="1.1"
+            viewBox="0 0 17 12"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g fill="none" fill-rule="evenodd">
+              <g
+                transform="translate(-9 -11)"
+                fill="#2BA3FA"
+                fill-rule="nonzero"
+              >
+                <path
+                  d="m25.576 11.414c0.56558 0.55188 0.56558 1.4439 0 1.9961l-9.404 9.176c-0.28213 0.27529-0.65247 0.41385-1.0228 0.41385-0.37034 0-0.74068-0.13855-1.0228-0.41385l-4.7019-4.588c-0.56584-0.55188-0.56584-1.4442 0-1.9961 0.56558-0.55214 1.4798-0.55214 2.0456 0l3.679 3.5899 8.3812-8.1779c0.56558-0.55214 1.4798-0.55214 2.0456 0z"
+                />
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </label>
+    <div class="main-content mb-4" *ngIf="custom" @animate>
+      <div class="flex justify-end"></div>
+      <form [formGroup]="customCalender">
+        <p class="font-semibold text-[10px] mt-4 mb-1 text-navy">HOURS</p>
+        <div class="grid grid-cols-3 gap-10 mb-2">
+          <span class="flex items-center text-xs font-medium">Start time</span>
+
+          <div class="col-span-2 input flex items-center">
+            <nz-time-picker
+              [nzUse12Hours]="true"
+              formControlName="startTime"
+              [nzMinuteStep]="15"
+              nzFormat="hh:mm a"
+            ></nz-time-picker>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-10 mb-2">
+          <span class="flex items-center text-xs font-medium">End Time</span>
+          <div class="col-span-2 input flex items-center">
+            <nz-time-picker
+              [nzUse12Hours]="true"
+              formControlName="endTime"
+              [nzMinuteStep]="15"
+              nzFormat="hh:mm a"
+            ></nz-time-picker>
+          </div>
+        </div>
+        <p class="font-semibold text-[10px] mb-2 mt-3 text-navy">
+          TIME DURATION
+        </p>
+        <nz-radio-group
+          class="flex items-center justify-between"
+          formControlName="durationMinutes"
+          nzName="durationMinutes"
+        >
+          <label nz-radio [nzValue]="slot" *ngFor="let slot of slotDurations"
+            >{{ slot }} min</label
+          >
+        </nz-radio-group>
+      </form>
+      <h3 class="flex items-center justify-between font-medium text-base my-6">
+        Date and Time Selction Tool<button
+          class="text-blue2 ml-3 cursor-pointer"
+          [disabled]="customCalender.invalid"
+          (click)="
+            isDateTime.emit({
+              isSelector: true,
+              customDates: customDates,
+              durationMinutes: this.cf.durationMinutes.value,
+              startTime: this.cf.startTime.value,
+              endTime: this.cf.endTime.value
+            })
+          "
+        >
+          Create or Edit
+        </button>
+      </h3>
+    </div>
+  </div>
+  <div class="flex justify-center">
+    <button
+      [disabled]="
+        custom
+          ? customCalender.invalid || customDates.length === 0
+          : entireCalender.invalid
+      "
+      class="bg-blue1 hover:bg-blue2 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded px-4 py-2"
+      (click)="confirmAppointment()"
+    >
+      Ready to Publish
+    </button>
+  </div>
+
+  <ng-template #titleTemplate>
+    Please follow these steps to set your custom schedule:
+    <br />
+    1. Set appointment duration
+    <br />
+    2. Select the start and end time range
+    <br />
+    3. From the calendar, click on all the days for which you want to make your
+    selection. Your selected days will display in blue.
+    <br />
+    4. For each selected day, pick the time slots that you want to make
+    available to patients.
+  </ng-template>
+</div>

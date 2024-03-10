@@ -1,0 +1,31 @@
+.search {
+  @apply flex items-center justify-center px-2 rounded border border-medGray bg-white transition-all;
+  &:focus-within {
+    border: 1px solid #2ba3fa;
+  }
+  &::placeholder {
+    color: #7e858d;
+  }
+  input,
+  textarea {
+    @apply w-full rounded py-2 text-sm;
+    border: none;
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+  }
+}
+
+.topNavigation {
+  @apply flex items-center text-blue2 bg-blue0 p-2 rounded hover:bg-blue2 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+::ng-deep {
+  .ant-progress-outer {
+    width: 80%;
+  }
+  .ant-divider-vertical {
+    height: 1.5rem;
+  }
+}

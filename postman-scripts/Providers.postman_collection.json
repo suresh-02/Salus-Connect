@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "9bf6bc08-4acc-4b24-8174-7e004165abc8",
+		"name": "Providers",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all providers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/providers?pageIndex=1&pageSize=10&sortField=providerName&sortDirection=desc",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"providers"
+					],
+					"query": [
+						{
+							"key": "pageIndex",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "10"
+						},
+						{
+							"key": "sortField",
+							"value": "providerName"
+						},
+						{
+							"key": "sortDirection",
+							"value": "desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activate/Deactivate a facility",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\": 1,\r\n    \"providerType\": \"Hospital\",\r\n    \"active\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/providers/activate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"providers",
+						"activate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search specialties",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/providers/specialties",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"providers",
+						"specialties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search locations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/providers/locations?search=a1a",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"providers",
+						"locations"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "a1a"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search providers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/providers/search?specialty=Physiotherapy&city=st. john's&province=NL&date=2021-12-30",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"providers",
+						"search"
+					],
+					"query": [
+						{
+							"key": "specialty",
+							"value": "Physiotherapy"
+						},
+						{
+							"key": "city",
+							"value": "st. john's"
+						},
+						{
+							"key": "province",
+							"value": "NL"
+						},
+						{
+							"key": "date",
+							"value": "2021-12-30"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Search providers (eye care, paradise, NL)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/providers/search?specialty=eye care&city=paradise&province=NL",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"search"
+							],
+							"query": [
+								{
+									"key": "specialty",
+									"value": "eye care"
+								},
+								{
+									"key": "city",
+									"value": "paradise"
+								},
+								{
+									"key": "province",
+									"value": "NL"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Search providers (homeopathy, toronto, ON)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/providers/search?specialty=homeopathy&city=toronto&province=ON",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"search"
+							],
+							"query": [
+								{
+									"key": "specialty",
+									"value": "homeopathy"
+								},
+								{
+									"key": "city",
+									"value": "toronto"
+								},
+								{
+									"key": "province",
+									"value": "ON"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Get all treatments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/providers/6/treatments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"providers",
+						"6",
+						"treatments"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbmlzdHJhdG9yIiwiZXhwIjoxNjQ4MTg1ODg0LCJpc3MiOiJodHRwOi8vOTkuNzkuNTMuMTY4L2FwaSIsImF1ZCI6Imh0dHA6Ly85OS43OS41My4xNjgifQ.WdGYlZ8itTzAVUjX3beyhp3WeI0iZBqWyOwWqw04Nrc",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -1,0 +1,21 @@
+.navigator {
+  @apply w-full ml-10 mb-1.5 mt-4 select-none;
+  span {
+    @apply text-sm text-blue2 border-1 border-blue2 px-5 py-2 rounded-t-lg transition-colors ease-in-out duration-200;
+    &:hover {
+      @apply text-white bg-blue2 cursor-pointer;
+    }
+  }
+  .selected {
+    @apply text-sm text-white bg-blue2 px-5 py-2 rounded-t-lg;
+  }
+}
+
+:host {
+  ::ng-deep {
+    .ant-radio-group,
+    .ant-checkbox-group {
+      @apply md:flex md:flex-row flex-wrap grid grid-cols-3;
+    }
+  }
+}

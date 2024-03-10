@@ -1,0 +1,52 @@
+// Custom Theming for NG-ZORRO
+// For more information: https://ng.ant.design/docs/customize-theme/en
+@import "../node_modules/ng-zorro-antd/ng-zorro-antd.less";
+
+// Override less variables to here
+// View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
+
+@primary-color: #2ba3fa;
+@font-family: "Inter", normal;
+@font-size-base: 12px;
+@font-size-lg: @font-size-base + 2px;
+@font-size-sm: 10px;
+
+@divider-color: rgba(203, 207, 212);
+
+@input-placeholder-color: rgba(126, 133, 141);
+
+.ant-modal-body {
+  padding-top: 0;
+}
+
+@checkbox-size: 14px;
+
+// .ant-checkbox + span {
+//   font-size: 12px;
+// }
+
+// span.ant-radio + * {
+//   padding-top: 8px;
+// }
+
+.anticon svg {
+  display: inline-block;
+  vertical-align: text-top;
+}
+
+.ant-divider-horizontal {
+  margin: 10px 0;
+}
+
+.ant-picker-header > button {
+  @apply text-blue1 hover:text-blue2;
+}
+
+// .ant-table-thead > tr > th,
+// .ant-table-tbody > tr > td,
+// .ant-table tfoot > tr > th,
+// .ant-table tfoot > tr > td {
+//   position: relative;
+//   padding: 0.5rem 1rem;
+//   overflow-wrap: break-word;
+// }

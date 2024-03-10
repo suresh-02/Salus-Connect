@@ -1,0 +1,282 @@
+<app-provider-header></app-provider-header>
+<div class="container pt-24">
+  <div class="flex justify-end mb-2">
+    <div *ngIf="doctor" class="flex flex-col items-end">
+      <span class="text-sm">
+        You are operating on behalf of {{ doctor.firstName }}
+        {{ doctor.lastName }}
+      </span>
+      <a routerLink="/provider/choose" class="text-blue1 hover:text-blue2"
+        >Switch provider</a
+      >
+    </div>
+  </div>
+
+  <nz-radio-group class="flex" [(ngModel)]="isDoctor" *ngIf="isStaff">
+    <label nz-radio [nzValue]="false">My Profile</label>
+    <label nz-radio [nzValue]="true">Doctor Profile</label>
+  </nz-radio-group>
+  <div *ngIf="user">
+    <div class="mb-4">
+      <div class="flex flex-col items-center">
+        <nz-avatar
+          *ngIf="!user.imageUrl"
+          [ngStyle]="{ 'background-color': '#99ddff' }"
+          [nzText]="
+            user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()
+          "
+          [nzSize]="80"
+          style="
+            vertical-align: middle;
+            font-size: 35px;
+            font-weight: 500;
+            color: #505050;
+          "
+        ></nz-avatar>
+        <img
+          [src]="environment.imageBaseUrl + user.imageUrl"
+          *ngIf="user.imageUrl"
+          class="object-cover w-20 h-20 rounded-xl"
+        />
+        <div class="flex items-center mt-4">
+          <button (click)="file.click()" class="btn blue icon btn-outline mr-2">
+            <i nz-icon nzType="upload" class="mr-1"></i>
+            Upload
+          </button>
+          <input
+            style="display: none"
+            type="file"
+            accept="image/png, image/gif, image/jpeg, image/jpg, image/png"
+            (change)="onUpload(file.files)"
+            #file
+          />
+          <button class="btn gray icon btn-outline" (click)="removeProfile()">
+            <i nz-icon nzType="close" class="mr-1"></i>
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <nz-divider></nz-divider>
+      <div>
+        <h2 class="text-[15px] font-medium">Personal Information</h2>
+        <div
+          class="mx-[10%] mt-4 grid gap-y-4 gap-x-8 md:grid-cols-2 grid-cols-1"
+        >
+          <div class="flex flex-col">
+            <span class="font-medium text-xs">First name</span>
+            <input type="text" [value]="user.firstName" disabled />
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium text-xs">Last name</span>
+            <input type="text" [value]="user.lastName" disabled />
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium text-xs">Phone number</span>
+            <input
+              [value]="phone.value"
+              disabled
+              *ngIf="(!isDoctor && isStaff) || isPatient"
+            />
+            <div
+              *ngIf="isDoctor || (!isStaff && !isPatient)"
+              class="border-1 border-medGray rounded flex items-center"
+              [ngClass]="{
+                error: phoneNumber.isError
+              }"
+            >
+              <input
+                type="text"
+                placeholder="Phone Number"
+                [formControl]="phone"
+                (ngModelChange)="checkPhoneAvailability(phoneNumber)"
+                (focusout)="checkPhoneAvailability(phoneNumber)"
+                class="input p-2 flex-grow rounded"
+              />
+              <i
+                @animate
+                class="mr-2 text-green-400 text-base"
+                *ngIf="phoneNumber.check"
+                nz-icon
+                nzType="check-circle"
+                nzTheme="outline"
+              ></i>
+              <i
+                @animate
+                class="mr-2 text-red-400 text-base"
+                *ngIf="phoneNumber.isError"
+                nz-icon
+                nzType="exclamation-circle"
+                nzTheme="outline"
+              ></i>
+            </div>
+            <p @animate *ngIf="phoneNumber.isError" class="text-red-400">
+              {{ phoneNumber.message }}
+            </p>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium text-xs">Email address</span>
+            <input type="text" [value]="user.emailAddress" disabled />
+          </div>
+          <div class="flex flex-col md:col-span-2" *ngIf="isBio">
+            <span class="font-medium text-xs">Biography</span>
+            <!-- <textarea
+              class="resize-none"
+              [formControl]="bio"
+              rows="10"
+              maxlength="4000"
+            ></textarea> -->
+            <ckeditor
+              class="w-auto border border-medGray rounded"
+              [formControl]="richBio"
+              [editor]="Editor"
+              (change)="onChange($event)"
+              [config]="{
+                height: 100,
+                wordcount: {
+                  showWordCount: true,
+                  maxWordCount: 4000
+                },
+                toolbar: [
+                  'heading',
+                  'bold',
+                  'italic',
+                  '|',
+                  'undo',
+                  'redo',
+                  '|',
+                  'numberedList',
+                  'bulletedList'
+                ]
+              }"
+              tagName="textarea"
+            ></ckeditor>
+            <p @animate *ngIf="bio.hasError('maxlength')" class="text-red-400">
+              Biography must be within 4000 characters
+            </p>
+
+            <div class="flex justify-between items-center mt-1">
+              <p class="!text-darkGray">
+                {{ 4000 - bio.value?.length }}
+                characters remaining
+              </p>
+              <p class="!text-darkGray">
+                {{ bio.value?.length ? bio.value?.length : 0 }}/4000
+              </p>
+            </div>
+          </div>
+          <div
+            class="flex justify-end md:col-span-2 gap-4"
+            *ngIf="isDoctor || (!isStaff && !isPatient)"
+          >
+            <button
+              class="btn btn-blue"
+              [disabled]="
+                (!phone.dirty && !richBio.dirty) || phone.invalid || bio.invalid
+              "
+              (click)="savePersonalInfo()"
+            >
+              Save
+            </button>
+            <!-- <button class="btn btn-outline blue">Cancel</button> -->
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isAddress">
+        <nz-divider></nz-divider>
+        <div class="flex items-center justify-between">
+          <h2 class="text-[15px] font-medium">Contact Information</h2>
+          <span
+            class="text-blue2 cursor-pointer"
+            (click)="showModal = true"
+            *ngIf="isPatient"
+            >Edit</span
+          >
+        </div>
+        <div
+          class="mx-[10%] mt-4 grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-y-4 gap-x-8"
+        >
+          <div class="flex flex-col">
+            <span class="font-medium text-xs">Address line 1</span>
+            <input
+              type="text"
+              [value]="user.address?.addressLine1"
+              disabled
+              placeholder="Address line 1"
+            />
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium text-xs">Address line 2</span>
+            <input
+              type="text"
+              [value]="user.address?.addressLine2"
+              disabled
+              placeholder="Address line 2"
+            />
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium text-xs">Postal code</span>
+            <input
+              type="text"
+              [value]="user.address?.postalCode"
+              disabled
+              placeholder="Postal code"
+            />
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium text-xs">City</span>
+            <input
+              type="text"
+              [value]="user.address?.city"
+              disabled
+              placeholder="City"
+            />
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium text-xs">State</span>
+            <input
+              type="text"
+              [value]="user.address?.provinceName"
+              disabled
+              placeholder="State"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-0 my-4 flex gap-4 justify-center items-center">
+  <a routerLink="/terms-of-use" target="_blank">Terms of Use</a>
+  <a routerLink="/privacy-policy" target="_blank">Privacy Policy</a>
+  <a routerLink="/contact-us" target="_blank">Get Support</a>
+</div>
+
+<nz-modal
+  [(nzVisible)]="showModal"
+  nzCentered
+  nzTitle="Contact Information"
+  [nzFooter]="null"
+  (nzOnCancel)="cancel()"
+  [nzMaskClosable]="false"
+  [nzKeyboard]="false"
+  [nzStyle]="{ minWidth: 'max-content' }"
+>
+  <div *nzModalContent>
+    <app-address-edit [form]="addressForm"></app-address-edit>
+    <div class="my-4 flex flex-row justify-end">
+      <button
+        class="btn btn-md btn-blue mr-2"
+        [disabled]="addressForm.invalid"
+        (click)="submit()"
+      >
+        Submit
+      </button>
+      <button class="btn btn-md btn-outline gray" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</nz-modal>

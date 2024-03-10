@@ -1,0 +1,37 @@
+.date-picker {
+  border-radius: 5px;
+  padding: 2px;
+  max-width: 150px;
+  min-width: 110px;
+  color: #2ba3fa;
+  font-size: 12px;
+  border: 1px solid #e6e7eb;
+}
+
+.dropdown {
+  @apply text-xs border-medGray my-2 p-2 pr-7 rounded text-blue2;
+  &:focus {
+    box-shadow: none;
+  }
+  option {
+    color: #007bff;
+  }
+}
+
+.timeBtnActive {
+  background-color: #2ba3fa;
+  border: none;
+  color: white;
+}
+
+.publish:not(:disabled):hover {
+  background-color: #0091f8;
+}
+
+.disabled {
+  color: #cbcfd4;
+}
+
+label {
+  z-index: 0 !important;
+}

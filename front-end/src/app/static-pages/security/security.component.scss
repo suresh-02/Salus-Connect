@@ -1,0 +1,13 @@
+.img:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  background-image: url("../../../assets/images/security-shield.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}

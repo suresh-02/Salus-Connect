@@ -1,0 +1,113 @@
+<div class="container" @fade>
+  <div class="flex flex-col items-center">
+    <h1 class="text-xl font-semibold text-center">
+      You’re already a part of the family!
+    </h1>
+    <p class="text-sm text-darkGray mt-2 text-center">
+      If you have a SimplyDoc account, log in to get started.
+    </p>
+  </div>
+  <form
+    [formGroup]="loginForm"
+    (ngSubmit)="submit()"
+    class="form mt-8"
+    id="form"
+  >
+    <div
+      class="input"
+      [ngClass]="{
+        error: emailAddress.isError
+      }"
+    >
+      <input
+        type="text"
+        placeholder="Email"
+        formControlName="emailAddress"
+        (ngModelChange)="checkError(emailAddress)"
+        (focusout)="checkError(emailAddress)"
+      />
+      <i
+        @animate
+        class="mr-2 text-green-400 text-base"
+        *ngIf="emailAddress.check"
+        nz-icon
+        [nzType]="'check-circle'"
+        nzTheme="outline"
+      ></i>
+      <i
+        @animate
+        class="mr-2 text-red-400 text-base"
+        *ngIf="emailAddress.isError"
+        nz-icon
+        [nzType]="'exclamation-circle'"
+        nzTheme="outline"
+      ></i>
+    </div>
+    <p @animate *ngIf="emailAddress.isError">{{ emailAddress.message }}</p>
+    <div
+      class="input"
+      [ngClass]="{
+        error: password.isError
+      }"
+    >
+      <input
+        [type]="hidePassword"
+        placeholder="Password"
+        formControlName="password"
+        (ngModelChange)="checkError(password)"
+        (focusout)="checkError(password)"
+      />
+      <p
+        *ngIf="hidePassword === 'text'"
+        (click)="hideOrShowPassword()"
+        class="hideShow"
+      >
+        <i
+          nz-icon
+          [nzType]="'eye-invisible'"
+          class="text-base"
+          nzTheme="outline"
+        ></i>
+      </p>
+      <p
+        *ngIf="hidePassword === 'password'"
+        (click)="hideOrShowPassword()"
+        class="hideShow"
+      >
+        <i nz-icon [nzType]="'eye'" class="text-base" nzTheme="outline"></i>
+      </p>
+      <i
+        @animate
+        class="mr-2 text-green-400 text-base"
+        *ngIf="password.check"
+        nz-icon
+        [nzType]="'check-circle'"
+        nzTheme="outline"
+      ></i>
+      <i
+        @animate
+        class="mr-2 text-red-400 text-base"
+        *ngIf="password.isError"
+        nz-icon
+        [nzType]="'exclamation-circle'"
+        nzTheme="outline"
+      ></i>
+    </div>
+    <p @animate *ngIf="password.isError">{{ password.message }}</p>
+    <button [disabled]="loginForm.invalid" class="submit">Continue</button>
+    <div class="flex flex-col gap-y-3 mb-4">
+      <a
+        class="text-blue2 cursor-pointer text-[12px]"
+        routerLink="/forgot-password"
+      >
+        Forgot Password?
+      </a>
+      <span class="text-darkGray text-[12px]">
+        Don't have an account with us?
+        <a class="text-blue2 cursor-pointer" routerLink="/register">Sign up</a>
+      </span>
+    </div>
+    <!-- <nz-divider nzText="OR" class="!text-darkGray"></nz-divider> -->
+  </form>
+  <!-- <app-social-button sign="Sign in"></app-social-button> -->
+</div>

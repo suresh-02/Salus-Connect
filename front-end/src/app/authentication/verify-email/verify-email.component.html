@@ -1,0 +1,83 @@
+<div class="max-w-max mx-auto">
+  <div class="bg-white border-1 border-medGray rounded p-8">
+    <div class="flex flex-col items-center justify-center">
+      <i
+        *ngIf="loading"
+        nz-icon
+        [nzType]="'loading'"
+        [nzTheme]="'outline'"
+        class="text-6xl leading-none"
+      ></i>
+      <i
+        *ngIf="!loading && error"
+        nz-icon
+        [nzType]="'close-circle'"
+        [nzTheme]="'twotone'"
+        class="text-6xl leading-none"
+      ></i>
+      <i
+        *ngIf="!loading && !error"
+        nz-icon
+        [nzType]="'check-circle'"
+        [nzTheme]="'twotone'"
+        class="text-6xl leading-none"
+      ></i>
+      <h1 class="text-lg text-center">
+        {{
+          loading
+            ? "Verifying your email please wait..."
+            : error
+            ? "We're facing issues in verifying your email. If this issue persist, please contact support@simplydoc.ca"
+            : isPatient
+            ? "Congratulations! Your email " +
+              email +
+              " has been verified successfully. As an enhanced security measure, you must now login to complete your appointment request. All requests are held for 10 minutes."
+            : "Congratulations. Your email " +
+              email +
+              " has been verified successfully. You must set a new password now to start using SimplyDoc."
+        }}
+      </h1>
+      <button
+        *ngIf="error"
+        class="mt-6 bg-blue1 hover:bg-blue2 p-3 rounded text-white flex items-center justify-center"
+        (click)="sendInvite()"
+      >
+        <i
+          *ngIf="sendLoading"
+          nz-icon
+          nzType="loading"
+          nzTheme="outline"
+          class="text-base leading-none mr-2"
+        ></i>
+        Verify your email
+      </button>
+      <button
+        *ngIf="!error && !loading && !isPatient"
+        class="mt-6 bg-blue1 hover:bg-blue2 p-3 rounded text-white flex items-center justify-center"
+        [routerLink]="['/reset-password']"
+        [queryParams]="{email,id}"
+      >
+        <i
+          nz-icon
+          nzType="undo"
+          nzTheme="outline"
+          class="text-base leading-none mr-2"
+        ></i>
+        Set New Password
+      </button>
+      <button
+        *ngIf="!error && !loading && isPatient"
+        class="mt-6 bg-blue1 hover:bg-blue2 p-3 rounded text-white flex items-center justify-center"
+        [routerLink]="['/login']"
+      >
+        <i
+          nz-icon
+          nzType="login"
+          nzTheme="outline"
+          class="text-base leading-none mr-2"
+        ></i>
+        Login
+      </button>
+    </div>
+  </div>
+</div>

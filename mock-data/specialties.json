@@ -1,0 +1,32 @@
+{
+  "specialties": [
+    { "id": 1, "specialtyName": "Dental Care", "categoryName": "General" },
+    {
+      "id": 2,
+      "specialtyName": "Chiropractic Services",
+      "categoryName": "General"
+    },
+    { "id": 3, "specialtyName": "Physiotherapy", "categoryName": "General" },
+    { "id": 4, "specialtyName": "Eye Care", "categoryName": "General" },
+    {
+      "id": 5,
+      "specialtyName": "Acupuncture",
+      "categoryName": "Alternative Medicine"
+    },
+    {
+      "id": 6,
+      "specialtyName": "Chinese Medicine",
+      "categoryName": "Alternative Medicine"
+    },
+    {
+      "id": 7,
+      "specialtyName": "Homeopathy",
+      "categoryName": "Alternative Medicine"
+    },
+    {
+      "id": 8,
+      "specialtyName": "Reiki",
+      "categoryName": "Alternative Medicine"
+    }
+  ]
+}

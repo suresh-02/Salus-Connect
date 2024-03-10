@@ -1,0 +1,221 @@
+<div
+  class="main-layout flex flex-col space-y-8 lg:space-y-10 2xl:space-y-16 pb-10"
+>
+  <div
+    class="pricing-intro space-x-5 items-center font-bold text-2xl lg:text-3xl 2xl:text-6xl text-center container"
+  >
+    No artificial barriers to entry.
+    <span class="text-blue2">Start using for free.</span>
+  </div>
+
+  <div class="pricing-summary flex justify-center gap-3 container">
+    <div class="flex flex-row justify-center text-lg text-center space-x-3">
+      <div
+        class="font-bold whitespace-pre-line"
+        [ngClass]="{ 'text-blue2': !isAnually }"
+      >
+        Billed Monthly
+      </div>
+      <nz-switch [(ngModel)]="isAnually"></nz-switch>
+      <div
+        class="font-bold whitespace-pre-line"
+        [ngClass]="{ 'text-blue2': isAnually }"
+      >
+        Billed Annually
+      </div>
+    </div>
+    <div class="font-bold lg:text-lg">(Save 15% with an annual plan)</div>
+  </div>
+  <div class="relative">
+    <div
+      class="pricing-plans grid grid-rows-4 lg:grid-rows-1 lg:grid-cols-4 gap-3 2xl:py-4 container img"
+    >
+      <div class="flex flex-col rounded-2xl border-4 border-blue2 p-3 bg-white">
+        <div class="font-bold text-2xl">Basic</div>
+        <div class="flex flex-col space-y-2">
+          <div class="flex flex-row">
+            <div class="font-extrabold text-3xl text-blue2">Free Always</div>
+          </div>
+          <div></div>
+        </div>
+        <div class="whitespace-pre-line text-base">
+          Get your practice listing up on SimplyDoc and immediately improve your
+          visibility. When you are ready to start getting appointments through
+          SimplyDoc, upgrade to a higher tier.
+        </div>
+      </div>
+      <div class="flex flex-col rounded-2xl border-4 border-blue2 p-3 bg-white">
+        <div class="font-bold text-2xl">Individual</div>
+        <div class="flex flex-col space-y-2">
+          <div class="flex flex-row">
+            <div class="font-extrabold text-3xl text-blue2">
+              CA$
+              <span class="text-4xl">{{ isAnually ? 189 : 19 }}</span>
+              <span class="text-sm font-normal"
+                >{{ isAnually ? "/year" : "/month" }}
+                <span class="text-[10px] font-normal text-black"
+                  >+ applicable taxes</span
+                ></span
+              >
+            </div>
+          </div>
+          <div></div>
+        </div>
+        <div class="whitespace-pre-line text-base">
+          For solo practitioners with big aspirations. Everything in Basic.
+          <span class="text-blue2"
+            >Plus, full access to the entire SimplyDoc platform for one
+            practitioner.</span
+          >
+        </div>
+      </div>
+      <div class="flex flex-col rounded-2xl border-4 border-blue2 p-3 bg-white">
+        <div class="font-bold text-2xl">Clinic</div>
+        <div class="flex flex-col space-y-2">
+          <div class="flex flex-row">
+            <div class="font-extrabold text-3xl text-blue2">
+              CA$
+              <span class="text-4xl">{{ isAnually ? 599 : 59 }}</span>
+              <span class="text-sm font-normal"
+                >{{ isAnually ? "/year" : "/month" }}
+                <span class="text-[10px] font-normal text-black"
+                  >+ applicable taxes</span
+                ></span
+              >
+            </div>
+          </div>
+          <div>
+            <div class="text-sm text-blue2 whitespace-pre-line">
+              + Add CA$ 10 for every additional practitioner <br />
+              ++ Add CA$ 6 for every additional staff.
+            </div>
+          </div>
+        </div>
+        <div class="whitespace-pre-line text-base">
+          For practices that are ready to modernize and enhance patient
+          experience. Everything in Individual.
+          <span class="text-blue2"
+            >Plus full access for up to 3 practitioners and 1 staff.</span
+          >
+        </div>
+      </div>
+      <div class="flex flex-col rounded-2xl border-4 border-blue2 p-3 bg-white">
+        <div class="font-bold text-2xl">Clinic Plus</div>
+        <div class="flex flex-col space-y-2">
+          <div class="flex flex-row">
+            <div class="font-extrabold text-3xl text-blue2">
+              CA$
+              <span class="text-4xl">{{ isAnually ? 1199 : 119 }}</span>
+              <span class="text-sm font-normal"
+                >{{ isAnually ? "/year" : "/month" }}
+                <span class="text-[10px] font-normal text-black"
+                  >+ applicable taxes</span
+                ></span
+              >
+            </div>
+          </div>
+          <div>
+            <div class="text-sm text-blue2 whitespace-pre-line">
+              + Add CA$ 10 for every additional practitioner <br />
+              ++ Add CA$ 6 for every additional staff.
+            </div>
+          </div>
+        </div>
+        <div class="whitespace-pre-line text-base">
+          For larger practices that are optimizing operations and are scaling
+          rapidly. Everything in Individual.
+          <span class="text-blue2"
+            >Plus full access for up to 7 practitioners and 2 staff.</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-plan container">
+    <div
+      class="rounded-2xl border-4 bg-black p-3 text-white flex flex-col lg:flex-row space-y-5 lg:space-y-0 items-center"
+    >
+      <div class="text-2xl font-bold lg:w-1/3">Custom Plans</div>
+      <div class="text-lg font-light lg:w-2/3">
+        For systems with 20 practitioners or more, plans start at CA$ 249.
+        Please contact us at
+        <span class="font-bold">onboard@simplydoc.ca</span> for a custom plan
+        that is tailoered for your needs.
+      </div>
+    </div>
+  </div>
+
+  <div class="2xl:bg-gradient-to-t 2xl:from-blue-100 py-3">
+    <div class="pricing-requesttojoin flex flex-col space-y-5 container">
+      <div class="font-bold text-center text-xl lg:text-4xl">
+        To protect our patient community, we require you to undergo a simple
+        verification process before you can get listed on SimplyDoc and start
+        using the platform.
+      </div>
+      <!-- <div class="flex justify-center">
+        <button
+          class="bg-black text-white px-6 py-3 rounded-lg lg:text-lg"
+          routerLink="/request-to-join"
+        >
+          Request to Join
+        </button>
+      </div> -->
+    </div>
+  </div>
+
+  <div
+    class="pricing-faqs flex flex-col lg:flex-row lg:items-center text-4xl space-y-4 lg:space-y-0 lg:space-x-8 container"
+  >
+    <div class="font-bold text-2xl lg:text-3xl 2xl:text-5xl">
+      frequently asked questions
+    </div>
+    <div class="pricing-faq flex flex-col space-y-5">
+      <div class="flex flex-col space-y-4">
+        <div class="text-lg 2xl:text-2xl font-bold">
+          Do you offer a free trial?
+        </div>
+        <div class="text-sm font-normal">
+          We don’t. We have spent countless days, weeks and months creating a
+          product which we believe will radically improve patient discovery,
+          access and management. And we are confident that once you use it, you
+          will find it incredibly useful. But don’t take our word for it.
+        </div>
+      </div>
+      <div class="flex flex-col space-y-4">
+        <div class="text-lg 2xl:text-2xl font-bold">
+          How quickly can I get approved?
+        </div>
+        <div class="text-sm font-normal">
+          In as little as 1-2 business days. Please note that approval may take
+          longer in some cases.
+        </div>
+      </div>
+      <div class="flex flex-col space-y-4">
+        <div class="text-lg 2xl:text-2xl font-bold">
+          Where do I pay for my subscription?
+        </div>
+        <div class="text-sm font-normal">
+          Once you log in to an authorized account, navigate to the business tab
+          to pay for your subscription. You will need to pay within 3 calendar
+          days of the start of your subscription to continue using SimplyDoc’s
+          services. Payment defaults will incur a monthly penalty of 20% the
+          value of your monthly subscription.
+        </div>
+      </div>
+      <div class="flex flex-col space-y-4">
+        <div class="text-lg font-bold">I have more questions.</div>
+        <div class="text-sm font-normal">
+          Please send us an email at onboard@simplydoc.ca
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="pricing-footnote container font-bold text-center text-xl lg:text-4xl"
+  >
+    Simplified pricing based on size of your practice so that you can focus on
+    providing the best possible patient experience.
+  </div>
+</div>

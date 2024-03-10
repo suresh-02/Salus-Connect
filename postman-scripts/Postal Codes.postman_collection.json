@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "5335b4cc-5172-44ec-a119-889539052260",
+		"name": "Postal Codes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get postal codes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/postal-codes/B0N2H0",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"postal-codes",
+						"B0N2H0"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get postal codes",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/postal-codes/B0N 2H0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"postal-codes",
+								"B0N 2H0"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "api-supported-versions",
+							"value": "1.0"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?RDpcUHJvamVjdHNcc2ltcGx5LWRvY1xzcmNcU2ltcGx5RG9jXGJhY2stZW5kXFNpbXBseURvYy5BcGlccG9zdGFsLWNvZGVzXEIwTiAySDA=?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 27 Aug 2021 16:48:46 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"postalCodeId\": 8066,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"LAKE EGMONT\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 8067,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"NORTH SALEM\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 8068,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"URBANIA\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 8069,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"WEST INDIAN ROAD\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 10703,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"BARR SETTLEMENT\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 10704,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"INDIAN BROOK 14\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 11051,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"GAYS RIVER\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 11052,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"RINES CREEK\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 11295,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"ADMIRAL ROCK\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 11296,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"CHASWOOD\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 11297,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"MACPHEES CORNER\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 12982,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"MAITLAND\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 12983,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"MILL VILLAGE\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 14058,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"MAPLE GROVE\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 14059,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"PINE GROVE\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 14060,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"SHUBENACADIE\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 14061,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"SOUTH MAITLAND\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 782809,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"COOKS BROOK\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    },\n    {\n        \"postalCodeId\": 782810,\n        \"postalCode\": \"B0N 2H0\",\n        \"city\": \"SHUBENACADIE EAST\",\n        \"provinceAbbr\": \"NS\",\n        \"provinceName\": \"Nova Scotia\"\n    }\n]"
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJleHAiOjE2MzIzMDA1MDksImlzcyI6Imh0dHA6Ly85OS43OS41My4xNjgvYXBpIiwiYXVkIjoiaHR0cDovLzk5Ljc5LjUzLjE2OCJ9.EL88whsJ5j0XllJ4cwFfQpALmw95A2ozNKjkMZXi7Uo",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

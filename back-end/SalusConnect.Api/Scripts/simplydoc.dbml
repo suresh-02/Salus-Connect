@@ -1,0 +1,395 @@
+// https://dbdocs.io/software.balu/salusconnect
+
+Project salusconnect {
+    database_type: 'PostgreSQL'
+    Note: 'SalusConnect Database'
+}
+/////////////////////////////////////////////////////
+// Enums
+
+Enum facilitytype {
+  Hospital
+  Clinic
+}
+
+Enum appointmentstatus {
+  Requested   // Patient  -> Patient can be Cancelled
+  Accepted    // Provider -> Patient can be Cancelled
+  Rejected    // Provider -> Closed
+  ProposeNew  // Provider -> Patient can be Confirmed/Cancelled
+  Confirmed   // Patient  -> ProposeNew -> Confirmed/Cancelled
+  Cancelled   // Patient  -> ProposeNew -> Confirmed/Cancelled
+}
+
+Enum notifyparty {
+  Provider
+  Patient
+}
+
+Enum userstatus {
+  Inactive
+  Published
+  Invited
+  Active
+}
+
+Enum insurancecoverage {
+  None
+  Partial
+  Full
+}
+
+Enum completestatus {
+  Complete
+  NoShow
+}
+
+Enum frequency {
+  Recurring
+  OneTime
+}
+
+Enum billingperiod {
+  Monthly
+  Yearly
+}
+
+Enum plancategory {
+  Base
+  Practitioner
+  Staff
+}
+
+Enum paymentmethod {
+  Automatic
+  Manual
+}
+
+Enum couponduration {
+  Forever
+  Once
+  MultipleMonths
+}
+
+Enum billingfrequency {
+  Monthly
+  Yearly
+}
+
+Enum platformusage {
+  FullAccess
+  InfoOnly
+}
+
+// Tables
+
+Table categories {
+  id int [pk, not null]
+  category_name varchar [not null, unique]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz [null]
+}
+
+Table specialties {
+  id int [pk, not null, increment]
+  specialty_name varchar [not null, unique]
+  category_id int [not null, ref: > categories.id]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz [null]
+}
+
+Table provinces {
+  province_abbr varchar [pk, not null]
+  province_name varchar [not null, unique]
+}
+
+Table postal_codes {
+  id int [pk, not null, increment]
+  postal_code varchar [not null]
+  city varchar [not null]
+  province_abbr varchar [not null, ref: > provinces.province_abbr]
+  time_zone int [not null]
+  latitude real [not null]
+  longitude real [not null]
+  is_new boolean [not null, default: false]
+  
+  Indexes {
+   postal_code
+   city
+  }
+}
+
+Table roles {
+  id int [pk, not null]
+  role_name varchar [not null, unique]
+  is_active boolean [not null, default: true]
+}
+
+Table addresses {
+  id int [pk, not null, increment]
+  address_line1 varchar
+  address_line2 varchar
+  postal_code_id int [not null, ref: > postal_codes.id]
+}
+
+Table users {
+  id int [pk, not null, increment] // auto-increment
+  first_name varchar [not null]
+  middle_name varchar [null]
+  last_name varchar [not null]
+  phone_number varchar [null]
+  email_address varchar [not null, unique]
+  password_hash varchar [not null]
+  password_salt varchar [not null]
+  role_id int [not null, ref: > roles.id]
+  image_url varchar [null]
+  is_email_confirmed boolean [null]
+  confirm_email_code varchar [null]
+  reset_password_code varchar [null]
+  is_created_by_phone boolean [not null, default: false]
+  status userstatus [not null, default: 'Active']
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz
+}
+
+Table facilities {
+  id int [pk, not null, increment]
+  facility_name varchar [not null, unique]
+  facility_type facilitytype [not null]
+  address_id int [not null, ref: > addresses.id]
+  status userstatus [not null, default: 'Active']
+  platform_usage platformusage [not null, default: 'FullAccess']
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz
+}
+
+Table doctors {
+  user_id int [pk, not null, ref: - users.id]
+  biography varchar
+  specialty_id int [not null, ref: > specialties.id]
+  tags varchar[]
+  facility_id int [null, ref: > facilities.id]
+  address_id int [null, ref: > addresses.id]
+  platform_usage platformusage [null]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz
+}
+
+Table staff {
+  user_id int [pk, not null, ref: - users.id]
+  facility_id int [not null, ref: > facilities.id]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz
+}
+
+Table patients {
+  user_id int [pk, not null, ref: - users.id]
+  address_id int [null, ref: > addresses.id]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz  
+}
+
+Table doctor_slots {
+  doctor_id int [pk, not null, ref: - doctors.user_id]
+  is_accept_new boolean [not null, default: false]
+  is_auto_approve boolean [not null, default: false]
+  cancellation_policy_days int [not null, default: 1]
+  date_range daterange [null]
+  time_range timerange [null]
+}
+
+Table doctor_slot_exceptions {
+  id int [pk, not null, increment]
+  doctor_id int [not null, ref: > doctor_slots.doctor_id]
+  exception_date date [not null]
+  exception_time_range timerange [null]
+  not_available boolean [null]
+}
+
+Table doctor_treatments {
+  id int [pk, not null, increment]
+  doctor_id int [not null, ref: > doctor_slots.doctor_id]
+  nick_name text [not null]
+  treatment_type text [not null]
+  treatment_description text [not null]
+  time_range timerange [null]
+  duration_min int [not null]
+  break_min int [null]
+  treatment_days int[] [null]
+  exclude_federal_holidays boolean [null]
+  exclude_provincial_holidays boolean [null]
+  insurance_coverage insurancecoverage [not null]
+  fee_per_visit numeric(10,2) [null]
+  is_default boolean [not null, default: false]
+  
+  Indexes {
+    (doctor_id, nick_name) [unique]
+    (doctor_id, treatment_type) [unique]
+  }
+}
+
+Table appointments {
+  id int [pk, not null, increment]
+  patient_id int [not null, ref: > patients.user_id]
+  appointment_code varchar [not null]
+  doctor_id int [not null, ref: > doctors.user_id]
+  appointment_date date [not null]
+  appointment_time time [not null]
+  treatment_id int [null, ref: > doctor_treatments.id]
+  duration_min int [not null, default: 0]
+  symptoms text [null]
+  fee_per_visit numeric(10,2) [null]
+  parent_id int [null]
+  complete_status completestatus [null]
+  doctor_notes text [null]
+  staff_notes text [null]
+  billed_amount numeric(10,2) [null]
+  new_appointment_time timestamp
+  is_created_by_phone boolean [not null, default: false]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  
+  Indexes {
+    (doctor_id, appointment_date, appointment_time) [unique]
+  }
+}
+
+Table appointment_statuses {
+  id int [pk, not null, increment]
+  appointment_id int [not null, ref: > appointments.id]
+  appointment_status appointmentstatus [not null]
+  notify_party notifyparty [not null]
+  read_status boolean [not null, default: false]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz [not null]
+}
+
+Table holidays {
+  id int [pk, not null, increment]
+  hday_date date [not null]
+  hday_name text [not null]
+  hday_provinces text[] [not null]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz [null]
+  
+  Indexes {
+    (hday_name, hday_date) [unique]
+  }
+}
+
+Table plans {
+  id int [pk, not null, increment]
+  stripe_product_id text [not null, unique]
+  stripe_price_id text [not null, unique]
+  plan_nickname text [not null, unique]
+  plan_name text [not null, unique]
+  plan_description text [null]
+  unit_label text [not null]
+  base_fee numeric(10,2) [not null, default: 0.00]
+  fee_frequency frequency [not null]
+  billing_period billingperiod [not null]
+  plan_category plancategory [not null]
+  is_active boolean [not null, default: true]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz [null]
+}
+
+Table coupons {
+  id int [pk, not null, increment]
+  stripe_id text [not null, unique]
+  coupon_nickname text [not null, unique]
+  coupon_name text [not null, unique]
+  coupon_description text [null]
+  discount_pct decimal(5,2) [null]
+  discount_amt decimal(10,2) [null]
+  duration couponduration [not null]
+  duration_months int [null]
+  redemption_date_limit date [null]
+  redemption_num_limit int [null]
+  is_active boolean [not null, default: true]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz [null]
+}
+
+Table coupon_codes {
+  id int [pk, not null, increment]
+  stripe_id text [not null, unique]
+  coupon_id int [not null, ref: > coupons.id]
+  coupon_code text [not null, unique]
+  is_first_time_only boolean [not null, default: false]
+  redemption_num_limit int [null]
+  expiry_date date [null]
+  is_active boolean [not null, default: true]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz [null]
+}
+
+Table coupon_plans {
+  id int [pk, not null, increment]
+  coupon_id int [not null, ref: > coupons.id]
+  plan_id int [not null, ref: > plans.id]
+  
+  Indexes {
+    (coupon_id, plan_id) [unique]
+  }
+}
+
+Table subscriptions {
+  id int [pk, not null, increment]
+  stripe_subscription_id text [not null]
+  stripe_customer_id text [not null]
+  doctor_id int [null, ref: > doctors.user_id]
+  facility_id int [null, ref: > facilities.id]
+  start_date date [not null]
+  end_date date [null]
+  billing_start_date date [not null]
+  free_trial_days int [not null, default: 0]
+  payment_method paymentmethod [not null]
+  memo text [null]
+  invoice_footer text [null]
+  designated_email text [not null]
+  designated_phone text [not null]
+  billing_frequency billingfrequency [not null, default: 'Monthly']
+  stripe_payment_method_id text [null]
+  is_active boolean [not null, default: true]
+  created_at timestamptz [not null, default: `now() at time zone 'utc'`]
+  updated_at timestamptz [null]
+}
+
+Table subscription_plans {
+  id int [pk, not null, increment]
+  subscription_id int [not null, ref: > subscriptions.id]
+  plan_id int [not null, ref: > plans.id]
+  qty int [not null, default: 0]
+  cost decimal(10,2) [not null, default: 0]
+  
+  Indexes {
+    (subscription_id, plan_id) [unique]
+  }
+}
+
+Table subscription_discounts {
+  subscription_id int [not null, ref: > subscriptions.id]
+  coupon_id int [not null, ref: > coupons.id]
+  
+  Indexes {
+    (subscription_id, coupon_id) [pk]
+  }
+}
+
+Table subscription_auth_doctors {
+  subscription_id int [not null, ref: > subscriptions.id]
+  doctor_id int [not null, ref: > doctors.user_id]
+  
+  Indexes {
+    (subscription_id, doctor_id) [pk]
+  }
+}
+
+Table subscription_auth_staff {
+  subscription_id int [not null, ref: > subscriptions.id]
+  staff_id int [not null, ref: > staff.user_id]
+  
+  Indexes {
+    (subscription_id, staff_id) [pk]
+  }
+}

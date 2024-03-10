@@ -1,0 +1,173 @@
+<div *ngIf="loading" class="absolute top-1/2 left-1/2">
+  <i nz-icon nzType="loading" nzTheme="outline" class="text-blue2 text-6xl"></i>
+</div>
+<div class="flex justify-center">
+  <div
+    class="max-w-max grid grid-flow-row auto-rows-max"
+    *ngIf="!loading && dashboard"
+  >
+    <div class="flex justify-between items-center gap-10 mb-4">
+      <nz-range-picker [(ngModel)]="dateRange"></nz-range-picker>
+      <button
+        (click)="isOpen = !isOpen"
+        class="btn btn-outline blue"
+        [class]="
+          treatmentId !== -1 ? '!bg-blue0 !text-black hover:!text-black' : ''
+        "
+        cdkOverlayOrigin
+        #trigger="cdkOverlayOrigin"
+      >
+        <i nz-icon nzType="filter" nzTheme="outline"></i>
+        Filter Appointments by Treatment Type
+      </button>
+    </div>
+    <div class="max-w-max bg-offWhite p-3 rounded shadow">
+      <h1 class="text-base font-medium">Patient Type</h1>
+      <div class="flex gap-5">
+        <div
+          class="border border-lightGray rounded bg-white p-2 flex justify-center items gap-5"
+        >
+          <div class="circle">
+            <div class="green two">
+              <span>CA$</span>
+              <span>{{ dashboard.patient.newPatients }}</span>
+            </div>
+            <span>New</span>
+          </div>
+          <div class="circle">
+            <div class="green two">
+              <span>CA$</span>
+              <span>{{ dashboard.patient.returningPatients }}</span>
+            </div>
+            <span>Returning</span>
+          </div>
+        </div>
+        <div
+          class="border border-lightGray rounded bg-white p-2 flex justify-center items gap-5"
+        >
+          <div class="circle">
+            <div class="green two">
+              <span>CA$</span>
+              <span>{{
+                dashboard.patient.newPatients +
+                  dashboard.patient.returningPatients
+              }}</span>
+            </div>
+            <span>Total</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-max bg-offWhite p-3 rounded shadow mt-5">
+      <h1 class="text-base font-medium">Fee Charged</h1>
+      <div class="flex gap-5">
+        <div
+          class="border border-lightGray rounded bg-white p-2 flex justify-center items gap-5"
+        >
+          <div class="circle">
+            <div class="green two">
+              <span>CA$</span>
+              <span>{{ dashboard.fee.statedFee }}</span>
+            </div>
+            <span>Stated Fee</span>
+          </div>
+          <div class="circle">
+            <div class="green two">
+              <span>CA$</span>
+              <span>{{ dashboard.fee.actualBilled }}</span>
+            </div>
+            <span>Actual Billed</span>
+          </div>
+        </div>
+        <div
+          class="border border-lightGray rounded bg-white p-2 flex justify-center items gap-5"
+        >
+          <div class="circle">
+            <div class="blue two">
+              <span>CA$</span>
+              <span>{{
+                dashboard.fee.actualBilled - dashboard.fee.statedFee
+              }}</span>
+            </div>
+            <span>Difference</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-max bg-offWhite p-3 rounded shadow mt-5">
+      <h1 class="text-base font-medium">Potential Loss from Cancellations</h1>
+      <div
+        class="border border-lightGray rounded bg-white p-2 flex justify-center items gap-5"
+      >
+        <div class="circle">
+          <div class="red two">
+            <span>CA$</span>
+            <span>{{ dashboard.cancel.cancelledByDoctorAmount }}</span>
+          </div>
+          <span>By You</span>
+        </div>
+        <div class="circle">
+          <div class="red two">
+            <span>CA$</span>
+            <span>{{ dashboard.cancel.cancelledByPatientAmount }}</span>
+          </div>
+          <span>By Patient</span>
+        </div>
+      </div>
+    </div>
+    <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayOrigin]="trigger"
+      [cdkConnectedOverlayOpen]="isOpen"
+      (overlayOutsideClick)="isOpen = false"
+    >
+      <div
+        class="bg-white p-4 rounded border-1 border-medGray mt-2 min-w-[300px] shadow-md"
+      >
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-medium">Filters</h3>
+          <i
+            nz-icon
+            nzType="close"
+            (click)="isOpen = false"
+            class="cursor-pointer"
+          ></i>
+        </div>
+        <nz-divider></nz-divider>
+        <div class="flex flex-col">
+          <nz-radio-group
+            class="flex flex-col text-base"
+            [(ngModel)]="treatmentId"
+            (ngModelChange)="isOpen = !isOpen"
+          >
+            <label nz-radio [nzValue]="-1">All</label>
+            <label
+              *ngFor="let t of treatments"
+              nz-radio
+              [nzValue]="t.treatmentId"
+              >{{ t.nickname }}</label
+            >
+          </nz-radio-group>
+        </div>
+      </div>
+    </ng-template>
+    <div class="flex justify-between items-center gap-10 mt-3">
+      <h1 class="text-5xl font-bold">
+        tell us what <br />
+        insights <br />
+        matter to <br />
+        you most
+      </h1>
+      <p class="text-xl">
+        We are constantly looking to <br />
+        add insights that will help you<br />
+        run and manage your<br />
+        business better. If you have<br />
+        something in mind, please <br />share it with us at <br />
+        <span class="underline">makeitbetter@simplydoc.ca</span>
+      </p>
+    </div>
+  </div>
+</div>

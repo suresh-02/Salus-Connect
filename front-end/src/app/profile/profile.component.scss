@@ -1,0 +1,36 @@
+input:not(.input),
+textarea {
+  @apply border-1 border-medGray rounded p-2 text-xs min-w-full focus:border-blue2;
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+input {
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+::ng-deep {
+  .ant-divider-horizontal {
+    margin: 20px 0;
+  }
+  .ant-radio-group {
+    display: flex;
+    flex-direction: row !important;
+  }
+}
+
+::ng-deep {
+  .ck-editor__editable_inline {
+    max-height: 150px;
+    width: auto;
+    border: none;
+  }
+  .ck.ck-toolbar {
+    border: 0;
+  }
+}

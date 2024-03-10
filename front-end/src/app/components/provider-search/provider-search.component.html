@@ -1,0 +1,118 @@
+<div class="search">
+  <div class="search-box flex-1" [formGroup]="searchForm">
+    <div class="w-full">
+      <i
+        nz-icon
+        nzType="search"
+        nzTheme="outline"
+        class="ml-2 text-base leading-none text-blue-900"
+      ></i>
+      <nz-select
+        [nzShowArrow]="false"
+        [nzBorderless]="true"
+        nzShowSearch
+        nzServerSearch
+        nzPlaceHolder="What are you looking for?"
+        formControlName="selectedSpecialtyOrProvider"
+        class="w-full"
+        nzSize="large"
+        (click)="loadSpecialty()"
+        (nzOnSearch)="searchSpeAndProviders($event)"
+        (nzFocus)="getSearchBack()"
+      >
+        <ng-container *ngFor="let o of speOrProviders">
+          <nz-option
+            *ngIf="!speOrProvidersLoading"
+            [nzValue]="o.value"
+            [nzLabel]="o.label"
+          ></nz-option>
+        </ng-container>
+        <nz-option *ngIf="speOrProvidersLoading" nzDisabled nzCustomContent>
+          <i nz-icon nzType="loading"></i>
+          Loading Data...
+        </nz-option>
+      </nz-select>
+    </div>
+    <nz-divider nzType="vertical" class="h-5 w-1 md:block hidden"></nz-divider>
+    <div
+      class="w-full my-0"
+      [ngClass]="{
+        '!bg-[rgb(245,245,245)]': this.searchForm.controls.selectedCity.disabled
+      }"
+    >
+      <i
+        nz-icon
+        nzType="aim"
+        nzTheme="outline"
+        class="md:ml-0 ml-2 text-base leading-none text-blue-900"
+      ></i>
+      <nz-select
+        [nzShowArrow]="false"
+        [nzBorderless]="true"
+        nzShowSearch
+        nzServerSearch
+        nzPlaceHolder="Enter your city"
+        formControlName="selectedCity"
+        class="w-full"
+        nzSize="large"
+        (nzOnSearch)="searchCity($event)"
+      >
+        <ng-container *ngFor="let o of cities">
+          <nz-option
+            *ngIf="!cityLoading"
+            [nzValue]="o.value"
+            [nzLabel]="o.label"
+          ></nz-option>
+        </ng-container>
+        <nz-option *ngIf="cityLoading" nzDisabled nzCustomContent>
+          <i nz-icon nzType="loading"></i>
+          Loading Data...
+        </nz-option>
+      </nz-select>
+    </div>
+    <nz-divider nzType="vertical" class="h-5 w-1 md:block hidden"></nz-divider>
+    <div class="w-full">
+      <i
+        nz-icon
+        nzType="calendar"
+        nzTheme="outline"
+        class="md:ml-0 ml-2 text-base leading-none text-blue-900"
+      ></i>
+      <nz-date-picker
+        nzSuffixIcon=""
+        [nzBorderless]="true"
+        formControlName="selectedDate"
+        [nzDisabledDate]="disabledEndDate"
+        class="w-full"
+        nzSize="large"
+      ></nz-date-picker>
+    </div>
+  </div>
+  <button
+    [disabled]="searchForm.invalid"
+    class="md:flex border-0 justify-center items-center hidden bg-blue2 disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-blue1 rounded-r p-4"
+    (click)="emitSearch()"
+  >
+    <i
+      nz-icon
+      nzType="search"
+      nzTheme="outline"
+      class="text-[15px] !text-white"
+    ></i>
+  </button>
+  <div class="md:hidden flex">
+    <button
+      [disabled]="searchForm.invalid"
+      (click)="emitSearch()"
+      class="btn btn-md btn-outline blue icon w-full"
+    >
+      <i
+        nz-icon
+        nzType="search"
+        nzTheme="outline"
+        class="mr-1 text-sm !text-black leading-none"
+      ></i>
+      Search
+    </button>
+  </div>
+</div>

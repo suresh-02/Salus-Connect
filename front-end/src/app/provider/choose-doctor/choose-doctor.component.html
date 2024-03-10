@@ -1,0 +1,47 @@
+<div class="flex flex-col items-center">
+  <p class="sm:text-sm text-darkGray text-center mb-1">
+    Welcome, {{ user.firstName }}. This account is registered in the name of
+    {{ facilityName }}.
+  </p>
+  <h1 class="sm:text-xl text-base font-medium text-center mb-1">
+    Choose the provider on behalf of whom you are using SimplyDoc today
+  </h1>
+  <p class="sm:text-sm text-darkGray text-center">
+    This gives you access to their dashboard
+  </p>
+</div>
+<div class="sm:flex items-center justify-center">
+  <div
+    *ngFor="let doctor of doctors; let i = index"
+    class="flex items-center justify-center"
+  >
+    <div
+      (click)="navigate(doctor)"
+      class="cursor-pointer flex flex-col items-center justify-center sm:m-10 m-6"
+    >
+      <nz-badge [nzCount]="doctor.notificationCount">
+        <nz-avatar
+          *ngIf="!doctor.imageUrl"
+          [nzShape]="'square'"
+          [ngStyle]="{ 'background-color': colors[i] }"
+          [nzText]="
+            doctor.firstName[0].toUpperCase() + doctor.lastName[0].toUpperCase()
+          "
+          [nzSize]="80"
+          class="align-middle text-4xl font-medium text-gray-700 rounded-xl"
+        ></nz-avatar>
+        <img
+          [src]="environment.imageBaseUrl + doctor.imageUrl"
+          *ngIf="doctor.imageUrl"
+          class="w-20 h-20 rounded-xl"
+        />
+      </nz-badge>
+      <span class="text-sm font-medium">
+        {{ doctor.firstName }} {{ doctor.lastName }}
+      </span>
+      <span class="text-xs text-blue2">{{
+        doctor.specialty.specialtyName
+      }}</span>
+    </div>
+  </div>
+</div>

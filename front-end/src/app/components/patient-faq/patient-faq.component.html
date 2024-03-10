@@ -1,0 +1,22 @@
+<app-header></app-header>
+
+<div class="my-20 flex flex-col">
+    <div class="flex flex-col space-y-8">
+        <div class="flex flex-row justify-center items-center space-y-3 bg-gradient-to-t from-blue-50 to-white py-5 w-screen">
+            <div class="w-1/4 text-center font-bold text-xl md:text-4xl">Patient <br> <span class="text-blue-400">FAQs</span></div>
+            <div class="w-3/4 whitespace-pre-line font-light text-lg md:text-2xl">SimplyDoc is built with ease of use in mind so that you don't need to be tech savvy to use and navigate the platform.
+                <br>
+                <br>
+                Below are answers to some common questions that may come up when you start using SimplyDoc.</div>
+        </div>
+
+        <div *ngFor="let item of items;" class="space-y-4" >
+            <div class="flex flex-col space-y-4 mx-10 md:mx-24">
+                <div class="text-blue-400 text-2xl font-light">{{ item.question }}</div>
+                <div class="font-normal text-lg">{{ item.answer }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>

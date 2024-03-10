@@ -1,0 +1,74 @@
+<div @animate *ngIf="formType == 'doctor'">
+  <app-doctor-edit
+    [selectedSpecialty]="specialty"
+    [individualForm]="individualForm"
+    (sendSpecialty)="specialty = $event"
+    [isView]="viewId ? true : false"
+    [id]="id"
+  ></app-doctor-edit>
+</div>
+
+<div *ngIf="formType == 'address'" @animate>
+  <div class="mt-2 max-w-[320px] md:max-w-[400px] lg:max-w-[500px] mx-auto">
+    <label>{{ fullName }} </label>
+  </div>
+  <app-address-edit [form]="individualAddress"></app-address-edit>
+</div>
+
+<!-- <div class="max-w-[700px] mx-auto" *ngIf="formType == 'subscription'" @animate>
+  <app-subscription-page
+    [id]="viewId"
+    [isFacility]="false"
+    [baseForm]="subscriptionForm"
+    [doctor]="id === -1 ? this.individualForm.value : doctor"
+  ></app-subscription-page>
+</div> -->
+
+<div class="form flex gap-x-4 mt-4" @animate>
+  <button
+    data-tooltip="Provider details"
+    (click)="previous()"
+    class="submit"
+    [disabled]="formType === 'doctor'"
+    [ngClass]="{
+      tooltip: isAddressForm
+    }"
+  >
+    Previous
+  </button>
+  <button
+    (click)="submit()"
+    class="submit"
+    *ngIf="formType === 'address' && !viewId"
+    [disabled]="
+      individualForm.invalid ||
+      individualAddress.invalid ||
+      loading
+    "
+  >
+    <i
+      nz-icon
+      nzType="loading"
+      nzTheme="outline"
+      class="mr-2 text-sm leading-none text-black"
+      *ngIf="loading"
+    ></i>
+    Submit
+  </button>
+  <button
+    [disabled]="
+      formType === 'doctor'
+        ? individualForm.invalid
+        :individualAddress.invalid
+    "
+    (click)="continue()"
+    class="submit"
+    *ngIf="viewId ? true : formType !== 'address'"
+    data-tooltip="Add address"
+    [ngClass]="{
+      tooltip: individualForm.valid
+    }"
+  >
+    Next
+  </button>
+</div>

@@ -1,0 +1,17 @@
+{
+	"userId": 15,
+	"isAcceptNew": true,
+	"slotOption": "CustomDates",
+	"durationMinute": 30,
+	"timeRange": ["10:00", "13:00"],
+	"customDates": [
+		{
+			"date": "2021-09-01",
+			"times": ["10:00", "12:00", "12:30"]
+		},
+		{
+			"date": "2021-09-02",
+			"times": ["10:00", "11:00", "12:00"]
+		}
+	]
+}

@@ -1,0 +1,15 @@
+input {
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+.specialty {
+  display: grid;
+  grid-template-columns: auto 50px;
+  margin-bottom: 5px;
+  span {
+    @apply text-sm;
+  }
+}

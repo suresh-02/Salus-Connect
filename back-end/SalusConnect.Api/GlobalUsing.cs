@@ -1,0 +1,17 @@
+﻿global using Dapper;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Options;
+global using SalusConnect.Api.Helpers;
+global using SalusConnect.Api.Models;
+global using SalusConnect.Api.Services;
+global using System;
+global using System.Collections.Generic;
+global using System.ComponentModel.DataAnnotations;
+global using System.Data;
+global using System.Linq;
+global using System.Text.Json.Serialization;
+global using System.Threading.Tasks;
+global using System.Transactions;

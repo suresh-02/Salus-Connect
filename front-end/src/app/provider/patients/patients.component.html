@@ -1,0 +1,93 @@
+<div
+  class="flex flex-col md:flex-row items-end md:items-center justify-between mb-2"
+>
+  <div class="search">
+    <input type="text" [(ngModel)]="search" placeholder="Search..." />
+    <i
+      nz-icon
+      nzType="search"
+      nzTheme="outline"
+      class="text-darkGray text-base mr-1.5 leading-none"
+    ></i>
+  </div>
+  <div class="float-right my-4">
+    <nz-pagination
+      nzSize="small"
+      [nzTotal]="total"
+      nzShowSizeChanger
+      [nzPageSizeOptions]="[10, 20, 50, 100]"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzShowTotal]="rangeTemplate"
+    ></nz-pagination>
+  </div>
+</div>
+<nz-table
+  #patientTable
+  nzSize="middle"
+  [nzData]="patients"
+  [nzShowPagination]="true"
+  [nzFrontPagination]="false"
+  [nzLoading]="loading"
+  [nzTotal]="total"
+  [nzPageSize]="pageSize"
+  [nzPageIndex]="pageIndex"
+  (nzQueryParams)="onQueryParamsChange($event)"
+  [nzVirtualForTrackBy]="trackByFunction"
+  [nzScroll]="{ x: '1120px' }"
+>
+  <thead>
+    <tr>
+      <th
+        nzColumnKey="firstName"
+        [nzSortFn]="true"
+        nzSortOrder="ascend"
+        nzWidth="203px"
+      >
+        Name
+      </th>
+      <th nzColumnKey="emailAddress" nzWidth="231px">Email Address</th>
+      <th nzColumnKey="phoneNumber" nzWidth="117px">Phone Number</th>
+      <th nzColumnKey="addressLine1" nzWidth="220px">Address</th>
+      <th nzColumnKey="city" nzWidth="110px" [nzSortFn]="true">City</th>
+      <th nzColumnKey="provinceAbbr" nzWidth="230px" [nzSortFn]="true">
+        Province
+      </th>
+      <th nzColumnKey="dateCreated" nzWidth="150px" [nzSortFn]="true">
+        Date Created
+      </th>
+      <th nzColumnKey="status" nzWidth="100px">Active</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of patientTable.data">
+      <td>{{ data.firstName }} {{ data.lastName }}</td>
+      <td>{{ data.emailAddress }}</td>
+      <td>{{ data.phoneNumber }}</td>
+      <td>
+        {{ data.address?.addressLine1 }}
+        <br *ngIf="data.address?.addressLine1" />
+        {{ data.address?.addressLine2 }}
+        <span *ngIf="!data.address?.addressLine1 && !data.address?.addressLine2"
+          >-</span
+        >
+      </td>
+      <td>
+        {{ data.address?.city ? data.address?.city : "-" }}
+      </td>
+      <td>{{ data.address?.stateAbbr }}</td>
+      <td>{{ data.dateCreated | date: "MM-dd-yyyy HH:mm" }}</td>
+      <td>
+        <nz-switch
+          nzSize="small"
+          [ngModel]="data.status === 'Active' ? true : false"
+          (ngModelChange)="changeStatus(data.userId, $event)"
+        ></nz-switch>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #rangeTemplate let-range="range" let-total>
+  Displaying {{ range[0] }} to {{ range[1] }} of {{ total }}
+</ng-template>

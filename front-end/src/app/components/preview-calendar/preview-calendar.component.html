@@ -1,0 +1,81 @@
+<div class="calendar">
+  <div class="pb-2">
+    <h1 class="text-lg font-medium text-blue2">Your Selection Preview</h1>
+    <span class="text-darkGray">
+      Hover over a blue box to view details about your treatments and slots
+    </span>
+  </div>
+  <div class="calender-header flex justify-between items-center mb-1 pb-2">
+    <p
+      class="month font-medium text-base cursor-pointer"
+      (click)="initiateCalendar(today.getMonth(), today.getFullYear())"
+    >
+      {{ months[date.getMonth()] }} {{ date.getFullYear() }}
+    </p>
+    <div class="flex items-center">
+      <i
+        nz-icon
+        nzType="left"
+        nzTheme="outline"
+        (click)="initiateCalendar(date.getMonth() - 1)"
+        class="icon mr-2"
+      ></i>
+      <i
+        nz-icon
+        nzType="right"
+        nzTheme="outline"
+        (click)="initiateCalendar(date.getMonth() + 1)"
+        class="icon"
+      ></i>
+    </div>
+  </div>
+  <div class="flex justify-between mb-1 weekdays">
+    <div>Su</div>
+    <div>Mo</div>
+    <div>Tu</div>
+    <div>We</div>
+    <div>Th</div>
+    <div>Fr</div>
+    <div>Sa</div>
+  </div>
+  <div class="calendar-body grid grid-cols-7">
+    <div *ngFor="let i of previousDayCount"></div>
+    <div
+      *ngFor="let i of calendarData; let idx = index"
+      class="flex flex-col items-center"
+    >
+      <button
+        id="pdate-{{ idx + 1 }}"
+        #id
+        [class]="i.class"
+        [ngClass]="{ click: id.id === selectedDate }"
+      >
+        {{ i.date | date: "d" }}
+      </button>
+      <button
+        [nz-tooltip]
+        [nzTooltipTitle]="patientTemplate"
+        [nzTooltipTitleContext]="{
+          $implicit: i.treatments
+        }"
+        class="px-1 rounded cursor-pointer"
+        [disabled]="i.class.includes('inactive')"
+        [ngClass]="{
+          'bg-medGray text-white !cursor-not-allowed':
+            i.class.includes('inactive'),
+          selected: !i.class.includes('inactive')
+        }"
+      >
+        {{ i.total }}
+      </button>
+    </div>
+  </div>
+</div>
+<span class="p-1 text-darkGray">
+  Note that the slot count includes overlapping slots.
+</span>
+<ng-template #patientTemplate let-data>
+  <div *ngFor="let t of data">
+    {{ t.treatmentName }} - {{ t.count }} slot(s)
+  </div>
+</ng-template>

@@ -1,0 +1,118 @@
+<form
+  [formGroup]="hospitalForm"
+  class="form"
+  *ngIf="formType == 'hospital'"
+  @animate
+>
+  <div
+    class="input"
+    [ngClass]="{
+      error: facilityName.isError
+    }"
+  >
+    <input
+      tabindex="1"
+      nz-tooltip
+      nzTooltipPlacement="right"
+      [nzTooltipMouseEnterDelay]="1"
+      [nzTooltipTitle]="
+        'Enter Your ' +
+        type[0].toUpperCase() +
+        type.slice(1, type.length) +
+        ' Name'
+      "
+      type="text"
+      [placeholder]="
+        type[0].toUpperCase() + type.slice(1, type.length) + ' Name'
+      "
+      formControlName="facilityName"
+      (ngModelChange)="checkError(facilityName)"
+      (focusout)="checkError(facilityName)"
+    />
+    <i
+      @animate
+      class="mr-2 text-green-400 text-base"
+      *ngIf="facilityName.check"
+      nz-icon
+      nzType="check-circle"
+      nzTheme="outline"
+    ></i>
+    <i
+      @animate
+      class="mr-2 text-red-400 text-base"
+      *ngIf="facilityName.isError"
+      nz-icon
+      nzType="exclamation-circle"
+      nzTheme="outline"
+    ></i>
+  </div>
+  <p @animate *ngIf="facilityName.isError">{{ facilityName.message }}</p>
+  <app-address-edit
+    [form]="hospitalAddress"
+    *ngIf="viewId === -1 ? true : !loading"
+  ></app-address-edit>
+</form>
+
+<div class="max-w-[700px] mx-auto" *ngIf="formType == 'doctor'" @animate>
+  <app-doctor
+    [isView]="viewId < 0 ? false : true"
+    [doctorForm]="doctorForm"
+    [hospitalName]="hospital"
+    [doctorsData]="doctorsData"
+    (doctorData)="doctorsData = $event"
+  ></app-doctor>
+</div>
+
+<div class="form flex gap-x-4 mt-4" @animate>
+  <button
+    (click)="previous()"
+    [disabled]="formType === 'hospital'"
+    class="submit"
+    nz-tooltip
+    nzTooltipPlacement="left"
+    [nzTooltipMouseEnterDelay]="1"
+    [nzTooltipTitle]="prevTooltip"
+  >
+    Previous
+  </button>
+  <button
+    *ngIf="formType === 'doctor' && viewId === -1"
+    (click)="submit()"
+    class="submit"
+    [disabled]="
+      hospitalForm.invalid ||
+      hospitalAddress.invalid ||
+      doctorsData.length == 0 ||
+      loading
+    "
+  >
+    <i
+      nz-icon
+      nzType="loading"
+      nzTheme="outline"
+      class="mr-2 text-sm leading-none text-black"
+      *ngIf="loading"
+    ></i>
+    Submit
+  </button>
+  <button
+    [disabled]="
+      hospitalForm.invalid || hospitalAddress.invalid || formType === 'doctor'
+        ? doctorsData.length === 0
+          ? true
+          : false
+        : false || viewId < 0
+        ? af.city.value.length === 0
+        : false
+    "
+    nz-tooltip
+    nzTooltipPlacement="right"
+    [nzTooltipMouseEnterDelay]="1"
+    [nzTooltipTitle]="nextTooltip"
+    *ngIf="viewId !== -1 ? true : formType !== 'doctor'"
+    (click)="continue()"
+    class="submit"
+  >
+    Next
+  </button>
+</div>

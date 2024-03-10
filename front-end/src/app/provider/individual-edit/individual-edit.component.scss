@@ -1,0 +1,6 @@
+.tag {
+  @apply bg-blue2 p-2 px-4 rounded-full mt-2 select-none text-white flex justify-between items-center max-w-max;
+  a {
+    @apply -mr-0.5 ml-1 hover:bg-blue1 p-1 rounded-full cursor-pointer;
+  }
+}
