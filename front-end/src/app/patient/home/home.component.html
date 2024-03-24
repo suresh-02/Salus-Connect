@@ -40,12 +40,12 @@
         >
       </td>
       <td *ngIf="!data.newAppointmentTime">
-        {{ data.appointmentDate | date: "MM-dd-yyyy" }}
+        {{ data.appointmentDate | date : "MM-dd-yyyy" }}
       </td>
       <td class="text-center" *ngIf="data.newAppointmentTime">
-        {{ data.appointmentDate | date: "MM-dd-yyyy" }} <br />
+        {{ data.appointmentDate | date : "MM-dd-yyyy" }} <br />
         to<br />
-        {{ data.newAppointmentTime | date: "MM-dd-yyyy" }}
+        {{ data.newAppointmentTime | date : "MM-dd-yyyy" }}
       </td>
       <td *ngIf="!data.newAppointmentTime">
         {{ addMinute(data.appointmentTime, data.durationMin)[0] }} -
@@ -100,7 +100,7 @@
         {{ data.treatmentNickname }}
         <br />
         Fee per visit:
-        {{ data.treatmentFees ? "C$ " + data.treatmentFees : "Varies" }}
+        {{ data.treatmentFees ? "₹ " + data.treatmentFees : "Varies" }}
         <br />
         Insurance coverage: {{ data.treatmentInsuranceCoverage }}
       </td>
@@ -173,7 +173,7 @@
   {{ data.treatmentNickname }}
   <br />
   Fee per visit:
-  {{ data.fees ? "C$ " + data.fees : "Varies" }}
+  {{ data.fees ? "₹ " + data.fees : "Varies" }}
   <br />
   Insurance coverage: {{ data.insuranceCoverage }}
 </ng-template>

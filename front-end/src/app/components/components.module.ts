@@ -31,6 +31,7 @@ import { TermsOfUseComponent } from './terms-of-use/terms-of-use.component';
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
 import { PatientFaqComponent } from './patient-faq/patient-faq.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { DrugInteractionComponent } from './drug-interaction/drug-interaction.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
     TermsOfServiceComponent,
     PatientFaqComponent,
     ContactUsComponent,
+    DrugInteractionComponent,
   ],
   imports: [
     RouterModule,
@@ -83,6 +85,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
     TreatmentComponent,
     DateTimeSelectorComponent,
     PreviewCalendarComponent,
+    DrugInteractionComponent,
   ],
   providers: [],
 })

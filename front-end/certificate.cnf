@@ -9,8 +9,8 @@ distinguished_name = dn
 C = IN
 ST = India
 L = India
-O = SimplyDoc
-OU = SimplyDoc Unit
+O = SalusConnect
+OU = SalusConnect Unit
 emailAddress = software.balu@gmail.com
 CN = localhost
 

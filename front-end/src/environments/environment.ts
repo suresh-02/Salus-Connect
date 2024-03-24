@@ -7,7 +7,6 @@ export const environment = {
   environmentName: 'Development',
   appVersion: require('../../package.json').version + '-dev',
   apiUrl: 'http://localhost:5000',
-  imageBaseUrl: 'https://simplydoc-development.s3.ca-central-1.amazonaws.com',
 };
 
 /*

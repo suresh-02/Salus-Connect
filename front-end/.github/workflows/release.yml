@@ -1,11 +1,11 @@
-name: 'Make a release'
+name: "Make a release"
 on:
   pull_request:
-    branches: [ qa, production ]
+    branches: [qa, production]
     types: [closed]
 jobs:
   build-ui:
-    name: 'Build the code for SimplyDoc website'
+    name: "Build the code for SalusConnect website"
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
@@ -21,24 +21,24 @@ jobs:
         run: |
           echo "ASSETS_FILE_NAME=${{ env.TAG_NAME }}.zip" >> $GITHUB_ENV
 
-      - name: 'Checkout Code'
+      - name: "Checkout Code"
         uses: actions/checkout@v2
 
-      - name: 'Install npm dependencies'
+      - name: "Install npm dependencies"
         run: npm install
 
-      - name: 'Build the website'
+      - name: "Build the website"
         run: npm run build-${{ github.event.pull_request.base.ref }}
 
-      - name: 'Archive site content'
+      - name: "Archive site content"
         uses: thedoctor0/zip-release@master
         with:
           filename: ${{ env.ASSETS_FILE_NAME }}
           path: dist/simply-doc/
           directory: .
 
-      - name: 'Create Github release'
-        id: 'create-new-release'
+      - name: "Create Github release"
+        id: "create-new-release"
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,7 +46,7 @@ jobs:
           tag_name: v${{ env.TAG_NAME}}
           release_name: Release v.${{ env.TAG_NAME }}
 
-      - name: 'Upload asset to Github Release'
+      - name: "Upload asset to Github Release"
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

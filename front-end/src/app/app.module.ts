@@ -33,7 +33,6 @@ import {
   CloseCircleTwoTone,
   CheckCircleTwoTone,
 } from '@ant-design/icons-angular/icons';
-import { DrugInteractionComponent } from './drug-interaction/drug-interaction.component';
 
 const icons: IconDefinition[] = [
   LogoutOutline,
@@ -43,12 +42,7 @@ const icons: IconDefinition[] = [
 
 registerLocaleData(en);
 @NgModule({
-  declarations: [
-    AppComponent,
-    LandingPageComponent,
-    ProfileComponent,
-    DrugInteractionComponent,
-  ],
+  declarations: [AppComponent, LandingPageComponent, ProfileComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

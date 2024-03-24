@@ -243,7 +243,7 @@ export class DoctorSlotsComponent implements OnInit {
     this.modal.confirm({
       nzTitle: 'Confirm and Publish',
       nzContent:
-        'By pressing Confirm and Publish, your Calendar will be published and will be visible on the SimplyDoc platform. All previously saved calendar availability information will be updated with your latest selection.',
+        'By pressing Confirm and Publish, your Calendar will be published and will be visible on the SalusConnect platform. All previously saved calendar availability information will be updated with your latest selection.',
       nzOnOk: () => {
         this.submit();
       },

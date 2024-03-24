@@ -170,9 +170,7 @@
 
     <div class="flex flex-col md:flex-row gap-y-3 md:gap-y-0">
       <div class="flex gap-3 items-center">
-        <h1 class="text-base font-medium flex-grow">
-          Exclude Holidays
-        </h1>
+        <h1 class="text-base font-medium flex-grow">Exclude Holidays</h1>
         <nz-switch
           nzSize="small"
           class="leading-none"
@@ -202,7 +200,7 @@
         formControlName="feePerVisit"
         (ngModelChange)="enableBreakOrFees('fees')"
       >
-        <label nz-radio nzValue="amount">CA $</label>
+        <label nz-radio nzValue="amount">₹</label>
         <nz-input-number
           formControlName="feeAmount"
           [nzMin]="1"

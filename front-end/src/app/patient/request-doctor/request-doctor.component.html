@@ -22,7 +22,7 @@
             class="align-middle text-4xl font-medium text-gray-700 mr-4"
           ></nz-avatar>
           <img
-            [src]="environment.imageBaseUrl + doctor.imageUrl"
+            [src]="doctor.imageUrl"
             *ngIf="doctor.imageUrl"
             class="object-cover w-20 h-20 rounded-full mr-4"
           />
@@ -104,7 +104,7 @@
               >Fees:
               {{
                 selectedTreatment.feePerVisit
-                  ? "C$ " + selectedTreatment.feePerVisit
+                  ? "₹ " + selectedTreatment.feePerVisit
                   : "Varies"
               }}</span
             >
@@ -158,7 +158,7 @@
                   *ngFor="
                     let t of isSeeMore
                       ? availableSlots
-                      : (availableSlots | slice: 0:8)
+                      : (availableSlots | slice : 0 : 8)
                   "
                   (click)="selectedSlot = t"
                   [ngClass]="{ selected: t == selectedSlot }"

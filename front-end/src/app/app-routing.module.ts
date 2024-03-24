@@ -9,7 +9,7 @@ import { TermsOfUseComponent } from './components/terms-of-use/terms-of-use.comp
 import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-service.component';
 import { PatientFaqComponent } from './components/patient-faq/patient-faq.component';
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
-import { DrugInteractionComponent } from './drug-interaction/drug-interaction.component';
+import { DrugInteractionComponent } from './components/drug-interaction/drug-interaction.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },

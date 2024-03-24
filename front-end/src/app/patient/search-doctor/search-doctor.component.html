@@ -41,7 +41,7 @@
               class="align-middle text-4xl font-medium text-gray-700 mr-4"
             ></nz-avatar>
             <img
-              [src]="environment.imageBaseUrl + doctor.imageUrl"
+              [src]="doctor.imageUrl"
               *ngIf="doctor.imageUrl"
               class="object-cover w-20 h-20 rounded-full mr-4"
             />
@@ -122,7 +122,7 @@
                   >Fees:
                   {{
                     selectedTreatment(doctor.id).feePerVisit
-                      ? "C$ " + selectedTreatment(doctor.id).feePerVisit
+                      ? "₹ " + selectedTreatment(doctor.id).feePerVisit
                       : "Varies"
                   }}</span
                 >
@@ -142,7 +142,7 @@
               <div *ngIf="doctor.isAvailable">
                 <div class="flex justify-between items-center">
                   <h1 class="text-base font-medium mb-1">
-                    {{ doctor.isAvailable.date | date: "EEEE, MMMM dd" }}
+                    {{ doctor.isAvailable.date | date : "EEEE, MMMM dd" }}
                   </h1>
                   <span
                     class="text-blue2 cursor-pointer"
@@ -155,7 +155,7 @@
                     *ngFor="
                       let time of doctor.isAvailable.times
                         | sortTime
-                        | slice: 0:6
+                        | slice : 0 : 6
                     "
                   >
                     <button
@@ -179,7 +179,7 @@
               >
                 <h1 class="text-base font-medium mb-1">
                   No available slots for
-                  {{ searchData.selectedDate | date: "EEEE, MMMM dd" }}
+                  {{ searchData.selectedDate | date : "EEEE, MMMM dd" }}
                 </h1>
                 <span
                   class="text-blue2 cursor-pointer"
@@ -194,7 +194,7 @@
               >
                 <h1 class="text-base font-medium mb-1">
                   Within 7 days of
-                  {{ searchData.selectedDate | date: "MMMM dd" }}
+                  {{ searchData.selectedDate | date : "MMMM dd" }}
                 </h1>
                 <span
                   class="text-blue2 cursor-pointer"
@@ -202,15 +202,15 @@
                   >View all availabilities</span
                 >
               </div>
-              <div *ngFor="let slot of doctor.slots | slice: 0:3">
+              <div *ngFor="let slot of doctor.slots | slice : 0 : 3">
                 <div>
                   <div class="grid grid-cols-2 gap-x-2">
                     <button
                       class="timeBtn"
-                      *ngFor="let t of slot.times | slice: 0:2"
+                      *ngFor="let t of slot.times | slice : 0 : 2"
                       (click)="route(doctor.id, slot.date, t)"
                     >
-                      {{ slot.date | date: "MMM dd" }},
+                      {{ slot.date | date : "MMM dd" }},
                       {{ addMinute(t, slot.durationMinutes)[0] }} -
                       {{ addMinute(t, slot.durationMinutes)[1] }}
                     </button>
@@ -221,7 +221,7 @@
             <div *ngIf="doctor.slots.length === 0">
               <h1 class="text-base font-medium mb-1">
                 No available dates within 7 days of
-                {{ searchData.selectedDate | date: "MMMM dd" }}
+                {{ searchData.selectedDate | date : "MMMM dd" }}
               </h1>
             </div>
           </div>

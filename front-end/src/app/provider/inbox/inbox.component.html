@@ -95,7 +95,7 @@
       <th nzColumnKey="status" nzWidth="154px" [nzSortFn]="true">Status</th>
       <th nzColumnKey="markAsComplete" nzWidth="150px">Mark as Complete</th>
       <th nzColumnKey="billedAmount" nzWidth="140px">Billed Amount</th>
-      <th rowspan="2" nzWidth="60px" nzRight>Actions</th>
+      <th rowspan="2" nzWidth="80px" nzRight>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -115,12 +115,12 @@
         </div>
       </td>
       <td *ngIf="!data.newAppointmentTime">
-        {{ data.appointmentDate | date: "MM-dd-yyyy" }}
+        {{ data.appointmentDate | date : "MM-dd-yyyy" }}
       </td>
       <td class="text-center" *ngIf="data.newAppointmentTime">
-        {{ data.appointmentDate | date: "MM-dd-yyyy" }} <br />
+        {{ data.appointmentDate | date : "MM-dd-yyyy" }} <br />
         to<br />
-        {{ data.newAppointmentTime | date: "MM-dd-yyyy" }}
+        {{ data.newAppointmentTime | date : "MM-dd-yyyy" }}
       </td>
       <td *ngIf="!data.newAppointmentTime">
         {{ addMinute(data.appointmentTime, data.durationMin)[0] }} -
@@ -183,7 +183,7 @@
         {{ data.treatmentNickname }}
         <br />
         Fee per visit:
-        {{ data.treatmentFees ? "C$ " + data.treatmentFees : "Varies" }}
+        {{ data.treatmentFees ? "₹ " + data.treatmentFees : "Varies" }}
         <br />
         Insurance coverage: {{ data.treatmentInsuranceCoverage }}
       </td>
@@ -259,7 +259,7 @@
               "
               [nzMin]="1"
               [nzStep]="0.1"
-              nzPlaceHolder="C$"
+              nzPlaceHolder="₹"
               [nzFormatter]="formatterDollar"
               [nzParser]="parserDollar"
               [nzPrecision]="2"
@@ -275,7 +275,7 @@
         </div>
       </td>
       <td nzRight>
-        <div class="grid grid-rows-2">
+        <div class="grid grid-rows-3">
           <div
             class="flex items-center justify-center mt-1.5 gap-2 row-start-2"
           >
@@ -291,14 +291,16 @@
             <span
               class="text-blue2 cursor-pointer text-sm"
               nz-tooltip="Add Notes"
-              (click)="
-                openNotesModal(
-                  data.appointmentId,
-                  data.doctorNotes
-                )
-              "
+              (click)="openNotesModal(data.appointmentId, data.doctorNotes)"
             >
               <i nz-icon nzType="snippets" nzTheme="outline" class="mr-1"></i>
+            </span>
+            <span
+              class="text-blue2 cursor-pointer text-sm"
+              nz-tooltip="Add Prescription"
+              (click)="openPrescriptionModel(data.appointmentId)"
+            >
+              <i nz-icon nzType="carry-out" nzTheme="outline" class="mr-1"></i>
             </span>
           </div>
         </div>
@@ -383,10 +385,7 @@
   [nzKeyboard]="false"
   [nzStyle]="{ minWidth: 'max-content' }"
   nzOkText="Submit"
-  [nzOkDisabled]="
-    doctorNotes.invalid ||
-    !richDoctorNotes.dirty
-  "
+  [nzOkDisabled]="doctorNotes.invalid || !richDoctorNotes.dirty"
 >
   <div *nzModalContent class="mt-6">
     <nz-tabset>
@@ -416,15 +415,6 @@
             tagName="textarea"
           ></ckeditor>
         </div>
-        <!-- <div class="flex justify-between items-center mt-1">
-          <p class="!text-darkGray">
-            {{ 4000 - doctorNotes.value?.length }}
-            characters remaining
-          </p>
-          <p class="!text-darkGray">
-            {{ doctorNotes.value?.length ? doctorNotes.value?.length : 0 }}/4000
-          </p>
-        </div> -->
       </nz-tab>
     </nz-tabset>
   </div>
@@ -546,7 +536,7 @@
   {{ data.treatmentNickname }}
   <br />
   Fee per visit:
-  {{ data.fees ? "C$ " + data.fees : "Varies" }}
+  {{ data.fees ? "₹ " + data.fees : "Varies" }}
   <br />
   Insurance coverage: {{ data.insuranceCoverage }}
 </ng-template>
@@ -562,3 +552,23 @@
 <ng-template #rangeTemplate let-range="range" let-total>
   Displaying {{ range[0] }} to {{ range[1] }} of {{ total }}
 </ng-template>
+
+<nz-modal
+  [(nzVisible)]="prescriptionModal"
+  (nzOnCancel)="cancel()"
+  (nzOnOk)="addPrescriptions()"
+  nzTitle="Add Prescription"
+  [nzMaskClosable]="false"
+  [nzKeyboard]="false"
+  [nzStyle]="{ minWidth: 'max-content' }"
+  nzOkText="Submit"
+  [nzOkDisabled]="!isDrugValid"
+>
+  <div *nzModalContent>
+    <app-drug-interaction
+      [selectedDrugs]="selectedDrugsIds"
+      (selectedDrugsChange)="selectedDrugs = $event"
+      (isValid)="isDrugValid = $event"
+    ></app-drug-interaction>
+  </div>
+</nz-modal>

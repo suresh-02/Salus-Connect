@@ -12,7 +12,7 @@ declare let gtag: Function;
 export class AppComponent implements OnInit {
   constructor(private router: Router) {}
 
-  title = 'simplydoc';
+  title = 'salusconnect';
 
   ngOnInit(): void {
     console.log(`appVersion: ${environment.appVersion}`);

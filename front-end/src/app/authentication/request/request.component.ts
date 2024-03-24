@@ -21,7 +21,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
         <p class="text-center text-darkGray mb-2">
           Please check your email ({{ email }}) for a confirmation link. The
           link verifies your account after which you can book your medical
-          appointments through SimplyDoc.
+          appointments through SalusConnect.
         </p>
         <a
           class="text-blue2 hover:text-blue1 transition-colors"

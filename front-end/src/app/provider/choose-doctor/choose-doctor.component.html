@@ -4,7 +4,7 @@
     {{ facilityName }}.
   </p>
   <h1 class="sm:text-xl text-base font-medium text-center mb-1">
-    Choose the provider on behalf of whom you are using SimplyDoc today
+    Choose the provider on behalf of whom you are using SalusConnect today
   </h1>
   <p class="sm:text-sm text-darkGray text-center">
     This gives you access to their dashboard
@@ -31,7 +31,7 @@
           class="align-middle text-4xl font-medium text-gray-700 rounded-xl"
         ></nz-avatar>
         <img
-          [src]="environment.imageBaseUrl + doctor.imageUrl"
+          [src]="doctor.imageUrl"
           *ngIf="doctor.imageUrl"
           class="w-20 h-20 rounded-xl"
         />

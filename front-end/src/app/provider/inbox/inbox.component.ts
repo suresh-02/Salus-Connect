@@ -22,6 +22,7 @@ import * as moment from 'moment';
 
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
+import { Drug } from 'src/app/components/drug-interaction/drug-interaction.component';
 
 @Component({
   selector: 'app-inbox',
@@ -54,9 +55,15 @@ export class InboxComponent implements OnInit {
 
   modalTitle = '';
   FPModal = false;
+  prescriptionModal = false;
   notesModal = false;
   phoneModal = false;
   treatmentLoad = false;
+
+  selectedDrugsIds: string[] = [];
+  selectedDrugs: Drug[] = [];
+  isDrugValid = false;
+  prescriptions: Drug[] = [];
 
   mark: string[] = [];
   today = new Date();
@@ -64,7 +71,10 @@ export class InboxComponent implements OnInit {
   richDoctorNotes = new FormControl('');
   doctorNotes = new FormControl(''); // , [Validators.maxLength(4000)]
 
-  dateRange: Date[] = [this.today, moment(this.today).add(29, 'days').toDate()];
+  dateRange: Date[] = [
+    moment(this.today).subtract(29, 'days').toDate(),
+    moment(this.today).add(29, 'days').toDate(),
+  ];
 
   treatments: Treatment[];
   doctorSlots: Slot[];
@@ -84,8 +94,8 @@ export class InboxComponent implements OnInit {
   appointmentId: number;
 
   billedAmount: number[] = [];
-  formatterDollar = (value: number): string => `C$ ${value}`;
-  parserDollar = (value: string): string => value.replace('C$ ', '');
+  formatterDollar = (value: number): string => `₹ ${value}`;
+  parserDollar = (value: string): string => value.replace('₹ ', '');
 
   searchDebounce: any;
 
@@ -143,6 +153,8 @@ export class InboxComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (!localStorage.getItem('prescriptions'))
+      localStorage.setItem('prescriptions', JSON.stringify([]));
     if (this.user.role.roleName === 'SupportStaff') {
       this.user = this.token.getDoctor();
     }
@@ -270,6 +282,17 @@ export class InboxComponent implements OnInit {
     this.selectedTreatment = tid;
   }
 
+  openPrescriptionModel(id: number) {
+    this.appointmentId = id;
+    let prescriptions: { appointmentId: number; selectedDrugs: Drug[] }[] =
+      JSON.parse(localStorage.getItem('prescriptions')!);
+    if (prescriptions.length > 0)
+      prescriptions
+        .filter((p) => p.appointmentId === id)[0]
+        ?.selectedDrugs.forEach((sd) => this.selectedDrugsIds.push(sd.id));
+    this.prescriptionModal = !this.prescriptionModal;
+  }
+
   openNotesModal(id: number, dn: any) {
     this.notesModal = !this.notesModal;
     this.appointmentId = id;
@@ -290,6 +313,9 @@ export class InboxComponent implements OnInit {
 
   cancel() {
     this.status = [];
+    this.selectedDrugs = [];
+    this.selectedDrugsIds = [];
+    this.prescriptionModal = false;
     this.phoneModal = false;
     this.FPModal = false;
     this.notesModal = false;
@@ -410,6 +436,25 @@ export class InboxComponent implements OnInit {
     const div = document.createElement('div');
     div.innerHTML = data;
     if (notes === 'doctor') this.doctorNotes.setValue(div.innerText);
+  }
+
+  addPrescriptions() {
+    let prescriptions: { appointmentId: number; selectedDrugs: Drug[] }[] =
+      JSON.parse(localStorage.getItem('prescriptions')!);
+    let index = prescriptions.findIndex(
+      (p) => p.appointmentId === this.appointmentId
+    );
+    if (index >= 0) {
+      prescriptions[index].selectedDrugs = this.selectedDrugs;
+    } else {
+      prescriptions.push({
+        appointmentId: this.appointmentId,
+        selectedDrugs: this.selectedDrugs,
+      });
+    }
+    localStorage.setItem('prescriptions', JSON.stringify(prescriptions));
+    this.message.success('Success', 'Prescriptions Added');
+    this.cancel();
   }
 
   addNotes() {
